@@ -1,8 +1,11 @@
 <Project>
   <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <Authors>martin_costello</Authors>
+    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)TodoApp.ruleset</CodeAnalysisRuleSet>
     <Company>https://github.com/martincostello/dotnet-minimal-api-integration-testing</Company>
     <Copyright>Martin Costello (c) $([System.DateTime]::Now.ToString(yyyy))</Copyright>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <LangVersion>preview</LangVersion>
     <NeutralLanguage>en-US</NeutralLanguage>

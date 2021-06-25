@@ -127,7 +127,7 @@ namespace TodoApp
                 services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                     (_) => new HttpRequestInterceptionFilter(Interceptor));
 
-                services.AddSingleton<IPostConfigureOptions<GitHubAuthenticationOptions>, RemoteAuthorizationEventsFilter >();
+                services.AddSingleton<IPostConfigureOptions<GitHubAuthenticationOptions>, RemoteAuthorizationEventsFilter>();
             });
 
             // Configure the server address for the server to

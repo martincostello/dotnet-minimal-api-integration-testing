@@ -3,7 +3,7 @@
 
 namespace Shouldly
 {
-    public static class ShoudlyTaskExtensions
+    public static class ShouldlyTaskExtensions
     {
         public static async Task ShouldBe(this Task<string> task, string expected)
         {

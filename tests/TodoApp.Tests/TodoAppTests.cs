@@ -48,8 +48,8 @@ namespace TodoApp
                 var items = await app.GetItemsAsync();
                 items.Count.ShouldBe(1);
 
-                await items.First().TextAsync().ShouldBe("Buy cheese");
-                await items.First().LastUpdatedAsync().ShouldBe("a few seconds ago");
+                await items[0].TextAsync().ShouldBe("Buy cheese");
+                await items[0].LastUpdatedAsync().ShouldBe("a few seconds ago");
 
                 // Act - Add another item
                 await app.AddItemAsync("Buy eggs");
@@ -58,21 +58,21 @@ namespace TodoApp
                 items = await app.GetItemsAsync();
                 items.Count.ShouldBe(2);
 
-                await items.First().TextAsync().ShouldBe("Buy cheese");
-                await items.Last().TextAsync().ShouldBe("Buy eggs");
+                await items[0].TextAsync().ShouldBe("Buy cheese");
+                await items[1].TextAsync().ShouldBe("Buy eggs");
 
                 // Act - Delete an item and complete an item
-                await items.First().DeleteAsync();
-                await items.Last().CompleteAsync();
+                await items[0].DeleteAsync();
+                await items[1].CompleteAsync();
 
                 // Assert
                 items = await app.GetItemsAsync();
                 items.Count.ShouldBe(1);
 
-                await items.First().TextAsync().ShouldBe("Buy eggs");
+                await items[0].TextAsync().ShouldBe("Buy eggs");
 
                 // Act - Delete the remaining item
-                await items.First().DeleteAsync();
+                await items[0].DeleteAsync();
 
                 // Assert
                 await app.WaitForNoItemsAsync();

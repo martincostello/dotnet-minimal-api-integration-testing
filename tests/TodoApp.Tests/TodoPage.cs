@@ -47,21 +47,6 @@ namespace TodoApp
         public async Task WaitForSignedOutAsync()
             => await Page.WaitForSelectorAsync(Selectors.SignIn);
 
-        private sealed class Selectors
-        {
-            internal const string AddItemButton = "id=add-new-item";
-            internal const string AddItemText = "id=new-item-text";
-            internal const string CompleteItem = "button[class*='todo-item-complete']";
-            internal const string DeleteItem = "button[class*='todo-item-delete']";
-            internal const string ItemText = "[class*='todo-item-text']";
-            internal const string ItemTimestamp = "[class*='todo-item-timestamp']";
-            internal const string NoItems = "id=banner";
-            internal const string SignIn = "id=sign-in";
-            internal const string SignOut = "id=sign-out";
-            internal const string TodoItem = "[class='todo-item']";
-            internal const string UserName = "id=user-name";
-        }
-
         public sealed class TodoPageItem
         {
             internal TodoPageItem(IElementHandle item)
@@ -94,6 +79,21 @@ namespace TodoApp
                 var element = await Item.QuerySelectorAsync(Selectors.ItemTimestamp);
                 return await element!.InnerTextAsync();
             }
+        }
+
+        private sealed class Selectors
+        {
+            internal const string AddItemButton = "id=add-new-item";
+            internal const string AddItemText = "id=new-item-text";
+            internal const string CompleteItem = "button[class*='todo-item-complete']";
+            internal const string DeleteItem = "button[class*='todo-item-delete']";
+            internal const string ItemText = "[class*='todo-item-text']";
+            internal const string ItemTimestamp = "[class*='todo-item-timestamp']";
+            internal const string NoItems = "id=banner";
+            internal const string SignIn = "id=sign-in";
+            internal const string SignOut = "id=sign-out";
+            internal const string TodoItem = "[class='todo-item']";
+            internal const string UserName = "id=user-name";
         }
     }
 }
