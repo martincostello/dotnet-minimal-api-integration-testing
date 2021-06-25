@@ -1,0 +1,24 @@
+name: update-dotnet-sdk
+
+on:
+  schedule:
+    - cron:  '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  update-dotnet-sdk:
+    name: Update .NET SDK
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Update .NET SDK
+      uses: martincostello/update-dotnet-sdk@v1
+      if: ${{ github.repository_owner == 'martincostello' }}
+      with:
+        repo-token: ${{ secrets.ACCESS_TOKEN }}
+        user-email: martin@martincostello.com
+        user-name: martincostello

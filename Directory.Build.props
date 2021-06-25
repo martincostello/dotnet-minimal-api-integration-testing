@@ -1,0 +1,27 @@
+<Project>
+  <PropertyGroup>
+    <Authors>martin_costello</Authors>
+    <Company>https://github.com/martincostello/dotnet-minimal-api-integration-testing</Company>
+    <Copyright>Martin Costello (c) $([System.DateTime]::Now.ToString(yyyy))</Copyright>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <LangVersion>preview</LangVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <!--
+      HACK Disable due to CS0105 for System when using global usings.
+      See https://github.com/dotnet/roslyn/issues/54255.
+    -->
+    <NoWarn>$(NoWarn);CS0105</NoWarn>
+    <Nullable>enable</Nullable>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/martincostello/dotnet-minimal-api-integration-testing</PackageProjectUrl>
+    <PackageReleaseNotes>See $(PackageProjectUrl)/releases for details.</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <VersionPrefix>1.0.0</VersionPrefix>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalUsings.cs" />
+  </ItemGroup>
+</Project>

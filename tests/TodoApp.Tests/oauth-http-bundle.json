@@ -1,0 +1,47 @@
+{
+  "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/main/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
+  "id": "oauth",
+  "version": 1,
+  "comment": "HTTP bundle for GitHub OAuth authentication.",
+  "items": [
+    {
+      "comment": "Token resource for GitHub login",
+      "uri": "https://github.com/login/oauth/access_token",
+      "method": "POST",
+      "contentFormat": "json",
+      "contentJson": {
+        "access_token": "secret-access-token",
+        "token_type": "bearer",
+        "scope": "repo,gist,user:email"
+      }
+    },
+    {
+      "comment": "User information resource for GitHub login",
+      "uri": "https://api.github.com/user",
+      "contentFormat": "json",
+      "contentJson": {
+        "login": "john-smith",
+        "id": 1,
+        "type": "User",
+        "name": "John Smith",
+        "company": "GitHub",
+        "location": "London, UK",
+        "html_url": "https://github.com/john-smith",
+        "avatar_url": "https://avatars.githubusercontent.com/u/9141961?s=60&v=4"
+      }
+    },
+    {
+      "comment": "Email resource for GitHub login",
+      "uri": "https://api.github.com/user/emails",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "email": "github@john-smith.local",
+          "verified": true,
+          "primary": true,
+          "visibility": "public"
+        }
+      ]
+    }
+  ]
+}

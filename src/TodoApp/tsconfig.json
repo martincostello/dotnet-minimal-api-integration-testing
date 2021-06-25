@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "inlineSources": true,
+    "inlineSourceMap": true,
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "outDir": "./wwwroot/static/js",
+    "removeComments": false,
+    "sourceMap": false,
+    "target": "ES2015"
+  },
+  "exclude": [
+    "node_modules",
+    "wwwroot"
+  ]
+}

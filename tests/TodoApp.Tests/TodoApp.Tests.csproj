@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>TodoApp</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="JustEat.HttpClientInterception" Version="3.1.0" />
+    <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0-preview.5.21301.17" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+    <PackageReference Include="Microsoft.Playwright" Version="1.12.2" />
+    <PackageReference Include="Shouldly" Version="4.0.3" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
+    <PackageReference Include="Xunit.SkippableFact" Version="1.4.13" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="oauth-http-bundle.json;testsettings.json;xunit.runner.json;xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="localhost-dev.pfx" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TodoApp\TodoApp.csproj" />
+    <AssemblyAttribute Include="Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryContentRootAttribute">
+      <_Parameter1>TodoApp</_Parameter1>
+      <_Parameter2>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../../src/TodoApp'))</_Parameter2>
+      <_Parameter3>TodoApp.csproj</_Parameter3>
+      <_Parameter4>-1</_Parameter4>
+    </AssemblyAttribute>
+  </ItemGroup>
+  <PropertyGroup>
+    <_PlaywrightCLIInstalledCommand Condition=" $([MSBuild]::IsOsPlatform('Windows')) ">where playwright</_PlaywrightCLIInstalledCommand>
+    <_PlaywrightCLIInstalledCommand Condition=" !$([MSBuild]::IsOsPlatform('Windows')) ">type playwright</_PlaywrightCLIInstalledCommand>
+  </PropertyGroup>
+  <Target Name="DownloadBrowserDrivers" AfterTargets="Build">
+    <Exec Command="$(_PlaywrightCLIInstalledCommand)" ConsoleToMsBuild="true" IgnoreExitCode="true" StandardErrorImportance="Normal" StandardOutputImportance="Normal">
+      <Output TaskParameter="ExitCode" PropertyName="_PlaywrightCLIInstalled" />
+    </Exec>
+    <Warning Condition=" $(_PlaywrightCLIInstalled) != 0 " Text="The Playwright CLI .NET Global Tool is not installed. To install this tool, run the following command: dotnet tool install --global Microsoft.Playwright.CLI" />
+    <Exec Condition=" $(_PlaywrightCLIInstalled) == 0 " Command="playwright install" WorkingDirectory="$(MSBuildThisFileDirectory)../../" ConsoleToMsBuild="true" StandardOutputImportance="Normal" />
+  </Target>
+</Project>

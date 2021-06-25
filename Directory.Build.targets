@@ -1,0 +1,5 @@
+<Project>
+  <PropertyGroup Condition=" '$(IsTestProject)' == 'true' ">
+    <DefineConstants>$(DefineConstants);TEST_PROJECT</DefineConstants>
+  </PropertyGroup>
+</Project>

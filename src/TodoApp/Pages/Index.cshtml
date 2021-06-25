@@ -1,0 +1,141 @@
+@page
+@using TodoApp;
+@using TodoApp.Pages;
+@model IndexModel
+@{
+    bool isAuthenticated = User.Identity!.IsAuthenticated;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My List - TodoApp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" asp-append-version="true" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">TodoApp</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#site-navbar" aria-controls="site-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="site-navbar">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="~/" title="My Todo List">My List</a>
+                    </li>
+                </ul>
+                @if (isAuthenticated)
+                {
+                    <form action="~/signout" method="post" class="navbar-right">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                @{
+                                    string displayName = User.GetUserName();
+                                    string profileUrl = User.GetProfileUrl();
+                                    string? avatarUrl = User.GetAvatarUrl();
+                                }
+                                <a class="nav-link" href="@profileUrl" title="GitHub" target="_blank">
+                                    <span id="user-name">@displayName</span>
+                                    @if (!string.IsNullOrWhiteSpace(avatarUrl))
+                                    {
+                                        <img src="@avatarUrl" class="user-profile" alt="@displayName" title="@displayName" aria-hidden="true" />
+                                    }
+                                </a>
+                            </li>
+                            <li>
+                                <button type="submit" class="btn btn-link navbar-btn nav-link" title="Sign out" id="sign-out">
+                                    Sign out
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                </button>
+                            </li>
+                        </ul>
+                    </form>
+                }
+            </div>
+        </div>
+    </nav>
+    <main class="container body-content">
+        <h1>Things To Do</h1>
+        <hr />
+        @if (!isAuthenticated)
+        {
+            <p class="lead">
+                Sign in with your GitHub account to manage your Todo list.
+            </p>
+            <form action="~/signin" method="post">
+                <button class="btn btn-lg btn-primary m-1" id="sign-in" type="submit">Sign in</button>
+            </form>
+        }
+        else
+        {
+            <h2>
+                My List
+                <div class="h6 spinner-border" id="loader" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </h2>
+
+            <div class="alert alert-success lead d-none" id="banner" role="alert">
+                <em>Relax</em> - You've done everything! 🌈
+            </div>
+
+            <div>
+                <table class="table d-none" id="item-table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="w-50" scope="col">Item</th>
+                            <th class="w-25" scope="col">Last Updated</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="item-list">
+                        <tr class="d-none" id="item-template" data-id="" data-completed="" data-timestamp="">
+                            <td class=todo-item-text>
+                            </td>
+                            <td class="todo-item-timestamp"></td>
+                            <td>
+                                <button class="btn btn-success d-none todo-item-complete">Done</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger todo-item-delete">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr/>
+
+            <h2>Add New Item</h2>
+
+            <form id="add-form" class="form-inline" role="form">
+
+                <label class="sr-only" for="new-item-text">Thing to do</label>
+
+                <input autocomplete="off"
+                       autofocus
+                       class="form-control form-control-lg mr-sm-2 w-75"
+                       id="new-item-text"
+                       name="text"
+                       placeholder="Buy eggs 🥚"
+                       type="text">
+
+                <button class="btn btn-lg btn-primary" disabled id="add-new-item" type="submit">Add</button>
+
+            </form>
+        }
+        <hr />
+        <footer>
+            <p>&copy; @(DateTimeOffset.UtcNow.Year) - Martin Costello</p>
+        </footer>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <script src="~/static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31410.414
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6326B5D0-9981-4488-B46F-9879F825965D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FB647623-961E-4B9C-91F4-E94664F7BEEF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{813B2DEF-0737-4242-8AB4-CF0725752CD0}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		.vsconfig = .vsconfig
+		build.ps1 = build.ps1
+		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		global.json = global.json
+		LICENSE = LICENSE
+		NuGet.config = NuGet.config
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoApp", "src\TodoApp\TodoApp.csproj", "{A5864C9C-A4D2-403A-BCD9-E40772CAB0FD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoApp.Tests", "tests\TodoApp.Tests\TodoApp.Tests.csproj", "{4C240082-6C0D-4033-AF81-3CBF2B2777AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".vscode", ".vscode", "{06810DD9-3B0B-4243-B80C-1AC084087013}"
+	ProjectSection(SolutionItems) = preProject
+		.vscode\extensions.json = .vscode\extensions.json
+		.vscode\launch.json = .vscode\launch.json
+		.vscode\tasks.json = .vscode\tasks.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{62E14D54-FE91-4A24-A7D2-82661587A2DC}"
+	ProjectSection(SolutionItems) = preProject
+		.github\CONTRIBUTING.md = .github\CONTRIBUTING.md
+		.github\dependabot.yml = .github\dependabot.yml
+		.github\ISSUE_TEMPLATE.md = .github\ISSUE_TEMPLATE.md
+		.github\PULL_REQUEST_TEMPLATE.md = .github\PULL_REQUEST_TEMPLATE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATE", "ISSUE_TEMPLATE", "{25891391-7F49-4621-8A74-EEAB11D4A778}"
+	ProjectSection(SolutionItems) = preProject
+		.github\ISSUE_TEMPLATE\bug_report.md = .github\ISSUE_TEMPLATE\bug_report.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{86E6F5AB-6537-4A16-B5FD-2B6070F99EE0}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A5864C9C-A4D2-403A-BCD9-E40772CAB0FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5864C9C-A4D2-403A-BCD9-E40772CAB0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5864C9C-A4D2-403A-BCD9-E40772CAB0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5864C9C-A4D2-403A-BCD9-E40772CAB0FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C240082-6C0D-4033-AF81-3CBF2B2777AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C240082-6C0D-4033-AF81-3CBF2B2777AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C240082-6C0D-4033-AF81-3CBF2B2777AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C240082-6C0D-4033-AF81-3CBF2B2777AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A5864C9C-A4D2-403A-BCD9-E40772CAB0FD} = {6326B5D0-9981-4488-B46F-9879F825965D}
+		{4C240082-6C0D-4033-AF81-3CBF2B2777AB} = {FB647623-961E-4B9C-91F4-E94664F7BEEF}
+		{06810DD9-3B0B-4243-B80C-1AC084087013} = {813B2DEF-0737-4242-8AB4-CF0725752CD0}
+		{62E14D54-FE91-4A24-A7D2-82661587A2DC} = {813B2DEF-0737-4242-8AB4-CF0725752CD0}
+		{25891391-7F49-4621-8A74-EEAB11D4A778} = {62E14D54-FE91-4A24-A7D2-82661587A2DC}
+		{86E6F5AB-6537-4A16-B5FD-2B6070F99EE0} = {62E14D54-FE91-4A24-A7D2-82661587A2DC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {242240D8-68EA-4CBF-8E67-D955866F20ED}
+	EndGlobalSection
+EndGlobal
