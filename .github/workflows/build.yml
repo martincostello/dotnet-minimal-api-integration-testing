@@ -26,6 +26,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    # HACK Install .NET 5 SDK for Microsoft.Playwright.CLI to work
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.301
+
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v1
 
