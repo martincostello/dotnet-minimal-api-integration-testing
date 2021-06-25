@@ -21,7 +21,7 @@ using Microsoft.Extensions.Options;
 
 namespace TodoApp
 {
-    public sealed class HttpServerFixture : WebApplicationFactory<Startup>, IAsyncLifetime, ITestOutputHelperAccessor
+    public sealed class HttpServerFixture : WebApplicationFactory<Services.ITodoService>, IAsyncLifetime, ITestOutputHelperAccessor
     {
         private IHost? _host;
         private bool _disposed;
@@ -40,7 +40,7 @@ namespace TodoApp
 
         public string ServerAddress => ClientOptions.BaseAddress.ToString();
 
-        public override IServiceProvider? Services => _host?.Services;
+        public override IServiceProvider Services => _host?.Services!;
 
         public void ClearOutputHelper()
             => OutputHelper = null;
@@ -162,7 +162,7 @@ namespace TodoApp
 
         private async Task CreateHttpServer()
         {
-            var builder = CreateHostBuilder().ConfigureWebHost(ConfigureWebHost);
+            var builder = CreateHostBuilder()!.ConfigureWebHost(ConfigureWebHost);
 
             _host = builder.Build();
 
