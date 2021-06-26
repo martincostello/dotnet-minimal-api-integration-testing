@@ -25,7 +25,7 @@ namespace TodoApp
 
             // Get a specific Todo item
             builder.MapGet("/api/items/{id}", async (
-                [FromRoute] string id,
+                [FromRoute] Guid id,
                 ClaimsPrincipal user,
                 ITodoService service,
                 CancellationToken cancellationToken) =>
@@ -59,7 +59,7 @@ namespace TodoApp
 
             // Mark a Todo item as completed
             builder.MapPost("/api/items/{id}/complete", async (
-                [FromRoute] string id,
+                [FromRoute] Guid id,
                 ClaimsPrincipal user,
                 ITodoService service,
                 CancellationToken cancellationToken) =>
@@ -78,7 +78,7 @@ namespace TodoApp
 
             // Delete a Todo item
             builder.MapDelete("/api/items/{id}", async (
-                [FromRoute] string id,
+                [FromRoute] Guid id,
                 ClaimsPrincipal user,
                 ITodoService service,
                 CancellationToken cancellationToken) =>

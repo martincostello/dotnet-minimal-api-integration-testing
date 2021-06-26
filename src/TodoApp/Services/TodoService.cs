@@ -27,41 +27,26 @@ namespace TodoApp.Services
 
         public async Task<bool?> CompleteItemAsync(
             string userId,
-            string itemId,
+            Guid itemId,
             CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(itemId, out var id))
-            {
-                return null;
-            }
-
-            return await Repository.CompleteItemAsync(userId, id, cancellationToken);
+            return await Repository.CompleteItemAsync(userId, itemId, cancellationToken);
         }
 
         public async Task<bool> DeleteItemAsync(
             string userId,
-            string itemId,
+            Guid itemId,
             CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(itemId, out var id))
-            {
-                return false;
-            }
-
-            return await Repository.DeleteItemAsync(userId, id, cancellationToken);
+            return await Repository.DeleteItemAsync(userId, itemId, cancellationToken);
         }
 
         public async Task<TodoItemModel?> GetAsync(
             string userId,
-            string itemId,
+            Guid itemId,
             CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(itemId, out var id))
-            {
-                return null;
-            }
-
-            var item = await Repository.GetItemAsync(userId, id, cancellationToken);
+            var item = await Repository.GetItemAsync(userId, itemId, cancellationToken);
 
             if (item is null)
             {
