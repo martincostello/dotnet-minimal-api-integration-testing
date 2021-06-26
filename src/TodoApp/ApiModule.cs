@@ -3,8 +3,8 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
 using TodoApp.Models;
 using TodoApp.Services;
 
@@ -12,94 +12,127 @@ namespace TodoApp
 {
     public static class ApiModule
     {
-        private const string ItemCompletePath = "/api/items/{id}/complete";
-        private const string ItemPath = "/api/items/{id}";
-        private const string ItemsPath = "/api/items";
-
         public static IEndpointRouteBuilder MapApiRoutes(this IEndpointRouteBuilder builder)
         {
-            builder.MapPost(ItemsPath, async (context) =>
+            // Get all Todo items
+            builder.MapGet("/api/items", async (
+                ITodoService service,
+                ClaimsPrincipal user,
+                CancellationToken cancellationToken) =>
             {
-                var model = await context.Request.ReadFromJsonAsync<CreateTodoItemModel>();
-
-                if (model is null || string.IsNullOrWhiteSpace(model.Text))
-                {
-                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                    return;
-                }
-
-                var userId = context.GetUserId();
-                var service = context.RequestServices.GetRequiredService<ITodoService>();
-
-                var id = await service.AddItemAsync(userId, model.Text, context.RequestAborted);
-
-                context.Response.StatusCode = StatusCodes.Status201Created;
-                context.Response.GetTypedHeaders().Location = new Uri($"/api/items/{id}", UriKind.Relative);
-
-                await context.Response.WriteAsJsonAsync(new { id });
+                return await service.GetListAsync(user.GetUserId(), cancellationToken);
             }).RequireAuthorization();
 
-            builder.MapGet(ItemsPath, async (context) =>
+            // Get a specific Todo item
+            builder.MapGet("/api/items/{id}", async (
+                [FromRoute] string id,
+                ClaimsPrincipal user,
+                ITodoService service,
+                CancellationToken cancellationToken) =>
             {
-                var userId = context.GetUserId();
-                var service = context.GetTodoService();
-
-                var model = await service.GetListAsync(userId, context.RequestAborted);
-
-                await context.Response.WriteAsJsonAsync(model);
-            }).RequireAuthorization();
-
-            builder.MapGet(ItemPath, async (context) =>
-            {
-                var itemId = context.GetItemId();
-                var userId = context.GetUserId();
-                var service = context.GetTodoService();
-
-                var model = await service.GetAsync(userId, itemId, context.RequestAborted);
+                var model = await service.GetAsync(user.GetUserId(), id, cancellationToken);
 
                 if (model is null)
                 {
-                    context.Response.StatusCode = StatusCodes.Status404NotFound;
-                    return;
+                    return new NotFoundResult();
                 }
 
-                await context.Response.WriteAsJsonAsync(model);
+                return new ObjectResult(model) as IResult;
             }).RequireAuthorization();
 
-            builder.MapPost(ItemCompletePath, async (context) =>
+            // Create a new Todo item
+            builder.MapPost("/api/items", async (
+                [FromBody] CreateTodoItemModel model,
+                ClaimsPrincipal user,
+                ITodoService service,
+                CancellationToken cancellationToken) =>
             {
-                var itemId = context.GetItemId();
-                var userId = context.GetUserId();
-                var service = context.GetTodoService();
+                if (model is null || string.IsNullOrWhiteSpace(model.Text))
+                {
+                    return new BadRequestResult();
+                }
 
-                var result = await service.CompleteItemAsync(userId, itemId, context.RequestAborted);
+                var id = await service.AddItemAsync(user.GetUserId(), model.Text, cancellationToken);
 
-                context.Response.StatusCode = result switch
+                return new CreatedAtResult($"/api/items/{id}", new { id }) as IResult;
+            }).RequireAuthorization();
+
+            // Mark a Todo item as completed
+            builder.MapPost("/api/items/{id}/complete", async (
+                [FromRoute] string id,
+                ClaimsPrincipal user,
+                ITodoService service,
+                CancellationToken cancellationToken) =>
+            {
+                var wasCompleted = await service.CompleteItemAsync(user.GetUserId(), id, cancellationToken);
+
+                var statusCode = wasCompleted switch
                 {
                     true => StatusCodes.Status204NoContent,
                     false => StatusCodes.Status400BadRequest,
                     _ => StatusCodes.Status404NotFound,
                 };
+
+                return new StatusCodeResult(statusCode);
             }).RequireAuthorization();
 
-            builder.MapDelete(ItemPath, async (context) =>
+            // Delete a Todo item
+            builder.MapDelete("/api/items/{id}", async (
+                [FromRoute] string id,
+                ClaimsPrincipal user,
+                ITodoService service,
+                CancellationToken cancellationToken) =>
             {
-                var itemId = context.GetItemId();
-                var userId = context.GetUserId();
-                var service = context.GetTodoService();
+                var wasDeleted = await service.DeleteItemAsync(user.GetUserId(), id, cancellationToken);
 
-                var result = await service.DeleteItemAsync(userId, itemId, context.RequestAborted);
-
-                context.Response.StatusCode = result ? StatusCodes.Status204NoContent : StatusCodes.Status404NotFound;
+                return new StatusCodeResult(wasDeleted ? StatusCodes.Status204NoContent : StatusCodes.Status404NotFound);
             }).RequireAuthorization();
 
             return builder;
         }
 
-        private static string GetItemId(this HttpContext context)
-            => (string)context.GetRouteValue("id")!;
+        // HACK Custom result types until ObjectResult implements IResult.
+        // See https://github.com/dotnet/aspnetcore/issues/32565.
 
-        private static ITodoService GetTodoService(this HttpContext context)
-            => context.RequestServices.GetRequiredService<ITodoService>();
+        private sealed class CreatedAtResult : ObjectResult
+        {
+            private readonly string _location;
+
+            internal CreatedAtResult(string location, object? value)
+                : base(value)
+            {
+                _location = location;
+            }
+
+            public override async Task ExecuteAsync(HttpContext httpContext)
+            {
+                httpContext.Response.Headers.Location = _location;
+                await base.ExecuteAsync(httpContext);
+            }
+        }
+
+        private class ObjectResult : IResult
+        {
+            public int? StatusCode { get; set; }
+
+            public object? Value { get; set; }
+
+            internal ObjectResult(object? value)
+            {
+                Value = value;
+            }
+
+            public virtual async Task ExecuteAsync(HttpContext httpContext)
+            {
+                var response = httpContext.Response;
+
+                if (StatusCode.HasValue)
+                {
+                    response.StatusCode = StatusCode.Value;
+                }
+
+                await response.WriteAsJsonAsync(Value, httpContext.RequestAborted);
+            }
+        }
     }
 }

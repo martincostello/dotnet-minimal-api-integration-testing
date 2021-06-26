@@ -60,9 +60,6 @@ namespace TodoApp
         public static string GetProfileUrl(this ClaimsPrincipal user)
             => user.FindFirst(GitHubProfileClaim)!.Value;
 
-        public static string GetUserId(this HttpContext context)
-            => context.User.GetUserId();
-
         public static string GetUserId(this ClaimsPrincipal user)
             => user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
@@ -71,33 +68,25 @@ namespace TodoApp
 
         public static IEndpointRouteBuilder MapAuthenticationRoutes(this IEndpointRouteBuilder builder)
         {
-            builder.MapGet(DeniedPath, context => context.RedirectAsync(RootPath + "?denied=true"));
-            builder.MapGet(SignOutPath, context => context.RedirectAsync(RootPath));
+            // TODO Remove cast once supported by C# 10
+            builder.MapGet(DeniedPath, (Action<HttpContext>)(context => context.Response.Redirect(RootPath + "?denied=true")));
+            builder.MapGet(SignOutPath, (Action<HttpContext>)(context => context.Response.Redirect(RootPath)));
 
-            builder.MapPost(SignInPath, SignInAsync);
-            builder.MapPost(SignOutPath, SignOutAsync).RequireAuthorization();
+            builder.MapPost(SignInPath, async context =>
+            {
+                await context.ChallengeAsync(
+                    GitHubAuthenticationDefaults.AuthenticationScheme,
+                    new AuthenticationProperties { RedirectUri = RootPath });
+            });
+
+            builder.MapPost(SignOutPath, async context =>
+            {
+                await context.SignOutAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new AuthenticationProperties { RedirectUri = RootPath });
+            }).RequireAuthorization();
 
             return builder;
-        }
-
-        private static async Task SignInAsync(HttpContext context)
-        {
-            await context.ChallengeAsync(
-                GitHubAuthenticationDefaults.AuthenticationScheme,
-                new AuthenticationProperties { RedirectUri = RootPath });
-        }
-
-        private static async Task SignOutAsync(HttpContext context)
-        {
-            await context.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new AuthenticationProperties { RedirectUri = RootPath });
-        }
-
-        private static Task RedirectAsync(this HttpContext context, string location)
-        {
-            context.Response.Redirect(location);
-            return Task.CompletedTask;
         }
     }
 }
