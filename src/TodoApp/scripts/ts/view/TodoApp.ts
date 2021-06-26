@@ -86,6 +86,7 @@ export class TodoApp {
             this.enable(this.elements.createItemButton);
         } finally {
             this.enable(this.elements.createItemText);
+            this.elements.createItemText.focus();
         }
     }
 
