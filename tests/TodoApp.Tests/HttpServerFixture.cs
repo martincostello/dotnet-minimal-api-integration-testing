@@ -63,6 +63,9 @@ namespace TodoApp
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            // HACK Workaround for https://github.com/dotnet/aspnetcore/issues/33889
+            builder.UseEnvironment(Environments.Development);
+
             base.ConfigureWebHost(builder);
 
             builder.ConfigureKestrel(
