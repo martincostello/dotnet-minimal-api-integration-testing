@@ -63,7 +63,7 @@ namespace TodoApp
                        .AddInMemoryCollection(config);
             });
 
-            builder.ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this))
+            builder.ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this).SetMinimumLevel(LogLevel.Debug))
                    .UseSolutionRelativeContentRoot(Path.Combine("src", "TodoApp"));
 
             builder.ConfigureServices((services) =>
