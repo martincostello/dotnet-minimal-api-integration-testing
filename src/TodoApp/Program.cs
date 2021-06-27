@@ -72,16 +72,13 @@ app.UseHsts();
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints((endpoints) =>
-{
-    endpoints.MapApiRoutes();
-    endpoints.MapAuthenticationRoutes();
-    endpoints.MapRazorPages();
-});
+app.MapAuthenticationRoutes();
+app.MapApiRoutes();
+
+app.MapRazorPages();
 
 app.Run();
