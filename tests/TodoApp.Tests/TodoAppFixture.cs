@@ -72,6 +72,12 @@ namespace TodoApp
                     (_) => new HttpRequestInterceptionFilter(Interceptor));
 
                 services.AddSingleton<IPostConfigureOptions<GitHubAuthenticationOptions>, RemoteAuthorizationEventsFilter>();
+
+                // HACK Remove the IConfiguration that WebApplication(Builder) adds that
+                // does not reflect the changes applied by ConfigureAppConfiguration() above.
+                // See https://github.com/dotnet/aspnetcore/issues/33876.
+                var configs = services.Where((p) => p.ServiceType == typeof(IConfiguration)).ToList();
+                services.Remove(configs[1]);
             });
 
             Interceptor.RegisterBundle("oauth-http-bundle.json");
