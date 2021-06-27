@@ -21,8 +21,9 @@ builder.Services.AddSingleton<IClock>((_) => SystemClock.Instance);
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 builder.Services.AddScoped<ITodoService, TodoService>();
 
-// TODO Remove if ClaimsPrincipal support is added to minimal APIs
+// TODO Remove if ClaimsPrincipal support is added to minimal actions.
 // See https://github.com/dotnet/aspnetcore/issues/33870
+// and https://github.com/dotnet/aspnetcore/pull/33883.
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ClaimsPrincipal>((p) =>
 {
