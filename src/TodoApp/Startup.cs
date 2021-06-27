@@ -28,7 +28,7 @@ namespace TodoApp
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IClock>((_) => NodaTime.SystemClock.Instance);
+            services.AddSingleton<IClock>((_) => SystemClock.Instance);
             services.AddScoped<ITodoRepository, TodoRepository>();
             services.AddScoped<ITodoService, TodoService>();
 
@@ -64,8 +64,10 @@ namespace TodoApp
             }
             else
             {
-                app.UseStatusCodePages();
+                app.UseExceptionHandler("/error");
             }
+
+            app.UseStatusCodePagesWithReExecute("/error", "?id={0}");
 
             app.UseHsts();
             app.UseHttpsRedirection();
