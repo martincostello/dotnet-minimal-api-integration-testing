@@ -37,7 +37,7 @@ namespace TodoApp
                     return new NotFoundResult();
                 }
 
-                return new ObjectResult(model) as IResult;
+                return new JsonResult(model) as IResult;
             }).RequireAuthorization();
 
             // Create a new Todo item
@@ -91,47 +91,28 @@ namespace TodoApp
             return builder;
         }
 
-        // HACK Custom result types until ObjectResult implements IResult.
+        // HACK Custom result types until CreatedAtResult/ObjectResult implements IResult.
         // See https://github.com/dotnet/aspnetcore/issues/32565.
 
-        private sealed class CreatedAtResult : ObjectResult
+        private sealed class CreatedAtResult : IResult
         {
             private readonly string _location;
+            private readonly object? _value;
 
             internal CreatedAtResult(string location, object? value)
-                : base(value)
             {
                 _location = location;
+                _value = value;
             }
 
-            public override async Task ExecuteAsync(HttpContext httpContext)
-            {
-                httpContext.Response.Headers.Location = _location;
-                await base.ExecuteAsync(httpContext);
-            }
-        }
-
-        private class ObjectResult : IResult
-        {
-            public int? StatusCode { get; set; }
-
-            public object? Value { get; set; }
-
-            internal ObjectResult(object? value)
-            {
-                Value = value;
-            }
-
-            public virtual async Task ExecuteAsync(HttpContext httpContext)
+            public async Task ExecuteAsync(HttpContext httpContext)
             {
                 var response = httpContext.Response;
 
-                if (StatusCode.HasValue)
-                {
-                    response.StatusCode = StatusCode.Value;
-                }
+                response.Headers.Location = _location;
+                response.StatusCode = StatusCodes.Status201Created;
 
-                await response.WriteAsJsonAsync(Value, httpContext.RequestAborted);
+                await response.WriteAsJsonAsync(_value, httpContext.RequestAborted);
             }
         }
     }
