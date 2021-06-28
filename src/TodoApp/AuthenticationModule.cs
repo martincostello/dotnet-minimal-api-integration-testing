@@ -6,7 +6,6 @@ using AspNet.Security.OAuth.GitHub;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -68,23 +67,19 @@ namespace TodoApp
 
         public static IEndpointRouteBuilder MapAuthenticationRoutes(this IEndpointRouteBuilder builder)
         {
-            // TODO Remove cast once supported by C# 10
-            builder.MapGet(DeniedPath, (Action<HttpContext>)(context => context.Response.Redirect(RootPath + "?denied=true")));
-            builder.MapGet(SignOutPath, (Action<HttpContext>)(context => context.Response.Redirect(RootPath)));
+            builder.MapGet(DeniedPath, () => Results.Redirect(RootPath + "?denied=true"));
+            builder.MapGet(SignOutPath, () => Results.Redirect(RootPath));
 
-            builder.MapPost(SignInPath, async context =>
-            {
-                await context.ChallengeAsync(
-                    GitHubAuthenticationDefaults.AuthenticationScheme,
-                    new AuthenticationProperties { RedirectUri = RootPath });
-            });
+            builder.MapPost(SignInPath, () =>
+                Results.Challenge(
+                    new AuthenticationProperties { RedirectUri = RootPath },
+                    GitHubAuthenticationDefaults.AuthenticationScheme));
 
-            builder.MapPost(SignOutPath, async context =>
-            {
-                await context.SignOutAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    new AuthenticationProperties { RedirectUri = RootPath });
-            }).RequireAuthorization();
+            builder.MapPost(SignOutPath, () =>
+                Results.SignOut(
+                    new AuthenticationProperties { RedirectUri = RootPath },
+                    CookieAuthenticationDefaults.AuthenticationScheme))
+                .RequireAuthorization();
 
             return builder;
         }
