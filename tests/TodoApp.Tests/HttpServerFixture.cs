@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2021. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Diagnostics;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Hosting;
@@ -144,17 +143,10 @@ namespace TodoApp
             Action<object>? configureHostBuilder = (Action<object>?)Delegate.CreateDelegate(typeof(Action<object>), deferredHostBuilder, configureHostBuilderMethod!);
             Action<Exception?>? entrypointCompleted = (Action<Exception?>?)Delegate.CreateDelegate(typeof(Action<Exception?>), deferredHostBuilder, entryPointCompletedMethod!);
 
-            var waitTimeout = new TimeSpan?();
-
-            if (Debugger.IsAttached)
-            {
-                waitTimeout = Timeout.InfiniteTimeSpan;
-            }
-
             var factory = (Func<string[], object>)resolveHostFactory!.Invoke(null, new object?[]
             {
                 typeof(Services.ITodoService).Assembly,
-                waitTimeout,
+                null,
                 false,
                 configureHostBuilder,
                 entrypointCompleted,
