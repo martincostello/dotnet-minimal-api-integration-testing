@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using NodaTime;
 using TodoApp;
 using TodoApp.Data;
@@ -17,7 +18,7 @@ using TodoApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<IClock>((_) => SystemClock.Instance);
+builder.Services.AddSingleton<IClock>(_ => SystemClock.Instance);
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 builder.Services.AddScoped<ITodoService, TodoService>();
 
@@ -31,11 +32,10 @@ builder.Services.AddScoped<ClaimsPrincipal>((p) =>
     return context.HttpContext!.User;
 });
 
-builder.Services.AddRouting();
-
 builder.Services.AddGitHubAuthentication();
-
+builder.Services.AddHttpClient();
 builder.Services.AddRazorPages();
+builder.Services.AddRouting();
 
 builder.Services.AddDbContext<TodoContext>((serviceProvider, builder) =>
 {
@@ -53,7 +53,17 @@ builder.Services.AddDbContext<TodoContext>((serviceProvider, builder) =>
     builder.UseSqlite("Data Source=" + databaseFile);
 });
 
-builder.Services.AddHttpClient();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo API", Version = "v1" });
+
+    // Only display the API actions
+    options.DocInclusionPredicate(
+        (_, description) => description.RelativePath?.StartsWith("api/", StringComparison.Ordinal) == true);
+
+    // HACK Workaround for https://github.com/dotnet/aspnetcore/issues/33934
+    options.ResolveConflictingActions(descriptions => descriptions.First());
+});
 
 var app = builder.Build();
 
@@ -78,6 +88,7 @@ app.UseAuthorization();
 
 app.MapAuthenticationRoutes();
 app.MapApiRoutes();
+app.UseSwagger();
 
 app.MapRazorPages();
 
