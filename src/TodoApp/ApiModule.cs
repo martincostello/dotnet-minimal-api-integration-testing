@@ -76,6 +76,9 @@ namespace TodoApp
                 return wasDeleted ? Results.NoContent() : Results.NotFound();
             }).RequireAuthorization();
 
+            // Redirect to Open API/Swagger documentation
+            builder.MapGet("/api", () => Results.Redirect("/swagger-ui/index.html"));
+
             return builder;
         }
     }
