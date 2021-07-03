@@ -2,10 +2,9 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace TodoApp
+namespace Microsoft.AspNetCore.Http
 {
     // Will be redundant when changes are available in a later preview.
     // See https://github.com/dotnet/aspnetcore/pull/33843.
