@@ -78,7 +78,9 @@ namespace TodoApp
             }).RequireAuthorization();
 
             // Redirect to Open API/Swagger documentation
-            builder.MapGet("/api", () => Results.Redirect("/swagger-ui/index.html"));
+            builder.MapGet("/api", () => Results.Redirect("/swagger-ui/index.html"))
+                .IgnoreApi()
+                .RequireAuthorization();
 
             return builder;
         }
