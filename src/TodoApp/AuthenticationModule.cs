@@ -68,18 +68,19 @@ namespace TodoApp
 
         public static IEndpointRouteBuilder MapAuthenticationRoutes(this IEndpointRouteBuilder builder)
         {
-            builder.MapGet(DeniedPath, () => Results.Redirect(RootPath + "?denied=true"));
-            builder.MapGet(SignOutPath, () => Results.Redirect(RootPath));
+            builder.MapGet(DeniedPath, () => Results.Redirect(RootPath + "?denied=true")).IgnoreApi();
+            builder.MapGet(SignOutPath, () => Results.Redirect(RootPath)).IgnoreApi();
 
             builder.MapPost(SignInPath, () =>
                 Results.Challenge(
                     new AuthenticationProperties { RedirectUri = RootPath },
-                    GitHubAuthenticationDefaults.AuthenticationScheme));
+                    GitHubAuthenticationDefaults.AuthenticationScheme)).IgnoreApi();
 
             builder.MapPost(SignOutPath, () =>
                 Results.SignOut(
                     new AuthenticationProperties { RedirectUri = RootPath },
                     CookieAuthenticationDefaults.AuthenticationScheme))
+                .IgnoreApi()
                 .RequireAuthorization();
 
             return builder;
