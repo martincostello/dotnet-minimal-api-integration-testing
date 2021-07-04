@@ -60,6 +60,12 @@ namespace TodoApp
         public static string GetProfileUrl(this ClaimsPrincipal user)
             => user.FindFirst(GitHubProfileClaim)!.Value;
 
+        public static string GetUserId(this HttpContext context)
+            => context.User.GetUserId();
+
+        public static string GetUserId(this ClaimsPrincipal user)
+            => user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+
         public static string GetUserName(this ClaimsPrincipal user)
             => user.FindFirst(GitHubAuthenticationConstants.Claims.Name)!.Value;
 
