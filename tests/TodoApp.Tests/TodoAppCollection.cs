@@ -4,8 +4,8 @@
 namespace TodoApp
 {
     [CollectionDefinition(Name)]
-    public sealed class HttpServerCollection : ICollectionFixture<HttpServerFixture>
+    public sealed class TodoAppCollection : ICollectionFixture<TodoAppFixture>
     {
-        public const string Name = "TodoApp HTTP server collection";
+        public const string Name = "TodoApp server collection";
     }
 }
