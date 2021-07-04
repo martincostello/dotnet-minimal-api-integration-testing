@@ -22,12 +22,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\TodoApp\TodoApp.csproj" />
-    <AssemblyAttribute Include="Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryContentRootAttribute">
-      <_Parameter1>TodoApp</_Parameter1>
-      <_Parameter2>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../../src/TodoApp'))</_Parameter2>
-      <_Parameter3>TodoApp.csproj</_Parameter3>
-      <_Parameter4>-1</_Parameter4>
-    </AssemblyAttribute>
   </ItemGroup>
   <PropertyGroup>
     <_PlaywrightCLIInstalledCommand Condition=" $([MSBuild]::IsOsPlatform('Windows')) ">where playwright</_PlaywrightCLIInstalledCommand>
