@@ -8,13 +8,11 @@
     <UserSecretsId>TodoApp</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="scripts\ts\main.ts" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="6.0.0-preview.5.21319.40" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0-preview.5.21301.9" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.3.2" PrivateAssets="all" />
     <PackageReference Include="NodaTime" Version="3.0.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="scripts\ts\**\*.ts" />

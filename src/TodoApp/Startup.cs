@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using NodaTime;
 using TodoApp.Data;
 using TodoApp.Services;
@@ -54,6 +55,14 @@ namespace TodoApp
             });
 
             services.AddHttpClient();
+
+            services.AddMvcCore()
+                    .AddApiExplorer();
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo API", Version = "v1" });
+            });
         }
 
         public void Configure(IApplicationBuilder app)
@@ -84,6 +93,8 @@ namespace TodoApp
                 endpoints.MapAuthenticationRoutes();
                 endpoints.MapRazorPages();
             });
+
+            app.UseSwagger();
         }
     }
 }
