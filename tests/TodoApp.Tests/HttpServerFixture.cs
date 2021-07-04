@@ -20,8 +20,11 @@ namespace TodoApp
 
         public override IServiceProvider Services => _host?.Services!;
 
-        async Task IAsyncLifetime.InitializeAsync()
-            => await EnsureHttpServerAsync();
+        Task IAsyncLifetime.InitializeAsync()
+        {
+            EnsureHttpServer();
+            return Task.CompletedTask;
+        }
 
         async Task IAsyncLifetime.DisposeAsync()
         {
@@ -62,9 +65,6 @@ namespace TodoApp
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            // HACK Workaround for https://github.com/dotnet/aspnetcore/issues/33889
-            builder.UseEnvironment(Environments.Development);
-
             base.ConfigureWebHost(builder);
 
             builder.ConfigureKestrel(
@@ -91,15 +91,15 @@ namespace TodoApp
             }
         }
 
-        private async Task EnsureHttpServerAsync()
+        private void EnsureHttpServer()
         {
             if (_host is null)
             {
-                await CreateHttpServerAsync();
+                CreateHttpServer();
             }
         }
 
-        private async Task CreateHttpServerAsync()
+        private void CreateHttpServer()
         {
             var builder = CreateHostBuilder();
 
