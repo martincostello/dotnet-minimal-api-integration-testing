@@ -2,10 +2,8 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.IO;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,16 +19,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IClock>(_ => SystemClock.Instance);
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 builder.Services.AddScoped<ITodoService, TodoService>();
-
-// TODO Remove if ClaimsPrincipal support is added to minimal actions.
-// See https://github.com/dotnet/aspnetcore/issues/33870
-// and https://github.com/dotnet/aspnetcore/pull/33883.
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ClaimsPrincipal>((p) =>
-{
-    var context = p.GetRequiredService<IHttpContextAccessor>();
-    return context.HttpContext!.User;
-});
 
 builder.Services.AddGitHubAuthentication();
 builder.Services.AddHttpClient();
