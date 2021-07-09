@@ -2,6 +2,8 @@
 
 [![Build status](https://github.com/martincostello/dotnet-minimal-api-integration-testing/workflows/build/badge.svg?branch=main&event=push)](https://github.com/martincostello/dotnet-minimal-api-integration-testing/actions?query=workflow%3Abuild+branch%3Amain+event%3Apush)
 
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/martincostello/dotnet-minimal-api-integration-testing)
+
 ## Introduction
 
 _TODO_
