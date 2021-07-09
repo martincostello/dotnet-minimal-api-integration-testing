@@ -8,7 +8,7 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="JustEat.HttpClientInterception" Version="3.1.0" />
     <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0-preview.7.21357.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0-preview.7.21358.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
     <PackageReference Include="Microsoft.Playwright" Version="1.13.0" />
     <PackageReference Include="Shouldly" Version="4.0.3" />
