@@ -7,13 +7,8 @@
     <Copyright>Martin Costello (c) $([System.DateTime]::Now.ToString(yyyy))</Copyright>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>latest</LangVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <!--
-      HACK Disable due to CS0105 for System when using global usings.
-      See https://github.com/dotnet/roslyn/issues/54255.
-    -->
-    <NoWarn>$(NoWarn);CS0105</NoWarn>
     <Nullable>enable</Nullable>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/martincostello/dotnet-minimal-api-integration-testing</PackageProjectUrl>
@@ -27,4 +22,12 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)GlobalUsings.cs" />
   </ItemGroup>
+  <!-- HACK Various work arounds until Visual Studio works with latest language features -->
+  <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' == 'true'">
+    <LangVersion>preview</LangVersion>
+    <!-- HACK Workaround for https://github.com/dotnet/roslyn/issues/54255 -->
+    <NoWarn>$(NoWarn);CS0105</NoWarn>
+    <!-- HACK Workaround for https://github.com/dotnet/aspnetcore/pull/33971 -->
+    <UseRazorSourceGenerator>false</UseRazorSourceGenerator>
+  </PropertyGroup>
 </Project>
