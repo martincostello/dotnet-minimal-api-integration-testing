@@ -61,5 +61,22 @@ namespace Microsoft.AspNetCore.Builder
             });
             return builder;
         }
+
+        /// <summary>
+        /// Specifies the error status code returned by the endpoint.
+        /// </summary>
+        /// <typeparam name="TBuilder">The type of the endpoint builder.</typeparam>
+        /// <param name="builder">The endpoint convention builder.</param>
+        /// <param name="statusCode">The HTTP response status code.</param>
+        /// <returns>The original convention builder parameter.</returns>
+        public static TBuilder ProducesErrorStatusCode<TBuilder>(this TBuilder builder, int statusCode)
+            where TBuilder : IEndpointConventionBuilder
+        {
+            builder.Add(endpointBuilder =>
+            {
+                endpointBuilder.Metadata.Add(new ProducesResponseTypeAttribute(typeof(ProblemDetails), statusCode));
+            });
+            return builder;
+        }
     }
 }
