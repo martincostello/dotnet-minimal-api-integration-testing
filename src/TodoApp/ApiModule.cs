@@ -27,10 +27,10 @@ namespace TodoApp
                 CancellationToken cancellationToken) =>
             {
                 var model = await service.GetAsync(user.GetUserId(), id, cancellationToken);
-                return model is null ? Results.NotFound() : Results.Json(model);
+                return model is null ? Results.Problem(statusCode: StatusCodes.Status404NotFound) : Results.Json(model);
             })
             .ProducesStatusCode(StatusCodes.Status200OK, typeof(TodoItemModel))
-            .ProducesStatusCode(StatusCodes.Status404NotFound)
+            .ProducesErrorStatusCode(StatusCodes.Status404NotFound)
             .RequireAuthorization();
 
             // Create a new Todo item
@@ -42,7 +42,7 @@ namespace TodoApp
             {
                 if (model is null || string.IsNullOrWhiteSpace(model.Text))
                 {
-                    return Results.BadRequest();
+                    return Results.Problem(statusCode: StatusCodes.Status400BadRequest);
                 }
 
                 var id = await service.AddItemAsync(user.GetUserId(), model.Text, cancellationToken);
@@ -50,7 +50,7 @@ namespace TodoApp
                 return Results.Created($"/api/items/{id}", new { id });
             })
             .ProducesStatusCode(StatusCodes.Status201Created)
-            .ProducesStatusCode(StatusCodes.Status400BadRequest)
+            .ProducesErrorStatusCode(StatusCodes.Status400BadRequest)
             .RequireAuthorization();
 
             // Mark a Todo item as completed
@@ -65,13 +65,13 @@ namespace TodoApp
                 return wasCompleted switch
                 {
                     true => Results.NoContent(),
-                    false => Results.BadRequest(),
-                    _ => Results.NotFound(),
+                    false => Results.Problem(statusCode: StatusCodes.Status400BadRequest),
+                    _ => Results.Problem(statusCode: StatusCodes.Status404NotFound),
                 };
             })
             .ProducesStatusCode(StatusCodes.Status204NoContent)
-            .ProducesStatusCode(StatusCodes.Status400BadRequest)
-            .ProducesStatusCode(StatusCodes.Status404NotFound)
+            .ProducesErrorStatusCode(StatusCodes.Status400BadRequest)
+            .ProducesErrorStatusCode(StatusCodes.Status404NotFound)
             .RequireAuthorization();
 
             // Delete a Todo item
@@ -82,10 +82,10 @@ namespace TodoApp
                 CancellationToken cancellationToken) =>
             {
                 var wasDeleted = await service.DeleteItemAsync(user.GetUserId(), id, cancellationToken);
-                return wasDeleted ? Results.NoContent() : Results.NotFound();
+                return wasDeleted ? Results.NoContent() : Results.Problem(statusCode: StatusCodes.Status404NotFound);
             })
             .ProducesStatusCode(StatusCodes.Status204NoContent)
-            .ProducesStatusCode(StatusCodes.Status404NotFound)
+            .ProducesErrorStatusCode(StatusCodes.Status404NotFound)
             .RequireAuthorization();
 
             // Redirect to Open API/Swagger documentation
