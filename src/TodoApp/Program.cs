@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using NodaTime;
 using TodoApp;
 using TodoApp.Data;
@@ -37,7 +36,7 @@ builder.Services.AddDbContext<TodoContext>((serviceProvider, builder) =>
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo API", Version = "v1" });
+    options.SwaggerDoc("v1", new() { Title = "Todo API", Version = "v1" });
 
     // Only display the API actions
     options.DocInclusionPredicate(
