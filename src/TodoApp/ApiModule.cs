@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
 using TodoApp.Models;
 using TodoApp.Services;
 
@@ -21,7 +20,7 @@ namespace TodoApp
 
             // Get a specific Todo item
             builder.MapGet("/api/items/{id}", async (
-                [FromRoute] Guid id,
+                Guid id,
                 ClaimsPrincipal user,
                 ITodoService service,
                 CancellationToken cancellationToken) =>
@@ -35,7 +34,7 @@ namespace TodoApp
 
             // Create a new Todo item
             builder.MapPost("/api/items", async (
-                [FromBody] CreateTodoItemModel model,
+                CreateTodoItemModel model,
                 ClaimsPrincipal user,
                 ITodoService service,
                 CancellationToken cancellationToken) =>
@@ -55,7 +54,7 @@ namespace TodoApp
 
             // Mark a Todo item as completed
             builder.MapPost("/api/items/{id}/complete", async (
-                [FromRoute] Guid id,
+                Guid id,
                 ClaimsPrincipal user,
                 ITodoService service,
                 CancellationToken cancellationToken) =>
@@ -76,7 +75,7 @@ namespace TodoApp
 
             // Delete a Todo item
             builder.MapDelete("/api/items/{id}", async (
-                [FromRoute] Guid id,
+                Guid id,
                 ClaimsPrincipal user,
                 ITodoService service,
                 CancellationToken cancellationToken) =>
