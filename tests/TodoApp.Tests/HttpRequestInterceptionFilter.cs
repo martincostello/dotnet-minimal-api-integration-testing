@@ -4,25 +4,24 @@
 using JustEat.HttpClientInterception;
 using Microsoft.Extensions.Http;
 
-namespace TodoApp
+namespace TodoApp;
+
+public sealed class HttpRequestInterceptionFilter : IHttpMessageHandlerBuilderFilter
 {
-    public sealed class HttpRequestInterceptionFilter : IHttpMessageHandlerBuilderFilter
+    private readonly HttpClientInterceptorOptions _options;
+
+    internal HttpRequestInterceptionFilter(HttpClientInterceptorOptions options)
     {
-        private readonly HttpClientInterceptorOptions _options;
+        _options = options;
+    }
 
-        internal HttpRequestInterceptionFilter(HttpClientInterceptorOptions options)
+    /// <inheritdoc />
+    public Action<HttpMessageHandlerBuilder> Configure(Action<HttpMessageHandlerBuilder> next)
+    {
+        return (builder) =>
         {
-            _options = options;
-        }
-
-        /// <inheritdoc />
-        public Action<HttpMessageHandlerBuilder> Configure(Action<HttpMessageHandlerBuilder> next)
-        {
-            return (builder) =>
-            {
-                next(builder);
-                builder.AdditionalHandlers.Add(_options.CreateHttpMessageHandler());
-            };
-        }
+            next(builder);
+            builder.AdditionalHandlers.Add(_options.CreateHttpMessageHandler());
+        };
     }
 }
