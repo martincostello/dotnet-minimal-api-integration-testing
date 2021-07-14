@@ -22,17 +22,9 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)GlobalUsings.cs" />
   </ItemGroup>
-  <!-- HACK Various workarounds that affect the CLI and the IDE -->
+  <!-- HACK Various workarounds -->
   <PropertyGroup>
     <!-- HACK Workaround warning in xunit collections -->
     <NoWarn>$(NoWarn);CA2252</NoWarn>
-  </PropertyGroup>
-  <!-- HACK Various workarounds until Visual Studio works with latest language features -->
-  <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' == 'true'">
-    <LangVersion>preview</LangVersion>
-    <!-- HACK Workaround for https://github.com/dotnet/roslyn/issues/54255 -->
-    <NoWarn>$(NoWarn);CS0105</NoWarn>
-    <!-- HACK Workaround for https://github.com/dotnet/aspnetcore/pull/33971 -->
-    <UseRazorSourceGenerator>false</UseRazorSourceGenerator>
   </PropertyGroup>
 </Project>
