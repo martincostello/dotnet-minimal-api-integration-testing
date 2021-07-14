@@ -22,7 +22,12 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)GlobalUsings.cs" />
   </ItemGroup>
-  <!-- HACK Various work arounds until Visual Studio works with latest language features -->
+  <!-- HACK Various workarounds that affect the CLI and the IDE -->
+  <PropertyGroup>
+    <!-- HACK Workaround warning in xunit collections -->
+    <NoWarn>$(NoWarn);CA2252</NoWarn>
+  </PropertyGroup>
+  <!-- HACK Various workarounds until Visual Studio works with latest language features -->
   <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' == 'true'">
     <LangVersion>preview</LangVersion>
     <!-- HACK Workaround for https://github.com/dotnet/roslyn/issues/54255 -->

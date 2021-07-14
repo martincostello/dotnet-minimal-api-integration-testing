@@ -3,11 +3,9 @@
 
 namespace TodoApp
 {
-#pragma warning disable CA2252 // HACK Appears to be a bug - investigate in a later preview build
     [CollectionDefinition(Name)]
     public sealed class HttpServerCollection : ICollectionFixture<HttpServerFixture>
     {
         public const string Name = "TodoApp HTTP server collection";
     }
-#pragma warning restore CA2252
 }
