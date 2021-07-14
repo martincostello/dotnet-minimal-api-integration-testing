@@ -17,6 +17,7 @@ builder.Services.AddGitHubAuthentication();
 builder.Services.AddHttpClient();
 builder.Services.AddRazorPages();
 builder.Services.AddRouting();
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<TodoContext>((serviceProvider, builder) =>
 {
@@ -41,9 +42,6 @@ builder.Services.AddSwaggerGen(options =>
     // Only display the API actions
     options.DocInclusionPredicate(
         (_, description) => description.RelativePath?.StartsWith("api/", StringComparison.Ordinal) == true);
-
-    // HACK Workaround for https://github.com/dotnet/aspnetcore/issues/33934
-    options.ResolveConflictingActions(descriptions => descriptions.First());
 });
 
 var app = builder.Build();
