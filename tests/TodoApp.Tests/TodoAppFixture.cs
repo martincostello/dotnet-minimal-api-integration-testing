@@ -14,72 +14,71 @@ using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace TodoApp
+namespace TodoApp;
+
+public class TodoAppFixture : WebApplicationFactory<Services.ITodoService>, ITestOutputHelperAccessor
 {
-    public class TodoAppFixture : WebApplicationFactory<Services.ITodoService>, ITestOutputHelperAccessor
+    public TodoAppFixture()
+        : base()
     {
-        public TodoAppFixture()
-            : base()
+        ClientOptions.AllowAutoRedirect = false;
+        ClientOptions.BaseAddress = new Uri("https://localhost");
+        Interceptor = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
+    }
+
+    public HttpClientInterceptorOptions Interceptor { get; }
+
+    public ITestOutputHelper? OutputHelper { get; set; }
+
+    public void ClearOutputHelper()
+        => OutputHelper = null;
+
+    public void SetOutputHelper(ITestOutputHelper value)
+        => OutputHelper = value;
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        // HACK Workaround for https://github.com/dotnet/aspnetcore/issues/33889
+        builder.UseEnvironment(Environments.Development);
+
+        builder.ConfigureAppConfiguration((builder) =>
         {
-            ClientOptions.AllowAutoRedirect = false;
-            ClientOptions.BaseAddress = new Uri("https://localhost");
-            Interceptor = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
-        }
+            string dataDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
-        public HttpClientInterceptorOptions Interceptor { get; }
+            if (!Directory.Exists(dataDirectory))
+            {
+                Directory.CreateDirectory(dataDirectory);
+            }
 
-        public ITestOutputHelper? OutputHelper { get; set; }
+            var config = new[]
+            {
+                KeyValuePair.Create("DataDirectory", dataDirectory),
+            };
 
-        public void ClearOutputHelper()
-            => OutputHelper = null;
+            string? directory = Path.GetDirectoryName(typeof(HttpServerFixture).Assembly.Location);
+            string fullPath = Path.Combine(directory ?? ".", "testsettings.json");
 
-        public void SetOutputHelper(ITestOutputHelper value)
-            => OutputHelper = value;
+            builder.AddJsonFile(fullPath)
+                   .AddInMemoryCollection(config);
+        });
 
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        builder.ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this))
+               .UseSolutionRelativeContentRoot(Path.Combine("src", "TodoApp"));
+
+        builder.ConfigureServices((services) =>
         {
-            // HACK Workaround for https://github.com/dotnet/aspnetcore/issues/33889
-            builder.UseEnvironment(Environments.Development);
+            services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
+                (_) => new HttpRequestInterceptionFilter(Interceptor));
 
-            builder.ConfigureAppConfiguration((builder) =>
-            {
-                string dataDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            services.AddSingleton<IPostConfigureOptions<GitHubAuthenticationOptions>, RemoteAuthorizationEventsFilter>();
 
-                if (!Directory.Exists(dataDirectory))
-                {
-                    Directory.CreateDirectory(dataDirectory);
-                }
+            // HACK Remove the IConfiguration that WebApplication(Builder) adds that
+            // does not reflect the changes applied by ConfigureAppConfiguration() above.
+            // See https://github.com/dotnet/aspnetcore/issues/33876.
+            var configs = services.Where((p) => p.ServiceType == typeof(IConfiguration)).ToList();
+            services.Remove(configs[1]);
+        });
 
-                var config = new[]
-                {
-                    KeyValuePair.Create("DataDirectory", dataDirectory),
-                };
-
-                string? directory = Path.GetDirectoryName(typeof(HttpServerFixture).Assembly.Location);
-                string fullPath = Path.Combine(directory ?? ".", "testsettings.json");
-
-                builder.AddJsonFile(fullPath)
-                       .AddInMemoryCollection(config);
-            });
-
-            builder.ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this))
-                   .UseSolutionRelativeContentRoot(Path.Combine("src", "TodoApp"));
-
-            builder.ConfigureServices((services) =>
-            {
-                services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
-                    (_) => new HttpRequestInterceptionFilter(Interceptor));
-
-                services.AddSingleton<IPostConfigureOptions<GitHubAuthenticationOptions>, RemoteAuthorizationEventsFilter>();
-
-                // HACK Remove the IConfiguration that WebApplication(Builder) adds that
-                // does not reflect the changes applied by ConfigureAppConfiguration() above.
-                // See https://github.com/dotnet/aspnetcore/issues/33876.
-                var configs = services.Where((p) => p.ServiceType == typeof(IConfiguration)).ToList();
-                services.Remove(configs[1]);
-            });
-
-            Interceptor.RegisterBundle("oauth-http-bundle.json");
-        }
+        Interceptor.RegisterBundle("oauth-http-bundle.json");
     }
 }

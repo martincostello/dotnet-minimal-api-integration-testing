@@ -3,86 +3,85 @@
 
 using Microsoft.Playwright;
 
-namespace TodoApp
+namespace TodoApp;
+
+[Collection(HttpServerCollection.Name)]
+public class TodoAppTests
 {
-    [Collection(HttpServerCollection.Name)]
-    public class TodoAppTests
+    public TodoAppTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     {
-        public TodoAppTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
+        Fixture = fixture;
+        OutputHelper = outputHelper;
+        Fixture.SetOutputHelper(OutputHelper);
+    }
+
+    private HttpServerFixture Fixture { get; }
+
+    private ITestOutputHelper OutputHelper { get; }
+
+    [Fact]
+    public async Task Can_Sign_In_And_Manage_Todo_Items()
+    {
+        // Arrange
+        var browser = new BrowserFixture(OutputHelper);
+        await browser.WithPageAsync(async (page) =>
         {
-            Fixture = fixture;
-            OutputHelper = outputHelper;
-            Fixture.SetOutputHelper(OutputHelper);
-        }
+            await page.GotoAsync(Fixture.ServerAddress);
+            await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
 
-        private HttpServerFixture Fixture { get; }
+            var app = new TodoPage(page);
 
-        private ITestOutputHelper OutputHelper { get; }
+            // Act - Sign in
+            await app.SignInAsync();
 
-        [Fact]
-        public async Task Can_Sign_In_And_Manage_Todo_Items()
-        {
-            // Arrange
-            var browser = new BrowserFixture(OutputHelper);
-            await browser.WithPageAsync(async (page) =>
-            {
-                await page.GotoAsync(Fixture.ServerAddress);
-                await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
+            // Assert
+            await app.WaitForSignedInAsync();
+            await app.UserNameAsync().ShouldBe("John Smith");
 
-                var app = new TodoPage(page);
+            // Arrange - Wait for list to be ready
+            await app.WaitForNoItemsAsync();
 
-                // Act - Sign in
-                await app.SignInAsync();
+            // Act - Add an item
+            await app.AddItemAsync("Buy cheese");
 
-                // Assert
-                await app.WaitForSignedInAsync();
-                await app.UserNameAsync().ShouldBe("John Smith");
+            // Assert
+            var items = await app.GetItemsAsync();
+            items.Count.ShouldBe(1);
 
-                // Arrange - Wait for list to be ready
-                await app.WaitForNoItemsAsync();
+            await items[0].TextAsync().ShouldBe("Buy cheese");
+            await items[0].LastUpdatedAsync().ShouldBe("a few seconds ago");
 
-                // Act - Add an item
-                await app.AddItemAsync("Buy cheese");
+            // Act - Add another item
+            await app.AddItemAsync("Buy eggs");
 
-                // Assert
-                var items = await app.GetItemsAsync();
-                items.Count.ShouldBe(1);
+            // Assert
+            items = await app.GetItemsAsync();
+            items.Count.ShouldBe(2);
 
-                await items[0].TextAsync().ShouldBe("Buy cheese");
-                await items[0].LastUpdatedAsync().ShouldBe("a few seconds ago");
+            await items[0].TextAsync().ShouldBe("Buy cheese");
+            await items[1].TextAsync().ShouldBe("Buy eggs");
 
-                // Act - Add another item
-                await app.AddItemAsync("Buy eggs");
+            // Act - Delete an item and complete an item
+            await items[0].DeleteAsync();
+            await items[1].CompleteAsync();
 
-                // Assert
-                items = await app.GetItemsAsync();
-                items.Count.ShouldBe(2);
+            // Assert
+            items = await app.GetItemsAsync();
+            items.Count.ShouldBe(1);
 
-                await items[0].TextAsync().ShouldBe("Buy cheese");
-                await items[1].TextAsync().ShouldBe("Buy eggs");
+            await items[0].TextAsync().ShouldBe("Buy eggs");
 
-                // Act - Delete an item and complete an item
-                await items[0].DeleteAsync();
-                await items[1].CompleteAsync();
+            // Act - Delete the remaining item
+            await items[0].DeleteAsync();
 
-                // Assert
-                items = await app.GetItemsAsync();
-                items.Count.ShouldBe(1);
+            // Assert
+            await app.WaitForNoItemsAsync();
 
-                await items[0].TextAsync().ShouldBe("Buy eggs");
+            // Act - Sign out
+            await app.SignOutAsync();
 
-                // Act - Delete the remaining item
-                await items[0].DeleteAsync();
-
-                // Assert
-                await app.WaitForNoItemsAsync();
-
-                // Act - Sign out
-                await app.SignOutAsync();
-
-                // Assert
-                await app.WaitForSignedOutAsync();
-            });
-        }
+            // Assert
+            await app.WaitForSignedOutAsync();
+        });
     }
 }
