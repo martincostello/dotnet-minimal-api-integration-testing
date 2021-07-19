@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2021. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using TodoApp;
@@ -39,9 +40,8 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new() { Title = "Todo API", Version = "v1" });
 
-    // HACK Only display the API actions
     options.DocInclusionPredicate(
-        (_, description) => description.RelativePath?.StartsWith("api/", StringComparison.Ordinal) == true);
+        (_, description) => !description.ActionDescriptor.EndpointMetadata.OfType<ApiExplorerSettingsAttribute>().Any((p) => p.IgnoreApi));
 });
 
 var app = builder.Build();
