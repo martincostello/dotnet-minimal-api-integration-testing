@@ -68,12 +68,12 @@ public static class AuthenticationModule
         builder.MapPost(SignInPath, () =>
             Results.Challenge(
                 new AuthenticationProperties { RedirectUri = RootPath },
-                GitHubAuthenticationDefaults.AuthenticationScheme)).IgnoreApi();
+                new[] { GitHubAuthenticationDefaults.AuthenticationScheme })).IgnoreApi();
 
         builder.MapPost(SignOutPath, () =>
             Results.SignOut(
                 new AuthenticationProperties { RedirectUri = RootPath },
-                CookieAuthenticationDefaults.AuthenticationScheme))
+                new[] { CookieAuthenticationDefaults.AuthenticationScheme }))
             .IgnoreApi()
             .RequireAuthorization();
 

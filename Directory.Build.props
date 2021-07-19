@@ -22,9 +22,4 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)GlobalUsings.cs" />
   </ItemGroup>
-  <!-- HACK Various workarounds -->
-  <PropertyGroup>
-    <!-- HACK Workaround warning in xunit collections -->
-    <NoWarn>$(NoWarn);CA2252</NoWarn>
-  </PropertyGroup>
 </Project>
