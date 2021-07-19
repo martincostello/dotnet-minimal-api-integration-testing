@@ -39,7 +39,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new() { Title = "Todo API", Version = "v1" });
 
-    // Only display the API actions
+    // HACK Only display the API actions
     options.DocInclusionPredicate(
         (_, description) => description.RelativePath?.StartsWith("api/", StringComparison.Ordinal) == true);
 });
