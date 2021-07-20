@@ -18,11 +18,9 @@ public static class ApiExplorerEndpointConventionBuilderExtensions
     /// <summary>
     /// Ignores the endpoint(s) from the API Explorer.
     /// </summary>
-    /// <typeparam name="TBuilder">The type of the endpoint builder.</typeparam>
     /// <param name="builder">The endpoint convention builder.</param>
     /// <returns>The original convention builder parameter.</returns>
-    public static TBuilder IgnoreApi<TBuilder>(this TBuilder builder)
-        where TBuilder : IEndpointConventionBuilder
+    public static IEndpointConventionBuilder ExcludeFromApiExplorer(this IEndpointConventionBuilder builder)
     {
         builder.Add(endpointBuilder =>
         {
@@ -32,45 +30,39 @@ public static class ApiExplorerEndpointConventionBuilderExtensions
     }
 
     /// <summary>
-    /// Specifies status code returned by the endpoint.
+    /// Adds metadata indicating the type of response an endpoint produces.
     /// </summary>
-    /// <typeparam name="TBuilder">The type of the endpoint builder.</typeparam>
     /// <param name="builder">The endpoint convention builder.</param>
-    /// <param name="statusCode">The HTTP response status code.</param>
+    /// <param name="statusCode">>The response status code.</param>
     /// <returns>The original convention builder parameter.</returns>
-    public static TBuilder ProducesStatusCode<TBuilder>(this TBuilder builder, int statusCode)
-        where TBuilder : IEndpointConventionBuilder
+    public static IEndpointConventionBuilder Produces<TResponse>(this IEndpointConventionBuilder builder, int statusCode = StatusCodes.Status200OK)
     {
-        return builder.ProducesStatusCode(statusCode, typeof(void));
+        return builder.Produces(statusCode, typeof(TResponse));
     }
 
     /// <summary>
-    /// Specifies status code and the type of the value returned by the endpoint.
+    /// Adds metadata indicating the type of response an endpoint produces.
     /// </summary>
-    /// <typeparam name="TBuilder">The type of the endpoint builder.</typeparam>
     /// <param name="builder">The endpoint convention builder.</param>
-    /// <param name="statusCode">The HTTP response status code.</param>
-    /// <param name="type">The type of object that is going to be written in the response.</param>
+    /// <param name="statusCode">The response status code.</param>
+    /// <param name="responseType">The type of the response.</param>
     /// <returns>The original convention builder parameter.</returns>
-    public static TBuilder ProducesStatusCode<TBuilder>(this TBuilder builder, int statusCode, Type type)
-        where TBuilder : IEndpointConventionBuilder
+    public static IEndpointConventionBuilder Produces(this IEndpointConventionBuilder builder, int statusCode = StatusCodes.Status200OK, Type? responseType = null)
     {
         builder.Add(endpointBuilder =>
         {
-            endpointBuilder.Metadata.Add(new ProducesResponseTypeAttribute(type, statusCode));
+            endpointBuilder.Metadata.Add(new ProducesResponseTypeAttribute(responseType ?? typeof(void), statusCode));
         });
         return builder;
     }
 
     /// <summary>
-    /// Specifies the error status code returned by the endpoint.
+    /// Adds metadata indicating that the endpoint produces a Problem Details response.
     /// </summary>
-    /// <typeparam name="TBuilder">The type of the endpoint builder.</typeparam>
     /// <param name="builder">The endpoint convention builder.</param>
     /// <param name="statusCode">The HTTP response status code.</param>
     /// <returns>The original convention builder parameter.</returns>
-    public static TBuilder ProducesErrorStatusCode<TBuilder>(this TBuilder builder, int statusCode)
-        where TBuilder : IEndpointConventionBuilder
+    public static IEndpointConventionBuilder ProducesProblem(this IEndpointConventionBuilder builder, int statusCode = StatusCodes.Status500InternalServerError)
     {
         builder.Add(endpointBuilder =>
         {
