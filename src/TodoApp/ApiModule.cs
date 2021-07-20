@@ -28,8 +28,8 @@ public static class ApiModule
             var model = await service.GetAsync(user.GetUserId(), id, cancellationToken);
             return model is null ? Results.Problem(statusCode: StatusCodes.Status404NotFound) : Results.Json(model);
         })
-        .ProducesStatusCode(StatusCodes.Status200OK, typeof(TodoItemModel))
-        .ProducesErrorStatusCode(StatusCodes.Status404NotFound)
+        .Produces<TodoItemModel>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
         .RequireAuthorization();
 
         // Create a new Todo item
@@ -48,8 +48,8 @@ public static class ApiModule
 
             return Results.Created($"/api/items/{id}", new { id });
         })
-        .ProducesStatusCode(StatusCodes.Status201Created)
-        .ProducesErrorStatusCode(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status201Created)
+        .ProducesProblem(StatusCodes.Status400BadRequest)
         .RequireAuthorization();
 
         // Mark a Todo item as completed
@@ -68,9 +68,9 @@ public static class ApiModule
                 _ => Results.Problem(statusCode: StatusCodes.Status404NotFound),
             };
         })
-        .ProducesStatusCode(StatusCodes.Status204NoContent)
-        .ProducesErrorStatusCode(StatusCodes.Status400BadRequest)
-        .ProducesErrorStatusCode(StatusCodes.Status404NotFound)
+        .Produces(StatusCodes.Status204NoContent)
+        .ProducesProblem(StatusCodes.Status400BadRequest)
+        .ProducesProblem(StatusCodes.Status404NotFound)
         .RequireAuthorization();
 
         // Delete a Todo item
@@ -83,13 +83,13 @@ public static class ApiModule
             var wasDeleted = await service.DeleteItemAsync(user.GetUserId(), id, cancellationToken);
             return wasDeleted ? Results.NoContent() : Results.Problem(statusCode: StatusCodes.Status404NotFound);
         })
-        .ProducesStatusCode(StatusCodes.Status204NoContent)
-        .ProducesErrorStatusCode(StatusCodes.Status404NotFound)
+        .Produces(StatusCodes.Status204NoContent)
+        .ProducesProblem(StatusCodes.Status404NotFound)
         .RequireAuthorization();
 
         // Redirect to Open API/Swagger documentation
         builder.MapGet("/api", () => Results.Redirect("/swagger-ui/index.html"))
-            .IgnoreApi()
+            .ExcludeFromApiExplorer()
             .RequireAuthorization();
 
         return builder;
