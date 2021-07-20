@@ -15,7 +15,8 @@ public static class ApiModule
         builder.MapGet("/api/items", async (
             ITodoService service,
             ClaimsPrincipal user,
-            CancellationToken cancellationToken) => await service.GetListAsync(user.GetUserId(), cancellationToken))
+            CancellationToken cancellationToken) =>
+                await service.GetListAsync(user.GetUserId(), cancellationToken))
             .RequireAuthorization();
 
         // Get a specific Todo item
@@ -24,13 +25,13 @@ public static class ApiModule
             ClaimsPrincipal user,
             ITodoService service,
             CancellationToken cancellationToken) =>
-        {
-            var model = await service.GetAsync(user.GetUserId(), id, cancellationToken);
-            return model is null ? Results.Problem(statusCode: StatusCodes.Status404NotFound) : Results.Json(model);
-        })
-        .Produces<TodoItemModel>()
-        .ProducesProblem(StatusCodes.Status404NotFound)
-        .RequireAuthorization();
+            {
+                var model = await service.GetAsync(user.GetUserId(), id, cancellationToken);
+                return model is null ? Results.Problem(statusCode: StatusCodes.Status404NotFound) : Results.Json(model);
+            })
+            .Produces<TodoItemModel>()
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .RequireAuthorization();
 
         // Create a new Todo item
         builder.MapPost("/api/items", async (
@@ -38,19 +39,19 @@ public static class ApiModule
             ClaimsPrincipal user,
             ITodoService service,
             CancellationToken cancellationToken) =>
-        {
-            if (model is null || string.IsNullOrWhiteSpace(model.Text))
             {
-                return Results.Problem(statusCode: StatusCodes.Status400BadRequest);
-            }
+                if (model is null || string.IsNullOrWhiteSpace(model.Text))
+                {
+                    return Results.Problem(statusCode: StatusCodes.Status400BadRequest);
+                }
 
-            var id = await service.AddItemAsync(user.GetUserId(), model.Text, cancellationToken);
+                var id = await service.AddItemAsync(user.GetUserId(), model.Text, cancellationToken);
 
-            return Results.Created($"/api/items/{id}", new { id });
-        })
-        .Produces(StatusCodes.Status201Created)
-        .ProducesProblem(StatusCodes.Status400BadRequest)
-        .RequireAuthorization();
+                return Results.Created($"/api/items/{id}", new { id });
+            })
+            .Produces(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .RequireAuthorization();
 
         // Mark a Todo item as completed
         builder.MapPost("/api/items/{id}/complete", async (
@@ -58,20 +59,20 @@ public static class ApiModule
             ClaimsPrincipal user,
             ITodoService service,
             CancellationToken cancellationToken) =>
-        {
-            var wasCompleted = await service.CompleteItemAsync(user.GetUserId(), id, cancellationToken);
-
-            return wasCompleted switch
             {
-                true => Results.NoContent(),
-                false => Results.Problem(statusCode: StatusCodes.Status400BadRequest),
-                _ => Results.Problem(statusCode: StatusCodes.Status404NotFound),
-            };
-        })
-        .Produces(StatusCodes.Status204NoContent)
-        .ProducesProblem(StatusCodes.Status400BadRequest)
-        .ProducesProblem(StatusCodes.Status404NotFound)
-        .RequireAuthorization();
+                var wasCompleted = await service.CompleteItemAsync(user.GetUserId(), id, cancellationToken);
+
+                return wasCompleted switch
+                {
+                    true => Results.NoContent(),
+                    false => Results.Problem(statusCode: StatusCodes.Status400BadRequest),
+                    _ => Results.Problem(statusCode: StatusCodes.Status404NotFound),
+                };
+            })
+            .Produces(StatusCodes.Status204NoContent)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .RequireAuthorization();
 
         // Delete a Todo item
         builder.MapDelete("/api/items/{id}", async (
@@ -79,18 +80,18 @@ public static class ApiModule
             ClaimsPrincipal user,
             ITodoService service,
             CancellationToken cancellationToken) =>
-        {
-            var wasDeleted = await service.DeleteItemAsync(user.GetUserId(), id, cancellationToken);
-            return wasDeleted ? Results.NoContent() : Results.Problem(statusCode: StatusCodes.Status404NotFound);
-        })
-        .Produces(StatusCodes.Status204NoContent)
-        .ProducesProblem(StatusCodes.Status404NotFound)
-        .RequireAuthorization();
+            {
+                var wasDeleted = await service.DeleteItemAsync(user.GetUserId(), id, cancellationToken);
+                return wasDeleted ? Results.NoContent() : Results.Problem(statusCode: StatusCodes.Status404NotFound);
+            })
+            .Produces(StatusCodes.Status204NoContent)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .RequireAuthorization();
 
         // Redirect to Open API/Swagger documentation
         builder.MapGet("/api", () => Results.Redirect("/swagger-ui/index.html"))
-            .ExcludeFromApiExplorer()
-            .RequireAuthorization();
+               .ExcludeFromApiExplorer()
+               .RequireAuthorization();
 
         return builder;
     }
