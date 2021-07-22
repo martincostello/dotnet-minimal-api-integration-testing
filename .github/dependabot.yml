@@ -4,6 +4,7 @@ updates:
   directory: "/"
   schedule:
     interval: daily
+    time: "05:30"
     timezone: Europe/London
   reviewers:
     - "martincostello"
