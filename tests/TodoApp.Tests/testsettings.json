@@ -1,6 +1,7 @@
 {
   "GitHub": {
     "ClientId": "github-id",
-    "ClientSecret": "github-secret"
+    "ClientSecret": "github-secret",
+    "EnterpriseDomain": ""
   }
 }
