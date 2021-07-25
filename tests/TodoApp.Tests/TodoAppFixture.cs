@@ -59,8 +59,6 @@ namespace TodoApp
                 string? directory = Path.GetDirectoryName(typeof(HttpServerFixture).Assembly.Location);
                 string fullPath = Path.Combine(directory ?? ".", "testsettings.json");
 
-                builder.Sources.Clear();
-
                 builder.AddJsonFile(fullPath)
                        .AddInMemoryCollection(config);
             });
