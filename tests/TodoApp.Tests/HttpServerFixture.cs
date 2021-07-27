@@ -36,33 +36,6 @@ public sealed class HttpServerFixture : TodoAppFixture, IAsyncLifetime
         }
     }
 
-    public HttpClient CreateHttpClient()
-    {
-        var handler = new HttpClientHandler()
-        {
-            AllowAutoRedirect = ClientOptions.AllowAutoRedirect,
-            CheckCertificateRevocationList = true,
-            MaxAutomaticRedirections = ClientOptions.MaxAutomaticRedirections,
-            UseCookies = ClientOptions.HandleCookies,
-        };
-
-        try
-        {
-            var client = new HttpClient(handler, disposeHandler: true);
-
-            ConfigureClient(client);
-
-            client.BaseAddress = ClientOptions.BaseAddress;
-
-            return client;
-        }
-        catch (Exception)
-        {
-            handler.Dispose();
-            throw;
-        }
-    }
-
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         base.ConfigureWebHost(builder);
