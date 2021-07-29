@@ -124,9 +124,7 @@ public class ApiTests
         // Go through the sign-in flow, which will set
         // the authentication cookie on the HttpClient.
         using var response = await client.PostAsync("/signin", content);
-
-        // HACK Restore when Razor Pages is working again
-        /////response.IsSuccessStatusCode.ShouldBeTrue();
+        response.IsSuccessStatusCode.ShouldBeTrue();
 
         return client;
     }

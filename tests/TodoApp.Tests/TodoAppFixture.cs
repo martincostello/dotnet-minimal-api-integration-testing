@@ -38,9 +38,6 @@ public class TodoAppFixture : WebApplicationFactory<Services.ITodoService>, ITes
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        // HACK Workaround for https://github.com/dotnet/aspnetcore/issues/33889
-        builder.UseEnvironment(Environments.Development);
-
         builder.ConfigureAppConfiguration((builder) =>
         {
             string dataDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
