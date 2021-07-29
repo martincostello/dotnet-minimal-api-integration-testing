@@ -115,7 +115,12 @@ public class ApiTests
 
     private async Task<HttpClient> CreateAuthenticatedClientAsync()
     {
-        var options = new WebApplicationFactoryClientOptions();
+        var options = new WebApplicationFactoryClientOptions()
+        {
+            AllowAutoRedirect = true,
+            BaseAddress = Fixture.ClientOptions.BaseAddress,
+        };
+
         var client = Fixture.CreateClient(options);
 
         var parameters = Array.Empty<KeyValuePair<string?, string?>>();
