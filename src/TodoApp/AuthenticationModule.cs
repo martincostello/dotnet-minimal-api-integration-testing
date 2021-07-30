@@ -30,7 +30,7 @@ public static class AuthenticationModule
             .AddGitHub()
             .Services
             .AddOptions<GitHubAuthenticationOptions>(GitHubAuthenticationDefaults.AuthenticationScheme)
-            .Configure<IConfiguration, IHostEnvironment>((options, configuration, environment) =>
+            .Configure<IConfiguration>((options, configuration) =>
             {
                 options.AccessDeniedPath = DeniedPath;
                 options.ClientId = configuration["GitHub:ClientId"];
