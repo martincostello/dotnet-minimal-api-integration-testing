@@ -40,6 +40,8 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new() { Title = "Todo API", Version = "v1" });
 
+    // TODO This can be removed once a release of Swashbuckle that contains
+    // https://github.com/domaindrivendev/Swashbuckle.AspNetCore/pull/2173 is available.
     options.DocInclusionPredicate(
         (_, description) => !description.ActionDescriptor.EndpointMetadata.OfType<ApiExplorerSettingsAttribute>().Any((p) => p.IgnoreApi));
 });

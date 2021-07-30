@@ -10,6 +10,9 @@ namespace Microsoft.AspNetCore.Builder;
 /// </summary>
 public static class ApiExplorerEndpointConventionBuilderExtensions
 {
+    //// TODO This can be removed once https://github.com/dotnet/aspnetcore/issues/34068
+    //// is resolved. Also see https://github.com/dotnet/aspnetcore/pull/34860.
+
     private static readonly ApiExplorerSettingsAttribute _ignoreApiMetadata = new()
     {
         IgnoreApi = true
@@ -28,6 +31,9 @@ public static class ApiExplorerEndpointConventionBuilderExtensions
         });
         return builder;
     }
+
+    //// TODO Methods below can be removed once https://github.com/dotnet/aspnetcore/issues/34542
+    //// is resolved. Also see https://github.com/dotnet/aspnetcore/pull/34860.
 
     /// <summary>
     /// Adds metadata indicating the type of response an endpoint produces.
