@@ -16,7 +16,9 @@ public static class ApiModule
             ITodoService service,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
-                await service.GetListAsync(user.GetUserId(), cancellationToken))
+            {
+                return await service.GetListAsync(user.GetUserId(), cancellationToken);
+            })
             .RequireAuthorization();
 
         // Get a specific Todo item
