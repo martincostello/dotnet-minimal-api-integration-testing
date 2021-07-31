@@ -3,12 +3,12 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace Microsoft.AspNetCore.Builder;
+namespace Microsoft.AspNetCore.Http;
 
 /// <summary>
-/// API Explorer extension methods for <see cref="IEndpointConventionBuilder"/>.
+/// Extension methods for adding response type metadata to endpoints.
 /// </summary>
-public static class ApiExplorerEndpointConventionBuilderExtensions
+public static class OpenApiEndpointConventionBuilderExtensions
 {
     //// TODO This can be removed once https://github.com/dotnet/aspnetcore/issues/34068
     //// is resolved. Also see https://github.com/dotnet/aspnetcore/pull/34860.
@@ -19,17 +19,14 @@ public static class ApiExplorerEndpointConventionBuilderExtensions
     };
 
     /// <summary>
-    /// Ignores the endpoint(s) from the API Explorer.
+    /// Adds metadata to support suppressing OpenAPI documentation from
+    /// being generated for this endpoint.
     /// </summary>
-    /// <param name="builder">The endpoint convention builder.</param>
-    /// <returns>The original convention builder parameter.</returns>
-    public static IEndpointConventionBuilder ExcludeFromApiExplorer(this IEndpointConventionBuilder builder)
+    /// <param name="builder">The <see cref="IEndpointConventionBuilder"/>.</param>
+    /// <returns>A <see cref="IEndpointConventionBuilder"/> that can be used to further customize the endpoint.</returns>
+    public static IEndpointConventionBuilder SuppressApi(this IEndpointConventionBuilder builder)
     {
-        builder.Add(endpointBuilder =>
-        {
-            endpointBuilder.Metadata.Add(_ignoreApiMetadata);
-        });
-        return builder;
+        return builder.WithMetadata(_ignoreApiMetadata);
     }
 
     //// TODO Methods below can be removed once https://github.com/dotnet/aspnetcore/issues/34542
@@ -38,42 +35,44 @@ public static class ApiExplorerEndpointConventionBuilderExtensions
     /// <summary>
     /// Adds metadata indicating the type of response an endpoint produces.
     /// </summary>
-    /// <param name="builder">The endpoint convention builder.</param>
-    /// <param name="statusCode">>The response status code.</param>
-    /// <returns>The original convention builder parameter.</returns>
-    public static IEndpointConventionBuilder Produces<TResponse>(this IEndpointConventionBuilder builder, int statusCode = StatusCodes.Status200OK)
+    /// <typeparam name="TResponse">The type of the response.</typeparam>
+    /// <param name="builder">The <see cref="IEndpointConventionBuilder"/>.</param>
+    /// <param name="statusCode">The response status code. Defatuls to StatusCodes.Status200OK.</param>
+    /// <param name="contentType">The response content type. Defaults to "application/json"</param>
+    /// <param name="additionalContentTypes">Additional response content types the endpoint produces for the supplied status code.</param>
+    /// <returns>A <see cref="IEndpointConventionBuilder"/> that can be used to further customize the endpoint.</returns>
+    public static IEndpointConventionBuilder Produces<TResponse>(
+        this IEndpointConventionBuilder builder,
+        int statusCode = StatusCodes.Status200OK)
     {
-        return builder.Produces(statusCode, typeof(TResponse));
+        return Produces(builder, statusCode, typeof(TResponse));
     }
 
     /// <summary>
     /// Adds metadata indicating the type of response an endpoint produces.
     /// </summary>
-    /// <param name="builder">The endpoint convention builder.</param>
-    /// <param name="statusCode">The response status code.</param>
-    /// <param name="responseType">The type of the response.</param>
-    /// <returns>The original convention builder parameter.</returns>
-    public static IEndpointConventionBuilder Produces(this IEndpointConventionBuilder builder, int statusCode = StatusCodes.Status200OK, Type? responseType = null)
+    /// <param name="builder">The <see cref="IEndpointConventionBuilder"/>.</param>
+    /// <param name="statusCode">The response status code. Defaults to StatusCodes.Status200OK.</param>
+    /// <param name="responseType">The type of the response. Defaults to null.</param>
+    /// <returns>A <see cref="IEndpointConventionBuilder"/> that can be used to further customize the endpoint.</returns>
+    public static IEndpointConventionBuilder Produces(
+        this IEndpointConventionBuilder builder,
+        int statusCode = StatusCodes.Status200OK,
+        Type? responseType = null)
     {
-        builder.Add(endpointBuilder =>
-        {
-            endpointBuilder.Metadata.Add(new ProducesResponseTypeAttribute(responseType ?? typeof(void), statusCode));
-        });
-        return builder;
+        return builder.WithMetadata(new ProducesResponseTypeAttribute(responseType ?? typeof(void), statusCode));
     }
 
     /// <summary>
     /// Adds metadata indicating that the endpoint produces a Problem Details response.
     /// </summary>
-    /// <param name="builder">The endpoint convention builder.</param>
-    /// <param name="statusCode">The HTTP response status code.</param>
-    /// <returns>The original convention builder parameter.</returns>
-    public static IEndpointConventionBuilder ProducesProblem(this IEndpointConventionBuilder builder, int statusCode = StatusCodes.Status500InternalServerError)
+    /// <param name="builder">The <see cref="IEndpointConventionBuilder"/>.</param>
+    /// <param name="statusCode">The response status code. Defatuls to StatusCodes.Status500InternalServerError.</param>
+    /// <returns>A <see cref="IEndpointConventionBuilder"/> that can be used to further customize the endpoint.</returns>
+    public static IEndpointConventionBuilder ProducesProblem(
+        this IEndpointConventionBuilder builder,
+        int statusCode = StatusCodes.Status500InternalServerError)
     {
-        builder.Add(endpointBuilder =>
-        {
-            endpointBuilder.Metadata.Add(new ProducesResponseTypeAttribute(typeof(ProblemDetails), statusCode));
-        });
-        return builder;
+        return Produces<ProblemDetails>(builder, statusCode);
     }
 }
