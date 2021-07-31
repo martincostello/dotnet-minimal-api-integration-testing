@@ -5,15 +5,18 @@ import { TodoClient } from '../client/TodoClient';
 import { TodoItem } from '../models/TodoItem';
 import { Classes } from './Classes';
 import { Elements } from './Elements';
+import { TodoElement } from './TodoElement';
 
 export class TodoApp {
 
     private readonly client: TodoClient;
     private readonly elements: Elements;
+    private readonly items: TodoElement[];
 
     constructor() {
         this.client = new TodoClient();
         this.elements = new Elements();
+        this.items = [];
     }
 
     async initialize(): Promise<void> {
@@ -58,6 +61,13 @@ export class TodoApp {
         }
 
         this.hide(this.elements.loader);
+
+        // Update any items' relative timestamps every 30 seconds
+        window.setInterval(() => {
+            this.items.forEach((item) => {
+                item.refresh();
+            });
+        }, 30000);
     }
 
     async addNewItem(): Promise<void> {
@@ -106,13 +116,22 @@ export class TodoApp {
             await this.client.delete(id);
         });
         element.onDeleted(() => {
+
             if (this.elements.itemCount() < 1) {
                 this.hide(this.elements.itemTable);
                 this.show(this.elements.banner);
             }
+
+            const index = this.items.findIndex((item) => item.id() === element.id());
+
+            if (index > -1) {
+                this.items.splice(index, 1);
+            }
         });
 
         element.show();
+
+        this.items.push(element);
     }
 
     private disable(element: Element) {

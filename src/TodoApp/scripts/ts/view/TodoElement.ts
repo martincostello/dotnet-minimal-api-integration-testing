@@ -55,6 +55,10 @@ export class TodoElement {
         });
     }
 
+    id(): string {
+        return this.item.id;
+    }
+
     onComplete(handler: (id: string) => Promise<void>) {
         this.onCompletedHandler = handler;
     }
@@ -65,6 +69,10 @@ export class TodoElement {
 
     onDeleted(handler: (id: string) => void) {
         this.onDeletedHandler = handler;
+    }
+
+    refresh() {
+        this.updateTimestamp(moment(this.item.lastUpdated));
     }
 
     show() {
