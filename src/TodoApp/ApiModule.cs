@@ -92,7 +92,7 @@ public static class ApiModule
 
         // Redirect to Open API/Swagger documentation
         builder.MapGet("/api", () => Results.Redirect("/swagger-ui/index.html"))
-               .ExcludeFromApiExplorer()
+               .SuppressApi()
                .RequireAuthorization();
 
         return builder;

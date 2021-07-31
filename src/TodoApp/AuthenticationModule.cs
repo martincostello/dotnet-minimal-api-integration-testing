@@ -63,23 +63,23 @@ public static class AuthenticationModule
     public static IEndpointRouteBuilder MapAuthenticationRoutes(this IEndpointRouteBuilder builder)
     {
         builder.MapGet(DeniedPath, () => Results.Redirect(RootPath + "?denied=true"))
-               .ExcludeFromApiExplorer();
+               .SuppressApi();
 
         builder.MapGet(SignOutPath, () => Results.Redirect(RootPath))
-               .ExcludeFromApiExplorer();
+               .SuppressApi();
 
         builder.MapPost(SignInPath, () =>
             Results.Challenge(
                 new AuthenticationProperties { RedirectUri = RootPath },
                 new[] { GitHubAuthenticationDefaults.AuthenticationScheme }))
-            .ExcludeFromApiExplorer();
+            .SuppressApi();
 
         builder.MapPost(SignOutPath, () =>
             Results.SignOut(
                 new AuthenticationProperties { RedirectUri = RootPath },
                 new[] { CookieAuthenticationDefaults.AuthenticationScheme }))
-            .ExcludeFromApiExplorer()
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .SuppressApi();
 
         return builder;
     }
