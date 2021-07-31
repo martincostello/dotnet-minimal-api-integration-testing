@@ -6,11 +6,13 @@ using Microsoft.Playwright;
 namespace TodoApp;
 
 [Collection(HttpServerCollection.Name)]
-public class TodoAppTests
+public class UITests
 {
-    public TodoAppTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
+    public UITests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     {
         Fixture = fixture;
+
+        // Route output from the fixture's logs to xunit's output
         OutputHelper = outputHelper;
         Fixture.SetOutputHelper(OutputHelper);
     }
@@ -26,6 +28,7 @@ public class TodoAppTests
         var browser = new BrowserFixture(OutputHelper);
         await browser.WithPageAsync(async (page) =>
         {
+            // Load the application
             await page.GotoAsync(Fixture.ServerAddress);
             await page.WaitForLoadStateAsync(LoadState.DOMContentLoaded);
 

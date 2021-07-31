@@ -16,7 +16,7 @@ public sealed class TodoMigration : Migration
     {
         migrationBuilder.CreateTable(
             name: nameof(TodoContext.Items),
-            columns: (table) => new
+            columns: table => new
             {
                 Id = table.Column<Guid>(nullable: false),
                 UserId = table.Column<string>(nullable: false),
@@ -24,7 +24,7 @@ public sealed class TodoMigration : Migration
                 CreatedAt = table.Column<DateTimeOffset>(nullable: false),
                 CompletedAt = table.Column<DateTimeOffset>(nullable: true),
             },
-            constraints: (table) => table.PrimaryKey($"PK_{nameof(TodoContext.Items)}", (p) => p.Id));
+            constraints: table => table.PrimaryKey($"PK_{nameof(TodoContext.Items)}", p => p.Id));
     }
 
     /// <inheritdoc />
@@ -37,15 +37,15 @@ public sealed class TodoMigration : Migration
         modelBuilder.HasAnnotation("Relational:MaxIdentifierLength", 128);
         modelBuilder.Entity(
             typeof(TodoItem).Name,
-            b =>
+            builder =>
             {
-                b.Property<Guid>(nameof(TodoItem.Id)).ValueGeneratedOnAdd();
-                b.Property<string>(nameof(TodoItem.UserId));
-                b.Property<string>(nameof(TodoItem.Text));
-                b.Property<DateTime>(nameof(TodoItem.CreatedAt));
-                b.Property<DateTime?>(nameof(TodoItem.CompletedAt));
-                b.HasKey(nameof(TodoItem.Id));
-                b.ToTable(nameof(TodoContext.Items));
+                builder.Property<Guid>(nameof(TodoItem.Id)).ValueGeneratedOnAdd();
+                builder.Property<string>(nameof(TodoItem.UserId));
+                builder.Property<string>(nameof(TodoItem.Text));
+                builder.Property<DateTime>(nameof(TodoItem.CreatedAt));
+                builder.Property<DateTime?>(nameof(TodoItem.CompletedAt));
+                builder.HasKey(nameof(TodoItem.Id));
+                builder.ToTable(nameof(TodoContext.Items));
             });
     }
 }

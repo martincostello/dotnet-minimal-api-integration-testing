@@ -11,6 +11,10 @@ using Microsoft.Extensions.Hosting;
 
 namespace TodoApp;
 
+/// <summary>
+/// A test server fixture that hosts the application on an HTTP port so
+/// that the application can be accessed through a browser for UI tests.
+/// </summary>
 public sealed class HttpServerFixture : TodoAppFixture, IAsyncLifetime
 {
     private IHost? _host;
@@ -40,6 +44,7 @@ public sealed class HttpServerFixture : TodoAppFixture, IAsyncLifetime
     {
         base.ConfigureWebHost(builder);
 
+        // Configure a self-signed TLS certificate for HTTPS
         builder.ConfigureKestrel(
             serverOptions => serverOptions.ConfigureHttpsDefaults(
                 httpsOptions => httpsOptions.ServerCertificate = new X509Certificate2("localhost-dev.pfx", "Pa55w0rd!")));
@@ -76,18 +81,20 @@ public sealed class HttpServerFixture : TodoAppFixture, IAsyncLifetime
     {
         var builder = CreateHostBuilder();
 
-        // HACK Workaround for https://github.com/dotnet/aspnetcore/issues/33846
         if (builder is null)
         {
+            // HACK Workaround for https://github.com/dotnet/aspnetcore/issues/33846
             builder = CreateDeferredHostBuilder();
         }
 
+        // Create and start the HTTP server
         _host = builder
             .ConfigureWebHost(ConfigureWebHost)
             .Build();
 
         _host.Start();
 
+        // Extract the address the HTTP server is listening on
         var server = _host.Services.GetRequiredService<IServer>();
         var addresses = server.Features.Get<IServerAddressesFeature>();
 
@@ -113,8 +120,8 @@ public sealed class HttpServerFixture : TodoAppFixture, IAsyncLifetime
 
         var deferredHostBuilder = (IHostBuilder)constructor!.Invoke(Array.Empty<object>());
 
-        Action<object>? configureHostBuilder = (Action<object>?)Delegate.CreateDelegate(typeof(Action<object>), deferredHostBuilder, configureHostBuilderMethod!);
-        Action<Exception?>? entrypointCompleted = (Action<Exception?>?)Delegate.CreateDelegate(typeof(Action<Exception?>), deferredHostBuilder, entryPointCompletedMethod!);
+        var configureHostBuilder = (Action<object>?)Delegate.CreateDelegate(typeof(Action<object>), deferredHostBuilder, configureHostBuilderMethod!);
+        var entrypointCompleted = (Action<Exception?>?)Delegate.CreateDelegate(typeof(Action<Exception?>), deferredHostBuilder, entryPointCompletedMethod!);
 
         var factory = (Func<string[], object>)resolveHostFactory!.Invoke(null, new object?[]
         {

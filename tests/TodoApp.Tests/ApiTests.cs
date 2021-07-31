@@ -15,6 +15,8 @@ public class ApiTests
     public ApiTests(TodoAppFixture fixture, ITestOutputHelper outputHelper)
     {
         Fixture = fixture;
+
+        // Route output from the fixture's logs to xunit's output
         OutputHelper = outputHelper;
         Fixture.SetOutputHelper(OutputHelper);
     }
@@ -59,7 +61,7 @@ public class ApiTests
         // Act - Get the item
         var item = await client.GetFromJsonAsync<TodoItemModel>(itemUri);
 
-        // Assert - Validate the item was created correctly
+        // Assert - Verify the item was created correctly
         item.ShouldNotBeNull();
         item.Id.ShouldBe(itemId);
         item.IsCompleted.ShouldBeFalse();
@@ -119,6 +121,7 @@ public class ApiTests
         {
             AllowAutoRedirect = true,
             BaseAddress = Fixture.ClientOptions.BaseAddress,
+            HandleCookies = true,
         };
 
         var client = Fixture.CreateClient(options);

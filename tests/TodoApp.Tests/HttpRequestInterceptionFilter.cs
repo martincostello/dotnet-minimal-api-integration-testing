@@ -6,6 +6,8 @@ using Microsoft.Extensions.Http;
 
 namespace TodoApp;
 
+// See https://github.com/justeat/httpclient-interception#registering-request-interception-when-using-ihttpclientfactory
+
 public sealed class HttpRequestInterceptionFilter : IHttpMessageHandlerBuilderFilter
 {
     private readonly HttpClientInterceptorOptions _options;
@@ -15,7 +17,6 @@ public sealed class HttpRequestInterceptionFilter : IHttpMessageHandlerBuilderFi
         _options = options;
     }
 
-    /// <inheritdoc />
     public Action<HttpMessageHandlerBuilder> Configure(Action<HttpMessageHandlerBuilder> next)
     {
         return (builder) =>
