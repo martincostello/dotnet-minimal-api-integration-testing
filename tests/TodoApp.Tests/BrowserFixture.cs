@@ -13,6 +13,11 @@ public class BrowserFixture
         OutputHelper = outputHelper;
     }
 
+    // Only record videos in CI to prevent filling
+    // up the local disk with videos from test runs.
+
+    protected virtual bool RecordVideo { get; } = IsRunningInGitHubActions;
+
     private static bool IsRunningInGitHubActions { get; } = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS"));
 
     private ITestOutputHelper OutputHelper { get; }
@@ -22,13 +27,11 @@ public class BrowserFixture
         string browserType = "chromium",
         [CallerMemberName] string? testName = null)
     {
-        using IPlaywright playwright = await Playwright.CreateAsync();
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await CreateBrowserAsync(playwright, browserType);
 
-        await using IBrowser browser = await CreateBrowserAsync(playwright, browserType);
-
-        BrowserNewPageOptions options = CreatePageOptions();
-
-        IPage page = await browser.NewPageAsync(options);
+        var options = CreatePageOptions();
+        var page = await browser.NewPageAsync(options);
 
         page.Console += (_, e) => OutputHelper.WriteLine(e.Text);
         page.PageError += (_, e) => OutputHelper.WriteLine(e);
@@ -52,12 +55,13 @@ public class BrowserFixture
     {
         var options = new BrowserNewPageOptions()
         {
-            IgnoreHTTPSErrors = true,
+            IgnoreHTTPSErrors = true, // The test fixture uses a self-signed TLS certificate
             Locale = "en-GB",
             TimezoneId = "Europe/London",
         };
 
-        if (IsRunningInGitHubActions)
+        
+        if (RecordVideo)
         {
             options.RecordVideoDir = "videos";
         }
@@ -69,6 +73,8 @@ public class BrowserFixture
     {
         var options = new BrowserTypeLaunchOptions();
 
+        // Slow down actions and make the DevTools visible by default
+        // to make it easier to debug the app when debugging locally.
         if (System.Diagnostics.Debugger.IsAttached)
         {
             options.Devtools = true;
@@ -76,7 +82,8 @@ public class BrowserFixture
             options.SlowMo = 250;
         }
 
-        string[] split = browserType.Split(':');
+        // Configure a channel if one was specified, e.g. "chromium:chrome"
+        var split = browserType.Split(':');
 
         browserType = split[0];
 
@@ -96,6 +103,7 @@ public class BrowserFixture
             OperatingSystem.IsWindows() ? "windows" :
             "other";
 
+        // Remove characters that are disallowed in file names
         browserType = browserType.Replace(':', '_');
 
         string utcNow = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture);
@@ -130,7 +138,7 @@ public class BrowserFixture
         string testName,
         string browserType)
     {
-        if (!IsRunningInGitHubActions)
+        if (!RecordVideo)
         {
             return;
         }

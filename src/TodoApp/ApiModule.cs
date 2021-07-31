@@ -7,8 +7,18 @@ using TodoApp.Services;
 
 namespace TodoApp;
 
+/// <summary>
+/// A class containing the HTTP endpoints for the Todo API.
+/// </summary>
 public static class ApiModule
 {
+    /// <summary>
+    /// Maps the endpoints for the API.
+    /// </summary>
+    /// <param name="builder">The <see cref="IEndpointConventionBuilder"/>.</param>
+    /// <returns>
+    /// A <see cref="IEndpointConventionBuilder"/> that can be used to further customize the endpoint.
+    /// </returns>
     public static IEndpointRouteBuilder MapApiRoutes(this IEndpointRouteBuilder builder)
     {
         // Get all Todo items

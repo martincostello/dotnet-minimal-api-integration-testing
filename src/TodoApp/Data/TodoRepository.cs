@@ -26,7 +26,7 @@ public sealed class TodoRepository : ITodoRepository
 
         var item = new TodoItem()
         {
-            CreatedAt = Now(),
+            CreatedAt = UtcNow(),
             Text = text,
             UserId = userId,
         };
@@ -55,7 +55,7 @@ public sealed class TodoRepository : ITodoRepository
             return false;
         }
 
-        item.CompletedAt = Now();
+        item.CompletedAt = UtcNow();
 
         Context.Items.Update(item);
 
@@ -107,14 +107,14 @@ public sealed class TodoRepository : ITodoRepository
         await EnsureDatabaseAsync(cancellationToken);
 
         return await Context.Items
-            .Where((p) => p.UserId == userId)
-            .OrderBy((p) => p.CompletedAt.HasValue)
-            .ThenBy((p) => p.CreatedAt)
+            .Where(p => p.UserId == userId)
+            .OrderBy(p => p.CompletedAt.HasValue)
+            .ThenBy(p => p.CreatedAt)
             .ToListAsync(cancellationToken);
     }
 
     private async Task EnsureDatabaseAsync(CancellationToken cancellationToken)
         => await Context.Database.EnsureCreatedAsync(cancellationToken);
 
-    private DateTime Now() => Clock.GetCurrentInstant().ToDateTimeUtc();
+    private DateTime UtcNow() => Clock.GetCurrentInstant().ToDateTimeUtc();
 }

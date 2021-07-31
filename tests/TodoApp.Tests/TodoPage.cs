@@ -5,6 +5,9 @@ using Microsoft.Playwright;
 
 namespace TodoApp;
 
+/// <summary>
+/// A class represeting the Page Object Model for the Todo application.
+/// </summary>
 public class TodoPage
 {
     public TodoPage(IPage page)

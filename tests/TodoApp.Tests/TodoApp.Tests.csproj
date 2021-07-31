@@ -17,7 +17,7 @@
     <PackageReference Include="Xunit.SkippableFact" Version="1.4.13" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="oauth-http-bundle.json;testsettings.json;xunit.runner.json;xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="oauth-http-bundle.json;xunit.runner.json;xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
     <None Update="localhost-dev.pfx" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
