@@ -19,7 +19,6 @@ namespace TodoApp;
 public class TodoAppFixture : WebApplicationFactory<Services.ITodoService>, ITestOutputHelperAccessor
 {
     public TodoAppFixture()
-        : base()
     {
         // Use HTTPS by default and do not follow
         // redirects so they can tested explicitly.
