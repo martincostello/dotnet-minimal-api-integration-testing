@@ -45,7 +45,7 @@ else {
 if ($installDotNetSdk -eq $true) {
 
     $env:DOTNET_INSTALL_DIR = Join-Path "$(Convert-Path "$PSScriptRoot")" ".dotnetcli"
-    $sdkPath = Join-Path $env:DOTNET_INSTALL_DIR "sdk\$dotnetVersion"
+    $sdkPath = Join-Path $env:DOTNET_INSTALL_DIR "sdk" "$dotnetVersion"
 
     if (!(Test-Path $sdkPath)) {
         if (!(Test-Path $env:DOTNET_INSTALL_DIR)) {
@@ -83,12 +83,27 @@ function DotNetTest {
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code $LASTEXITCODE"
     }
+
+    $nugetPath = Join-Path ($env:USERPROFILE ?? "~") ".nuget" "packages"
+    $propsFile = Join-Path $solutionPath "tests" "TodoApp.Tests" "TodoApp.Tests.csproj"
+    $reportGeneratorVersion = (Select-Xml -Path $propsFile -XPath "//PackageReference[@Include='ReportGenerator']/@Version").Node.'#text'
+    $reportGeneratorPath = Join-Path $nugetPath "reportgenerator" $reportGeneratorVersion "tools" "net5.0" "ReportGenerator.dll"
+
+    $coverageOutput = Join-Path $OutputPath "coverage.cobertura.xml"
+    $reportOutput = Join-Path $OutputPath "coverage"
+
+    & $dotnet `
+        $reportGeneratorPath `
+        `"-reports:$coverageOutput`" `
+        `"-targetdir:$reportOutput`" `
+        -reporttypes:HTML `
+        -verbosity:Warning
 }
 
 function DotNetPublish {
     param([string]$Project)
 
-    $publishPath = (Join-Path $OutputPath "publish")
+    $publishPath = Join-Path $OutputPath "publish"
     & $dotnet publish $Project --output $publishPath --configuration $Configuration
 
     if ($LASTEXITCODE -ne 0) {
