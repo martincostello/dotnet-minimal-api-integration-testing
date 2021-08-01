@@ -4,6 +4,8 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using TodoApp.Models;
 
@@ -51,12 +53,11 @@ public class ApiTests
         createdResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
         createdResponse.Headers.Location.ShouldNotBeNull();
 
-        using var createdStream = await createdResponse.Content.ReadAsStreamAsync();
-        using var createdJson = await JsonDocument.ParseAsync(createdStream);
+        using var createdJson = await createdResponse.Content.ReadFromJsonAsync<JsonDocument>();
 
         // Arrange - Get the new item's URL and Id
         var itemUri = createdResponse.Headers.Location;
-        var itemId = createdJson.RootElement.GetProperty("id").GetString();
+        var itemId = createdJson!.RootElement.GetProperty("id").GetString();
 
         // Act - Get the item
         var item = await client.GetFromJsonAsync<TodoItemModel>(itemUri);
@@ -113,6 +114,125 @@ public class ApiTests
             () => client.GetFromJsonAsync<TodoItemModel>(itemUri));
 
         exception.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task Cannot_Create_Todo_Item_With_No_Text()
+    {
+        // Arrange
+        var client = await CreateAuthenticatedClientAsync();
+        var item = new CreateTodoItemModel { Text = string.Empty };
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/items", item);
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+        problem.ShouldNotBeNull();
+        problem.Status.ShouldBe(StatusCodes.Status400BadRequest);
+        problem.Title.ShouldBe("Bad Request");
+        problem.Detail.ShouldBe("No item text specified.");
+        problem.Type.ShouldBe("https://tools.ietf.org/html/rfc7231#section-6.5.1");
+        problem.Instance.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task Cannot_Complete_Todo_Item_Multiple_Times()
+    {
+        // Arrange
+        var client = await CreateAuthenticatedClientAsync();
+        var item = new CreateTodoItemModel { Text = "Something" };
+
+        using var createdResponse = await client.PostAsJsonAsync("/api/items", item);
+        createdResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
+        createdResponse.Headers.Location.ShouldNotBeNull();
+
+        var itemUri = createdResponse.Headers.Location;
+
+        using var completedResponse = await client.PostAsJsonAsync(itemUri + "/complete", new { });
+        completedResponse.StatusCode.ShouldBe(HttpStatusCode.NoContent);
+
+        // Act
+        using var response = await client.PostAsJsonAsync(itemUri + "/complete", new { });
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+        problem.ShouldNotBeNull();
+        problem.Status.ShouldBe(StatusCodes.Status400BadRequest);
+        problem.Title.ShouldBe("Bad Request");
+        problem.Detail.ShouldBe("Item already completed.");
+        problem.Type.ShouldBe("https://tools.ietf.org/html/rfc7231#section-6.5.1");
+        problem.Instance.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task Cannot_Complete_Deleted_Todo_Item()
+    {
+        // Arrange
+        var client = await CreateAuthenticatedClientAsync();
+        var item = new CreateTodoItemModel { Text = "Something" };
+
+        using var createdResponse = await client.PostAsJsonAsync("/api/items", item);
+        createdResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
+        createdResponse.Headers.Location.ShouldNotBeNull();
+
+        var itemUri = createdResponse.Headers.Location;
+
+        using var deletedResponse = await client.DeleteAsync(itemUri);
+        deletedResponse.StatusCode.ShouldBe(HttpStatusCode.NoContent);
+
+        // Act
+        using var response = await client.PostAsJsonAsync(itemUri + "/complete", new { });
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+        problem.ShouldNotBeNull();
+        problem.Status.ShouldBe(StatusCodes.Status404NotFound);
+        problem.Title.ShouldBe("Not Found");
+        problem.Detail.ShouldBe("Item not found.");
+        problem.Type.ShouldBe("https://tools.ietf.org/html/rfc7231#section-6.5.4");
+        problem.Instance.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task Cannot_Delete_Todo_Item_Multiple_Times()
+    {
+        // Arrange
+        var client = await CreateAuthenticatedClientAsync();
+        var item = new CreateTodoItemModel { Text = "Something" };
+
+        using var createdResponse = await client.PostAsJsonAsync("/api/items", item);
+        createdResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
+        createdResponse.Headers.Location.ShouldNotBeNull();
+
+        var itemUri = createdResponse.Headers.Location;
+
+        using var deletedResponse = await client.DeleteAsync(itemUri);
+        deletedResponse.StatusCode.ShouldBe(HttpStatusCode.NoContent);
+
+        // Act
+        using var response = await client.DeleteAsync(itemUri);
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+
+        problem.ShouldNotBeNull();
+        problem.Status.ShouldBe(StatusCodes.Status404NotFound);
+        problem.Title.ShouldBe("Not Found");
+        problem.Detail.ShouldBe("Item not found.");
+        problem.Type.ShouldBe("https://tools.ietf.org/html/rfc7231#section-6.5.4");
+        problem.Instance.ShouldBeNull();
     }
 
     private async Task<HttpClient> CreateAuthenticatedClientAsync()
