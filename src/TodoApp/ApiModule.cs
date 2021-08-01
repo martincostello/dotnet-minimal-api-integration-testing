@@ -39,7 +39,7 @@ public static class ApiModule
             CancellationToken cancellationToken) =>
             {
                 var model = await service.GetAsync(user.GetUserId(), id, cancellationToken);
-                return model is null ? Results.Problem(statusCode: StatusCodes.Status404NotFound) : Results.Json(model);
+                return model is null ? Results.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound) : Results.Json(model);
             })
             .Produces<TodoItemModel>()
             .ProducesProblem(StatusCodes.Status404NotFound)
@@ -54,7 +54,7 @@ public static class ApiModule
             {
                 if (model is null || string.IsNullOrWhiteSpace(model.Text))
                 {
-                    return Results.Problem(statusCode: StatusCodes.Status400BadRequest);
+                    return Results.Problem("No item text specified.", statusCode: StatusCodes.Status400BadRequest);
                 }
 
                 var id = await service.AddItemAsync(user.GetUserId(), model.Text, cancellationToken);
@@ -77,8 +77,8 @@ public static class ApiModule
                 return wasCompleted switch
                 {
                     true => Results.NoContent(),
-                    false => Results.Problem(statusCode: StatusCodes.Status400BadRequest),
-                    _ => Results.Problem(statusCode: StatusCodes.Status404NotFound),
+                    false => Results.Problem("Item already completed.", statusCode: StatusCodes.Status400BadRequest),
+                    _ => Results.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound),
                 };
             })
             .Produces(StatusCodes.Status204NoContent)
@@ -94,7 +94,7 @@ public static class ApiModule
             CancellationToken cancellationToken) =>
             {
                 var wasDeleted = await service.DeleteItemAsync(user.GetUserId(), id, cancellationToken);
-                return wasDeleted ? Results.NoContent() : Results.Problem(statusCode: StatusCodes.Status404NotFound);
+                return wasDeleted ? Results.NoContent() : Results.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound);
             })
             .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status404NotFound)
