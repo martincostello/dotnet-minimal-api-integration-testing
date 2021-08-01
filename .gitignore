@@ -12,6 +12,7 @@ Backup*/
 bin
 Bin
 coverage
+coverage.*
 node_modules
 obj
 packages

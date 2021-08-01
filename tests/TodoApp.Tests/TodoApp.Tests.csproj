@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="coverlet.msbuild" Version="3.1.0" PrivateAssets="All" />
     <PackageReference Include="JustEat.HttpClientInterception" Version="3.1.0" />
     <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0-rc.1.21379.1" />
@@ -23,6 +24,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\TodoApp\TodoApp.csproj" />
   </ItemGroup>
+   <PropertyGroup>
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutput Condition=" '$(OutputPath)' != '' ">$([MSBuild]::EnsureTrailingSlash('$(OutputPath)'))</CoverletOutput>
+    <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
+  </PropertyGroup>
   <PropertyGroup>
     <_PlaywrightCLIInstalledCommand Condition=" $([MSBuild]::IsOsPlatform('Windows')) ">where playwright</_PlaywrightCLIInstalledCommand>
     <_PlaywrightCLIInstalledCommand Condition=" !$([MSBuild]::IsOsPlatform('Windows')) ">type playwright</_PlaywrightCLIInstalledCommand>
