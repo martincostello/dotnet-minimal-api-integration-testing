@@ -105,7 +105,10 @@ public sealed class HttpServerFixture : TodoAppFixture
 
     private void EnsureServer()
     {
-        // This forces WebApplicationFactory to bootstrap the server
-        using var _ = CreateDefaultClient();
+        if (_host is null)
+        {
+            // This forces WebApplicationFactory to bootstrap the server
+            using var _ = CreateDefaultClient();
+        }
     }
 }
