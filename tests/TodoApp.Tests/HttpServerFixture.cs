@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2021. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -15,28 +14,26 @@ namespace TodoApp;
 /// A test server fixture that hosts the application on an HTTP port so
 /// that the application can be accessed through a browser for UI tests.
 /// </summary>
-public sealed class HttpServerFixture : TodoAppFixture, IAsyncLifetime
+public sealed class HttpServerFixture : TodoAppFixture
 {
-    private IHost? _host;
     private bool _disposed;
+    private IHost? _host;
 
-    public string ServerAddress => ClientOptions.BaseAddress.ToString();
-
-    public override IServiceProvider Services => _host?.Services!;
-
-    Task IAsyncLifetime.InitializeAsync()
+    public string ServerAddress
     {
-        EnsureHttpServer();
-        return Task.CompletedTask;
+        get
+        {
+            EnsureServer();
+            return ClientOptions.BaseAddress.ToString();
+        }
     }
 
-    async Task IAsyncLifetime.DisposeAsync()
+    public override IServiceProvider Services
     {
-        if (_host != null)
+        get
         {
-            await _host.StopAsync();
-            _host.Dispose();
-            _host = null;
+            EnsureServer();
+            return _host!.Services!;
         }
     }
 
@@ -54,6 +51,43 @@ public sealed class HttpServerFixture : TodoAppFixture, IAsyncLifetime
         builder.UseUrls("https://127.0.0.1:0");
     }
 
+    protected override IHost CreateHost(IHostBuilder builder)
+    {
+        // Create the host for TestServer now before we
+        // modify the builder to use Kestrel instead.
+        var testHost = builder.Build();
+
+        // Modify the host builder to use Kestrel instead
+        // of TestServer so we can listen on a real address.
+        builder.ConfigureWebHost((p) => p.UseKestrel());
+
+        // Create and start the Kestrel server before the test server,
+        // otherwise due to the way the deferred host builder works
+        // for minimal hosting, the server will not get "initialized
+        // enough" for the address it is listening on to be available.
+        // See https://github.com/dotnet/aspnetcore/issues/33846.
+        _host = builder.Build();
+        _host.Start();
+
+        // Extract the selected dynamic port out of the Kestrel server
+        // and assign it onto the client options for convenience so it
+        // "just works" as otherwise it'll be the default http://localhost
+        // URL, which won't route to the Kestrel-hosted HTTP server.
+        var server = _host.Services.GetRequiredService<IServer>();
+        var addresses = server.Features.Get<IServerAddressesFeature>();
+
+        ClientOptions.BaseAddress = addresses!.Addresses
+            .Select((p) => new Uri(p))
+            .Last();
+
+        // Return the host that uses TestServer, rather than the real one.
+        // Otherwise the internals will complain about the host's server
+        // not being an instance of the concrete type TestServer.
+        // See https://github.com/dotnet/aspnetcore/pull/34702.
+        testHost.Start();
+        return testHost;
+    }
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
@@ -69,76 +103,11 @@ public sealed class HttpServerFixture : TodoAppFixture, IAsyncLifetime
         }
     }
 
-    private void EnsureHttpServer()
+    private void EnsureServer()
     {
-        if (_host is null)
+        // This forces WebApplicationFactory to bootstrap the server
+        using (CreateDefaultClient())
         {
-            CreateHttpServer();
         }
-    }
-
-    private void CreateHttpServer()
-    {
-        var builder = CreateHostBuilder();
-
-        if (builder is null)
-        {
-            // HACK Workaround for https://github.com/dotnet/aspnetcore/issues/33846
-            builder = CreateDeferredHostBuilder();
-        }
-
-        // Create and start the HTTP server
-        _host = builder
-            .ConfigureWebHost(ConfigureWebHost)
-            .Build();
-
-        _host.Start();
-
-        // Extract the address the HTTP server is listening on
-        var server = _host.Services.GetRequiredService<IServer>();
-        var addresses = server.Features.Get<IServerAddressesFeature>();
-
-        ClientOptions.BaseAddress = addresses!.Addresses
-            .Select((p) => new Uri(p))
-            .Last();
-    }
-
-    private static IHostBuilder CreateDeferredHostBuilder()
-    {
-        // From https://github.com/dotnet/aspnetcore/blob/dbf84eaa5a8f79947647ad64a785d39e7cd23afe/src/Mvc/Mvc.Testing/src/WebApplicationFactory.cs#L162-L174
-        var instanceMethod = BindingFlags.Instance | BindingFlags.Public;
-        var staticMethod = BindingFlags.Public | BindingFlags.Static;
-
-        var deferredHostBuilderType = Type.GetType("Microsoft.AspNetCore.Mvc.Testing.DeferredHostBuilder, Microsoft.AspNetCore.Mvc.Testing");
-        var constructor = deferredHostBuilderType!.GetConstructor(instanceMethod, Type.EmptyTypes);
-        var setHostFactory = deferredHostBuilderType.GetMethod("SetHostFactory", instanceMethod);
-        var configureHostBuilderMethod = deferredHostBuilderType.GetMethod("ConfigureHostBuilder", instanceMethod);
-        var entryPointCompletedMethod = deferredHostBuilderType.GetMethod("EntryPointCompleted", instanceMethod);
-
-        var hostFactoryResolverType = Type.GetType("Microsoft.Extensions.Hosting.HostFactoryResolver, Microsoft.AspNetCore.Mvc.Testing");
-        var resolveHostFactory = hostFactoryResolverType!.GetMethod("ResolveHostFactory", staticMethod);
-
-        var deferredHostBuilder = (IHostBuilder)constructor!.Invoke(Array.Empty<object>());
-
-        var configureHostBuilder = (Action<object>?)Delegate.CreateDelegate(typeof(Action<object>), deferredHostBuilder, configureHostBuilderMethod!);
-        var entrypointCompleted = (Action<Exception?>?)Delegate.CreateDelegate(typeof(Action<Exception?>), deferredHostBuilder, entryPointCompletedMethod!);
-
-        var factory = (Func<string[], object>)resolveHostFactory!.Invoke(null, new object?[]
-        {
-            typeof(Services.ITodoService).Assembly,
-            null,
-            false,
-            configureHostBuilder,
-            entrypointCompleted,
-        })!;
-
-        if (factory is null)
-        {
-            throw new NotSupportedException("Failed to resolve entry point for web application.");
-        }
-
-        setHostFactory!.Invoke(deferredHostBuilder, new object[] { factory });
-
-        return deferredHostBuilder.UseEnvironment(Environments.Development);
     }
 }
