@@ -41,7 +41,7 @@ public static class ApiModule
                 var model = await service.GetAsync(user.GetUserId(), id, cancellationToken);
                 return model is null ? Results.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound) : Results.Json(model);
             })
-            .Produces<TodoItemModel>()
+            .Produces<TodoItemModel>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .RequireAuthorization();
 
@@ -102,8 +102,8 @@ public static class ApiModule
 
         // Redirect to Open API/Swagger documentation
         builder.MapGet("/api", () => Results.Redirect("/swagger-ui/index.html"))
-               .RequireAuthorization()
-               .SuppressApi();
+               .ExcludeFromDescription()
+               .RequireAuthorization();
 
         return builder;
     }

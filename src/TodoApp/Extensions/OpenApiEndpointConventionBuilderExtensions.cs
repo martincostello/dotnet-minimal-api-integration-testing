@@ -24,7 +24,7 @@ public static class OpenApiEndpointConventionBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IEndpointConventionBuilder"/>.</param>
     /// <returns>A <see cref="IEndpointConventionBuilder"/> that can be used to further customize the endpoint.</returns>
-    public static IEndpointConventionBuilder SuppressApi(this IEndpointConventionBuilder builder)
+    public static IEndpointConventionBuilder ExcludeFromDescription(this IEndpointConventionBuilder builder)
     {
         return builder.WithMetadata(_ignoreApiMetadata);
     }
@@ -37,13 +37,11 @@ public static class OpenApiEndpointConventionBuilderExtensions
     /// </summary>
     /// <typeparam name="TResponse">The type of the response.</typeparam>
     /// <param name="builder">The <see cref="IEndpointConventionBuilder"/>.</param>
-    /// <param name="statusCode">The response status code. Defatuls to StatusCodes.Status200OK.</param>
-    /// <param name="contentType">The response content type. Defaults to "application/json"</param>
-    /// <param name="additionalContentTypes">Additional response content types the endpoint produces for the supplied status code.</param>
+    /// <param name="statusCode">The response status code.</param>
     /// <returns>A <see cref="IEndpointConventionBuilder"/> that can be used to further customize the endpoint.</returns>
     public static IEndpointConventionBuilder Produces<TResponse>(
         this IEndpointConventionBuilder builder,
-        int statusCode = StatusCodes.Status200OK)
+        int statusCode)
     {
         return Produces(builder, statusCode, typeof(TResponse));
     }
@@ -52,12 +50,12 @@ public static class OpenApiEndpointConventionBuilderExtensions
     /// Adds metadata indicating the type of response an endpoint produces.
     /// </summary>
     /// <param name="builder">The <see cref="IEndpointConventionBuilder"/>.</param>
-    /// <param name="statusCode">The response status code. Defaults to StatusCodes.Status200OK.</param>
+    /// <param name="statusCode">The response status code.</param>
     /// <param name="responseType">The type of the response. Defaults to null.</param>
     /// <returns>A <see cref="IEndpointConventionBuilder"/> that can be used to further customize the endpoint.</returns>
     public static IEndpointConventionBuilder Produces(
         this IEndpointConventionBuilder builder,
-        int statusCode = StatusCodes.Status200OK,
+        int statusCode,
         Type? responseType = null)
     {
         return builder.WithMetadata(new ProducesResponseTypeAttribute(responseType ?? typeof(void), statusCode));
@@ -67,11 +65,11 @@ public static class OpenApiEndpointConventionBuilderExtensions
     /// Adds metadata indicating that the endpoint produces a Problem Details response.
     /// </summary>
     /// <param name="builder">The <see cref="IEndpointConventionBuilder"/>.</param>
-    /// <param name="statusCode">The response status code. Defatuls to StatusCodes.Status500InternalServerError.</param>
+    /// <param name="statusCode">The response status code.</param>
     /// <returns>A <see cref="IEndpointConventionBuilder"/> that can be used to further customize the endpoint.</returns>
     public static IEndpointConventionBuilder ProducesProblem(
         this IEndpointConventionBuilder builder,
-        int statusCode = StatusCodes.Status500InternalServerError)
+        int statusCode)
     {
         return Produces<ProblemDetails>(builder, statusCode);
     }

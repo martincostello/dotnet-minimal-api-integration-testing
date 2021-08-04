@@ -108,23 +108,17 @@ public static class AuthenticationModule
     public static IEndpointRouteBuilder MapAuthenticationRoutes(this IEndpointRouteBuilder builder)
     {
         builder.MapGet(DeniedPath, () => Results.Redirect(RootPath + "?denied=true"))
-               .SuppressApi();
+               .ExcludeFromDescription();
 
         builder.MapGet(SignOutPath, () => Results.Redirect(RootPath))
-               .SuppressApi();
+               .ExcludeFromDescription();
 
-        builder.MapPost(SignInPath, () =>
-            Results.Challenge(
-                new AuthenticationProperties { RedirectUri = RootPath },
-                new[] { GitHubAuthenticationDefaults.AuthenticationScheme }))
-            .SuppressApi();
+        builder.MapPost(SignInPath, () => Results.Challenge(new() { RedirectUri = RootPath }, new[] { GitHubAuthenticationDefaults.AuthenticationScheme }))
+               .ExcludeFromDescription();
 
-        builder.MapPost(SignOutPath, () =>
-            Results.SignOut(
-                new AuthenticationProperties { RedirectUri = RootPath },
-                new[] { CookieAuthenticationDefaults.AuthenticationScheme }))
-            .RequireAuthorization()
-            .SuppressApi();
+        builder.MapPost(SignOutPath, () => Results.SignOut(new() { RedirectUri = RootPath }, new[] { CookieAuthenticationDefaults.AuthenticationScheme }))
+               .ExcludeFromDescription()
+               .RequireAuthorization();
 
         return builder;
     }
