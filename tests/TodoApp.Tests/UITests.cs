@@ -68,6 +68,8 @@ public class UITests
             await items[0].DeleteAsync();
             await items[1].CompleteAsync();
 
+            await Task.Delay(TimeSpan.FromSeconds(0.5));
+
             // Assert
             items = await app.GetItemsAsync();
             items.Count.ShouldBe(1);
