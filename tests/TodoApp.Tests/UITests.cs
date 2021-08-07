@@ -21,8 +21,27 @@ public class UITests
 
     private ITestOutputHelper OutputHelper { get; }
 
-    [Fact]
-    public async Task Can_Sign_In_And_Manage_Todo_Items()
+    public static IEnumerable<object[]> Browsers()
+    {
+        yield return new object[] { "chromium" };
+        yield return new object[] { "chromium:chrome" };
+
+        if (!OperatingSystem.IsLinux())
+        {
+            yield return new object[] { "chromium:msedge" };
+        }
+
+        yield return new object[] { "firefox" };
+
+        if (OperatingSystem.IsMacOS())
+        {
+            yield return new object[] { "webkit" };
+        }
+    }
+
+    [Theory]
+    [MemberData(nameof(Browsers))]
+    public async Task Can_Sign_In_And_Manage_Todo_Items(string browserType)
     {
         // Arrange
         var browser = new BrowserFixture(OutputHelper);
@@ -87,6 +106,7 @@ public class UITests
 
             // Assert
             await app.WaitForSignedOutAsync();
-        });
+        },
+        browserType);
     }
 }
