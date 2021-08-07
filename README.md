@@ -34,14 +34,15 @@ application with ASP.NET Core 6 using the following technologies:
 [TypeScript]: https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-oop.html
 
 The tests show how you can write integration tests for the [API] and [User
-Interface] layers of the application that can help you get good coverage of the
-system-under-test, as well as confidence in changes you make to an application
-are ready to ship to a production system.
+Interface] layers of an application that can help you get good coverage of the
+system-under-test, as well as confidence that the changes you make to an
+application are ready to ship to a production system.
 
 The tests include demonstrations of the use of the following open source
 libraries and technologies:
 
 * [coverlet]
+* [HttpClientFactory]
 * [HttpClient Interception]
 * [Playwright]
 * [ReportGenerator]
@@ -52,6 +53,7 @@ libraries and technologies:
 
 [API]: https://github.com/martincostello/dotnet-minimal-api-integration-testing/blob/main/tests/TodoApp.Tests/ApiTests.cs
 [coverlet]: https://github.com/coverlet-coverage/coverlet
+[HttpClientFactory]: https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests
 [HttpClient Interception]: https://github.com/justeat/httpclient-interception
 [Playwright]: https://playwright.dev/dotnet/
 [ReportGenerator]: https://github.com/danielpalme/ReportGenerator
@@ -81,6 +83,12 @@ cd dotnet-minimal-api-integration-testing
 Any feedback or issues can be added to the issues for this project in
 [GitHub](https://github.com/martincostello/dotnet-minimal-api-integration-testing/issues "Issues for this project on GitHub.com").
 
+## Acknowledgements
+
+Thanks to David Fowler ([@davidfowl](https://github.com/davidfowl)) from the
+ASP.NET Core team for helping out with resolving issues with Minimal Actions
+found from testing this sample with the ASP.NET Core 6 pre-releases!
+
 ## Repository
 
 The repository is hosted in
@@ -92,9 +100,3 @@ https://github.com/martincostello/dotnet-minimal-api-integration-testing.git
 This project is licensed under the
 [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt "The Apache 2.0 license")
 license.
-
-## Acknowledgements
-
-Thanks to David Fowler ([@davidfowl](https://github.com/davidfowl)) from the
-ASP.NET Core team for helping out with resolving issues with Minimal Actions
-found from testing this sample with the ASP.NET Core 6 pre-releases!
