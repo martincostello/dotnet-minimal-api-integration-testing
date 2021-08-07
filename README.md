@@ -38,18 +38,23 @@ Interface] layers of the application that can help you get good coverage of the
 system-under-test, as well as confidence in changes you make to an application
 are ready to ship to a production system.
 
-The tests include use of the following open source technologies:
+The tests include demonstrations of the use of the following open source
+libraries and technologies:
 
+* [coverlet]
 * [HttpClient Interception]
 * [Playwright]
+* [ReportGenerator]
 * [Shouldly]
 * [WebApplicationFactory&lt;T&gt;]
 * [xunit]
 * [xunit Logging]
 
 [API]: https://github.com/martincostello/dotnet-minimal-api-integration-testing/blob/main/tests/TodoApp.Tests/ApiTests.cs
+[coverlet]: https://github.com/coverlet-coverage/coverlet
 [HttpClient Interception]: https://github.com/justeat/httpclient-interception
 [Playwright]: https://playwright.dev/dotnet/
+[ReportGenerator]: https://github.com/danielpalme/ReportGenerator
 [Shouldly]: https://shouldly.io/
 [User Interface]: https://github.com/martincostello/dotnet-minimal-api-integration-testing/blob/main/tests/TodoApp.Tests/UITests.cs
 [WebApplicationFactory&lt;T&gt;]: https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests
