@@ -110,10 +110,20 @@ public class ApiTests
         items.Items.Count.ShouldBe(beforeCount);
         items.Items.ShouldNotContain(p => p.Id == itemId);
 
-        var exception = await Assert.ThrowsAsync<HttpRequestException>(
-            () => client.GetFromJsonAsync<TodoItemModel>(itemUri));
+        // Act
+        using var getResponse = await client.GetAsync(itemUri);
 
-        exception.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        // Assert
+        getResponse.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+
+        var problem = await getResponse.Content.ReadFromJsonAsync<ProblemDetails>();
+
+        problem.ShouldNotBeNull();
+        problem.Status.ShouldBe(StatusCodes.Status404NotFound);
+        problem.Title.ShouldBe("Not Found");
+        problem.Detail.ShouldBe("Item not found.");
+        problem.Type.ShouldBe("https://tools.ietf.org/html/rfc7231#section-6.5.4");
+        problem.Instance.ShouldBeNull();
     }
 
     [Fact]
