@@ -11,11 +11,7 @@ public static class DbSetExtensions
         CancellationToken cancellationToken)
         where TEntity : class
     {
-        if (keyValue is null)
-        {
-            throw new ArgumentNullException(nameof(keyValue));
-        }
-
+        ArgumentNullException.ThrowIfNull(keyValue);
         return set.FindAsync(new object[] { keyValue }, cancellationToken);
     }
 }
