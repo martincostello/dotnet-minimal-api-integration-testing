@@ -68,7 +68,7 @@ app.UseAuthorization();
 
 // Add the HTTP endpoints
 app.MapAuthenticationRoutes();
-app.MapApiRoutes();
+app.MapTodoApiRoutes();
 
 // Add Swagger endpoint for OpenAPI
 app.UseSwagger();

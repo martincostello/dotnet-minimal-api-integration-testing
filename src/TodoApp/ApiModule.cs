@@ -13,13 +13,13 @@ namespace TodoApp;
 public static class ApiModule
 {
     /// <summary>
-    /// Maps the endpoints for the API.
+    /// Maps the endpoints for the Todo API.
     /// </summary>
     /// <param name="builder">The <see cref="IEndpointConventionBuilder"/>.</param>
     /// <returns>
     /// A <see cref="IEndpointConventionBuilder"/> that can be used to further customize the endpoint.
     /// </returns>
-    public static IEndpointRouteBuilder MapApiRoutes(this IEndpointRouteBuilder builder)
+    public static IEndpointRouteBuilder MapTodoApiRoutes(this IEndpointRouteBuilder builder)
     {
         // Get all Todo items
         builder.MapGet("/api/items", async (
