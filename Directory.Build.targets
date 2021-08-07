@@ -1,4 +1,8 @@
 <Project>
+  <!--
+    TODO Remove when changes from https://github.com/dotnet/sdk/issues/19521
+    are available to consume in the RC1 SDK.
+  -->
   <PropertyGroup Condition=" '$(IsTestProject)' == 'true' ">
     <DefineConstants>$(DefineConstants);TEST_PROJECT</DefineConstants>
   </PropertyGroup>
