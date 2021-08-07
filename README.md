@@ -6,12 +6,14 @@
 
 ## Introduction
 
-> 🛈 This project currently depends on features in daily builds of the .NET
+> 🛈 This project currently depends on features in [daily builds] of the .NET
 `6.0.100-rc.1` SDK and requires preview builds of Visual Studio 2022 for IDE
 support.
 >
 > To work with this sample directly from source with Visual Studio Code, run
 `build.ps1` and then `startvscode.cmd` or `startvscode.sh`.
+
+[daily builds]: https://github.com/dotnet/installer#installers-and-binaries
 
 This sample project demonstrates techniques you can use for integration testing
 an ASP.NET Core 6 web application that uses the new [minimal APIs] feature.
@@ -35,8 +37,8 @@ application with ASP.NET Core 6 using the following technologies:
 
 The tests show how you can write integration tests for the [API] and [User
 Interface] layers of an application that can help you get good coverage of the
-system-under-test, as well as confidence that the changes you make to an
-application are ready to ship to a production system.
+system-under-test, as well as help give you confidence that the changes you make
+to an application are ready to ship to a production system.
 
 The tests include demonstrations of the use of the following open source
 libraries and technologies:
@@ -70,7 +72,7 @@ to [create a GitHub OAuth app] to obtain secrets for the `GitHub:ClientId` and
 `GitHub:ClientSecret` [options] so that the [OAuth user authentication] works and
 you can log into the Todo App UI.
 
-When creating the GitHub OAuth app, use `https://localhost:5001/signin-github`
+> 💡 When creating the GitHub OAuth app, use `https://localhost:5001/signin-github`
 as the _Authorization callback URL_.
 
 > ⚠️ Do not commit GitHub OAuth secrets to source control. Configure them
