@@ -42,11 +42,11 @@ public class TodoAppFixture : WebApplicationFactory<Services.ITodoService>, ITes
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureAppConfiguration((builder) =>
+        builder.ConfigureAppConfiguration(configBuilder =>
         {
             // Configure the test fixture to write the SQLite database
             // to a temporary directory, rather than in App_Data.
-            string dataDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            var dataDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
             if (!Directory.Exists(dataDirectory))
             {
@@ -59,10 +59,10 @@ public class TodoAppFixture : WebApplicationFactory<Services.ITodoService>, ITes
                 KeyValuePair.Create("DataDirectory", dataDirectory),
                 KeyValuePair.Create("GitHub:ClientId", "github-id"),
                 KeyValuePair.Create("GitHub:ClientSecret", "github-secret"),
-                KeyValuePair.Create("GitHub:EnterpriseDomain", string.Empty),
+                KeyValuePair.Create("GitHub:EnterpriseDomain", string.Empty)
             };
 
-            builder.AddInMemoryCollection(config);
+            configBuilder.AddInMemoryCollection(config);
         });
 
         // Route the application's logs to the xunit output
@@ -73,7 +73,7 @@ public class TodoAppFixture : WebApplicationFactory<Services.ITodoService>, ITes
 
         // Configure the application so HTTP requests related to the OAuth flow
         // can be intercepted and redirected to not use the real GitHub service.
-        builder.ConfigureServices((services) =>
+        builder.ConfigureServices(services =>
         {
             services.AddHttpClient();
 
@@ -83,6 +83,7 @@ public class TodoAppFixture : WebApplicationFactory<Services.ITodoService>, ITes
             services.AddSingleton<IPostConfigureOptions<GitHubAuthenticationOptions>, RemoteAuthorizationEventsFilter>();
         });
 
+        // Configure a bundle of HTTP requests to intercept for the OAuth flow.
         Interceptor.RegisterBundle("oauth-http-bundle.json");
     }
 }

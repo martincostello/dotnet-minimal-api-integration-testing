@@ -73,7 +73,7 @@ public static class AuthenticationModule
     /// </summary>
     /// <param name="user">The current user.</param>
     /// <returns>
-    /// The GitHub profile URL for the current user, if any.
+    /// The GitHub profile URL for the current user.
     /// </returns>
     public static string GetProfileUrl(this ClaimsPrincipal user)
         => user.FindFirst(GitHubProfileClaim)!.Value;

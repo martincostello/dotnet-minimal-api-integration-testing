@@ -34,23 +34,23 @@ public sealed class RemoteAuthorizationEventsFilter : IPostConfigureOptions<GitH
     {
         // Extract the state and return URI from the intended
         // destination the browser would be directed to.
-        NameValueCollection queryString = ParseQueryString(context);
+        var queryString = ParseQueryString(context);
 
-        string? location = queryString["redirect_uri"];
-        string? state = queryString["state"];
+        var location = queryString["redirect_uri"];
+        var state = queryString["state"];
 
         queryString.Clear();
 
         // Redirect the browser back to the test application with
         // the state from the original intended destination.
-        string code = Guid.NewGuid().ToString();
+        var code = Guid.NewGuid().ToString();
 
         queryString.Add("code", code);
         queryString.Add("state", state);
 
         var builder = new UriBuilder(location!)
         {
-            Query = queryString.ToString() ?? string.Empty,
+            Query = queryString.ToString() ?? string.Empty
         };
 
         return Redirect(context, builder);
@@ -65,7 +65,7 @@ public sealed class RemoteAuthorizationEventsFilter : IPostConfigureOptions<GitH
     private static Task Redirect<T>(RedirectContext<T> context, UriBuilder builder)
         where T : AuthenticationSchemeOptions
     {
-        string location = builder.Uri.ToString();
+        var location = builder.Uri.ToString();
 
         context.Response.Redirect(location);
 

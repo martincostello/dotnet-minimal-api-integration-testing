@@ -27,17 +27,21 @@ public class BrowserFixture
         string browserType = "chromium",
         [CallerMemberName] string? testName = null)
     {
+        // Start Playright and load the browser of the specified type
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await CreateBrowserAsync(playwright, browserType);
 
+        // Create a new page for the test to use
         var options = CreatePageOptions();
         var page = await browser.NewPageAsync(options);
 
+        // Redirect the browser logs to the xunit output
         page.Console += (_, e) => OutputHelper.WriteLine(e.Text);
         page.PageError += (_, e) => OutputHelper.WriteLine(e);
 
         try
         {
+            // Run the test, passing it the page to use
             await action(page);
         }
         catch (Exception)
@@ -53,14 +57,14 @@ public class BrowserFixture
 
     protected virtual BrowserNewPageOptions CreatePageOptions()
     {
-        var options = new BrowserNewPageOptions()
+        var options = new BrowserNewPageOptions
         {
             IgnoreHTTPSErrors = true, // The test fixture uses a self-signed TLS certificate
             Locale = "en-GB",
-            TimezoneId = "Europe/London",
+            TimezoneId = "Europe/London"
         };
 
-        
+
         if (RecordVideo)
         {
             options.RecordVideoDir = "videos";
@@ -120,10 +124,7 @@ public class BrowserFixture
             string fileName = GenerateFileName(testName, browserType, ".png");
             string path = Path.Combine("screenshots", fileName);
 
-            await page.ScreenshotAsync(new PageScreenshotOptions()
-            {
-                Path = path,
-            });
+            await page.ScreenshotAsync(new() { Path = path });
 
             OutputHelper.WriteLine($"Screenshot saved to {path}.");
         }

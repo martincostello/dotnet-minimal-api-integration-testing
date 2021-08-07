@@ -59,7 +59,7 @@ public sealed class HttpServerFixture : TodoAppFixture
 
         // Modify the host builder to use Kestrel instead
         // of TestServer so we can listen on a real address.
-        builder.ConfigureWebHost((p) => p.UseKestrel());
+        builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
 
         // Create and start the Kestrel server before the test server,
         // otherwise due to the way the deferred host builder works
@@ -77,7 +77,7 @@ public sealed class HttpServerFixture : TodoAppFixture
         var addresses = server.Features.Get<IServerAddressesFeature>();
 
         ClientOptions.BaseAddress = addresses!.Addresses
-            .Select((p) => new Uri(p))
+            .Select(x => new Uri(x))
             .Last();
 
         // Return the host that uses TestServer, rather than the real one.

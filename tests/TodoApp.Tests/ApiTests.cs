@@ -108,7 +108,7 @@ public class ApiTests
         items.ShouldNotBeNull();
         items.Items.ShouldNotBeNull();
         items.Items.Count.ShouldBe(beforeCount);
-        items.Items.ShouldNotContain(p => p.Id == itemId);
+        items.Items.ShouldNotContain(x => x.Id == itemId);
 
         // Act
         using var getResponse = await client.GetAsync(itemUri);
@@ -247,11 +247,11 @@ public class ApiTests
 
     private async Task<HttpClient> CreateAuthenticatedClientAsync()
     {
-        var options = new WebApplicationFactoryClientOptions()
+        var options = new WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = true,
             BaseAddress = Fixture.ClientOptions.BaseAddress,
-            HandleCookies = true,
+            HandleCookies = true
         };
 
         var client = Fixture.CreateClient(options);
