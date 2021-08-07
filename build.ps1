@@ -1,7 +1,6 @@
 #! /usr/bin/pwsh
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
-    [Parameter(Mandatory = $false)][string] $VersionSuffix = "",
     [Parameter(Mandatory = $false)][string] $OutputPath = "",
     [Parameter(Mandatory = $false)][switch] $SkipTests
 )
@@ -121,7 +120,7 @@ $publishProjects = @(
 
 Write-Host "Publishing solution..." -ForegroundColor Green
 ForEach ($project in $publishProjects) {
-    DotNetPublish $project $Configuration $PrereleaseSuffix
+    DotNetPublish $project $Configuration
 }
 
 if ($SkipTests -eq $false) {
