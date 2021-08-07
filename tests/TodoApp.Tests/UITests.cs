@@ -26,7 +26,7 @@ public class UITests
     {
         // Arrange
         var browser = new BrowserFixture(OutputHelper);
-        await browser.WithPageAsync(async (page) =>
+        await browser.WithPageAsync(async page =>
         {
             // Load the application
             await page.GotoAsync(Fixture.ServerAddress);

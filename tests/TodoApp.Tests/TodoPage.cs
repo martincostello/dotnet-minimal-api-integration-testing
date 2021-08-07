@@ -29,7 +29,7 @@ public class TodoPage
     public async Task<IReadOnlyList<TodoPageItem>> GetItemsAsync()
     {
         var elements = await Page.QuerySelectorAllAsync(Selectors.TodoItem);
-        return elements.Select((p) => new TodoPageItem(p)).ToArray();
+        return elements.Select(x => new TodoPageItem(x)).ToArray();
     }
 
     public async Task SignInAsync()

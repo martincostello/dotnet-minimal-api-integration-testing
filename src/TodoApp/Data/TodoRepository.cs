@@ -24,11 +24,11 @@ public sealed class TodoRepository : ITodoRepository
     {
         await EnsureDatabaseAsync(cancellationToken);
 
-        var item = new TodoItem()
+        var item = new TodoItem
         {
             CreatedAt = UtcNow(),
             Text = text,
-            UserId = userId,
+            UserId = userId
         };
 
         Context.Add(item);
@@ -107,9 +107,9 @@ public sealed class TodoRepository : ITodoRepository
         await EnsureDatabaseAsync(cancellationToken);
 
         return await Context.Items
-            .Where(p => p.UserId == userId)
-            .OrderBy(p => p.CompletedAt.HasValue)
-            .ThenBy(p => p.CreatedAt)
+            .Where(x => x.UserId == userId)
+            .OrderBy(x => x.CompletedAt.HasValue)
+            .ThenBy(x => x.CreatedAt)
             .ToListAsync(cancellationToken);
     }
 

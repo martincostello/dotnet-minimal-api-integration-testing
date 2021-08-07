@@ -19,7 +19,7 @@ public sealed class HttpRequestInterceptionFilter : IHttpMessageHandlerBuilderFi
 
     public Action<HttpMessageHandlerBuilder> Configure(Action<HttpMessageHandlerBuilder> next)
     {
-        return (builder) =>
+        return builder =>
         {
             next(builder);
             builder.AdditionalHandlers.Add(_options.CreateHttpMessageHandler());

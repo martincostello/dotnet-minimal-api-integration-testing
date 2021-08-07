@@ -77,12 +77,12 @@ public sealed class TodoService : ITodoService
 
     private static TodoItemModel MapItem(TodoItem item)
     {
-        return new TodoItemModel()
+        return new TodoItemModel
         {
             Id = item.Id.ToString(),
             IsCompleted = item.CompletedAt.HasValue,
             LastUpdated = (item.CompletedAt ?? item.CreatedAt).ToString("u", CultureInfo.InvariantCulture),
-            Text = item.Text,
+            Text = item.Text
         };
     }
 }
