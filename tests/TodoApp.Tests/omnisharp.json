@@ -1,0 +1,21 @@
+{
+  "fileOptions": {
+    "systemExcludeSearchPatterns": [
+      "**/bin/**/*",
+      "**/obj/**/*",
+      "**/node_modules/**/*"
+    ],
+    "excludeSearchPatterns": []
+  },
+  "FormattingOptions": {
+    "enableEditorConfigSupport": true
+  },
+  "msbuild": {
+    "MSBuildSDKsPath": ".\\.dotnetcli",
+    "EnablePackageAutoRestore": true,
+    "loadProjectsOnDemand": true
+  },
+  "RoslynExtensionsOptions": {
+    "enableAnalyzersSupport": true
+  }
+}
