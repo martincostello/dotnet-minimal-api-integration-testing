@@ -1,12 +1,12 @@
 /// <binding ProjectOpened='default' />
-var browserify = require('browserify');
-var buffer = require('vinyl-buffer');
-var eslint = require('gulp-eslint');
-var gulp = require('gulp');
-var source = require('vinyl-source-stream');
-var sourcemaps = require('gulp-sourcemaps');
-var tsify = require('tsify');
-var uglify = require('gulp-uglify');
+let browserify = require('browserify');
+let buffer = require('vinyl-buffer');
+let eslint = require('gulp-eslint');
+let gulp = require('gulp');
+let source = require('vinyl-source-stream');
+let sourcemaps = require('gulp-sourcemaps');
+let tsify = require('tsify');
+let uglify = require('gulp-uglify');
 
 gulp.task('lint', function () {
     return gulp.src(['scripts/ts/**/*.ts'])
@@ -31,10 +31,10 @@ gulp.task('build', function () {
             extensions: ['.ts'],
             plugins: [
                 [
-                    "transform-runtime",
+                    'transform-runtime',
                     {
-                        "polyfill": false,
-                        "regenerator": true
+                        'polyfill': false,
+                        'regenerator': true
                     }
                 ]
             ]
