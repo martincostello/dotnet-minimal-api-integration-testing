@@ -25,7 +25,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\TodoApp\TodoApp.csproj" />
   </ItemGroup>
-   <PropertyGroup>
+  <ItemGroup>
+    <Using Include="Shouldly" />
+    <Using Include="Xunit" />
+    <Using Include="Xunit.Abstractions" />
+  </ItemGroup>
+  <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutput Condition=" '$(OutputPath)' != '' ">$([MSBuild]::EnsureTrailingSlash('$(OutputPath)'))</CoverletOutput>
     <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
