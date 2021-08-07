@@ -63,6 +63,24 @@ libraries and technologies:
 [xunit]: https://xunit.net/
 [xunit Logging]: https://github.com/martincostello/xunit-logging
 
+## Debugging
+
+To debug the application locally outside of the integration tests, you will need
+to [create a GitHub OAuth app] to obtain secrets for the `GitHub:ClientId` and
+`GitHub:ClientSecret` [options] so that the [OAuth user authentication] works and
+you can log into the Todo App UI.
+
+When creating the GitHub OAuth app, use `https://localhost:5001/signin-github`
+as the _Authorization callback URL_.
+
+> ⚠️ Do not commit GitHub OAuth secrets to source control. Configure them
+with [User Secrets] instead.
+
+[create a GitHub OAuth app]: https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app
+[OAuth user authentication]: https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/?view=aspnetcore-5.0&tabs=visual-studio
+[options]: https://github.com/martincostello/dotnet-minimal-api-integration-testing/blob/1cd99029a9e3af57ab2fe1335b43e298efb65c09/src/TodoApp/appsettings.json#L10-L11
+[User Secrets]: https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets
+
 ## Building and Testing
 
 Compiling the application yourself requires Git and the
