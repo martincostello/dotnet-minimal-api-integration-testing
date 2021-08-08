@@ -14,10 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IClock>(_ => SystemClock.Instance);
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 builder.Services.AddScoped<ITodoService, TodoService>();
-builder.Services.AddDbContext<TodoContext>((serviceProvider, builder) =>
+builder.Services.AddDbContext<TodoContext>((options) =>
 {
-    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-    var environment = serviceProvider.GetRequiredService<IHostEnvironment>();
+    var configuration = builder.Configuration;
+    var environment = builder.Environment;
     var dataDirectory = configuration["DataDirectory"];
 
     if (string.IsNullOrEmpty(dataDirectory) || !Path.IsPathRooted(dataDirectory))
@@ -27,7 +27,7 @@ builder.Services.AddDbContext<TodoContext>((serviceProvider, builder) =>
 
     var databaseFile = Path.Combine(dataDirectory, "TodoApp.db");
 
-    builder.UseSqlite("Data Source=" + databaseFile);
+    options.UseSqlite("Data Source=" + databaseFile);
 });
 
 // Add user authentication with GitHub as an external OAuth provider
@@ -35,7 +35,6 @@ builder.Services.AddGitHubAuthentication();
 
 // Add Razor Pages to render the UI
 builder.Services.AddRazorPages();
-builder.Services.AddRouting();
 
 // Configure OpenAPI documentation for the Todo API
 builder.Services.AddEndpointsApiExplorer();
@@ -62,16 +61,19 @@ app.UseHttpsRedirection();
 // Add static files for JavaScript, CSS and OpenAPI
 app.UseStaticFiles();
 
+// We explicitly call UseRouting here because of https://github.com/dotnet/aspnetcore/issues/34146
+app.UseRouting();
+
 // Add authN for GitHub
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Add Swagger endpoint for OpenAPI
+app.UseSwagger();
+
 // Add the HTTP endpoints
 app.MapAuthenticationRoutes();
 app.MapTodoApiRoutes();
-
-// Add Swagger endpoint for OpenAPI
-app.UseSwagger();
 
 // Add Razor Pages for the UI
 app.MapRazorPages();
