@@ -52,7 +52,7 @@ public static class ApiModule
             ITodoService service,
             CancellationToken cancellationToken) =>
             {
-                if (model is null || string.IsNullOrWhiteSpace(model.Text))
+                if (string.IsNullOrWhiteSpace(model.Text))
                 {
                     return Results.Problem("No item text specified.", statusCode: StatusCodes.Status400BadRequest);
                 }
