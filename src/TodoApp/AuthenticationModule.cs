@@ -55,6 +55,7 @@ public static class AuthenticationModule
                     options.ClaimActions.MapJsonKey(GitHubAvatarClaim, "avatar_url");
                 }
             })
+            .ValidateOnStart()
             .Services;
     }
 
