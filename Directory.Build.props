@@ -30,14 +30,4 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)GlobalUsings.cs" />
   </ItemGroup>
-  <!--
-    HACK Workaround for issues building with file-scoped
-    namespaces in Visual Studio 2022 17.0 Preview 2.
-  -->
-  <ItemGroup Condition="'$(BuildingInsideVisualStudio)' == 'true' AND $([MSBuild]::VersionGreaterThanOrEquals('$(VisualStudioVersion)', '17.0'))">
-    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.0.0-4.21409.9">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
 </Project>
