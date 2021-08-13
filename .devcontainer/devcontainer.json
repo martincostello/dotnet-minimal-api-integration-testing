@@ -11,6 +11,7 @@
     "ms-dotnettools.csharp",
     "ms-vscode.PowerShell"
   ],
+  "forwardPorts": [ 5001 ],
   "remoteEnv": {
     "DOTNET_ROLL_FORWARD": "Major",
     "PATH": "/root/.dotnet/tools:${containerWorkspaceFolder}/.dotnetcli:${containerEnv:PATH}"
