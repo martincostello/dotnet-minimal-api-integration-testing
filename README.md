@@ -6,7 +6,7 @@
 
 ## Introduction
 
-> 🛈 This project currently depends on features in [daily builds] of the .NET
+> ℹ️ This project currently depends on features in [daily builds] of the .NET
 `6.0.100-rc.1` SDK and requires preview builds of Visual Studio 2022 for IDE
 support.
 >
