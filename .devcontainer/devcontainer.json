@@ -11,7 +11,19 @@
     "ms-dotnettools.csharp",
     "ms-vscode.PowerShell"
   ],
-  "forwardPorts": [ 5001 ],
+  "forwardPorts": [ 5000, 5001 ],
+  "portsAttributes":{
+    "5000": {
+      "label": "HTTP",
+      "onAutoForward": "silent",
+      "protocol": "http"
+    },
+    "5001": {
+      "label": "HTTPS",
+      "onAutoForward": "openBrowserOnce",
+      "protocol": "https"
+    }
+  },
   "postCreateCommand": "./build.ps1 -SkipTests",
   "remoteEnv": {
     "DOTNET_ROLL_FORWARD": "Major",
