@@ -15,7 +15,9 @@
         "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       },
       "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "GitHub__ClientId": "${env:TODOAPP_GITHUB_CLIENTID}",
+        "GitHub__ClientSecret": "${env:TODOAPP_GITHUB_CLIENTSECRET}"
       }
     },
     {
