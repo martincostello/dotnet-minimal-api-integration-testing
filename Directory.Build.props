@@ -23,11 +23,4 @@
   <ItemGroup>
     <Using Include="System.Globalization" />
   </ItemGroup>
-  <!--
-    TODO Remove when changes from https://github.com/dotnet/sdk/issues/19521
-    are available to consume in the RC1 SDK.
-  -->
-  <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)GlobalUsings.cs" />
-  </ItemGroup>
 </Project>
