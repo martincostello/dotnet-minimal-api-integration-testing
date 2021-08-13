@@ -6,9 +6,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceRoot}/src/TodoApp/bin/Debug/net6.0/TodoApp.dll",
+      "program": "${workspaceFolder}/src/TodoApp/bin/Debug/net6.0/TodoApp.dll",
       "args": [],
-      "cwd": "${workspaceRoot}/src/TodoApp",
+      "cwd": "${workspaceFolder}/src/TodoApp",
       "stopAtEntry": false,
       "serverReadyAction": {
         "action": "openExternally",
@@ -29,7 +29,7 @@
       "args": [
         "test"
       ],
-      "cwd": "${workspaceRoot}/tests/TodoApp.Tests",
+      "cwd": "${workspaceFolder}/tests/TodoApp.Tests",
       "console": "internalConsole",
       "stopAtEntry": false,
       "internalConsoleOptions": "openOnSessionStart"
