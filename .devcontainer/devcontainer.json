@@ -1,0 +1,18 @@
+{
+  "name": "C# (.NET)",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "VARIANT": "5.0"
+    }
+  },
+  "extensions": [
+    "editorconfig.editorconfig",
+    "ms-dotnettools.csharp",
+    "ms-vscode.PowerShell"
+  ],
+  "remoteEnv": {
+    "DOTNET_ROLL_FORWARD": "Major",
+    "PATH": "/root/.dotnet/tools:${containerWorkspaceFolder}/.dotnetcli:${containerEnv:PATH}"
+  }
+}
