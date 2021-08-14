@@ -54,9 +54,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStatusCodePagesWithReExecute("/error", "?id={0}");
 
-// Require use of HTTPS
-app.UseHsts();
-app.UseHttpsRedirection();
+// Require use of HTTPS in production
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+    app.UseHttpsRedirection();
+}
 
 // Add static files for JavaScript, CSS and OpenAPI
 app.UseStaticFiles();

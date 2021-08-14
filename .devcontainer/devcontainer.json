@@ -1,17 +1,14 @@
 {
   "name": "C# (.NET)",
   "build": {
-    "dockerfile": "Dockerfile",
-    "args": {
-      "VARIANT": "5.0"
-    }
+    "dockerfile": "Dockerfile"
   },
   "extensions": [
     "editorconfig.editorconfig",
     "ms-dotnettools.csharp",
     "ms-vscode.PowerShell"
   ],
-  "forwardPorts": [ 5001 ],
+  "forwardPorts": [ 5000 ],
   "postCreateCommand": "./build.ps1 -SkipTests",
   "remoteEnv": {
     "DOTNET_ROLL_FORWARD": "Major",
