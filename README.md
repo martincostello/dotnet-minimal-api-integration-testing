@@ -72,7 +72,7 @@ to [create a GitHub OAuth app] to obtain secrets for the `GitHub:ClientId` and
 `GitHub:ClientSecret` [options] so that the [OAuth user authentication] works and
 you can log into the Todo App UI.
 
-> 💡 When creating the GitHub OAuth app, use `https://localhost:5001/signin-github`
+> 💡 When creating the GitHub OAuth app, use `https://localhost:5001/sign-in-github`
 as the _Authorization callback URL_.
 
 > ⚠️ Do not commit GitHub OAuth secrets to source control. Configure them
