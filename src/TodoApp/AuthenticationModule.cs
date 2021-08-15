@@ -15,8 +15,8 @@ public static class AuthenticationModule
 {
     private const string DeniedPath = "/denied";
     private const string RootPath = "/";
-    private const string SignInPath = "/signin";
-    private const string SignOutPath = "/signout";
+    private const string SignInPath = "/sign-in";
+    private const string SignOutPath = "/sign-out";
 
     private const string GitHubAvatarClaim = "urn:github:avatar";
     private const string GitHubProfileClaim = "urn:github:profile";
@@ -43,6 +43,7 @@ public static class AuthenticationModule
             .Configure<IConfiguration>((options, configuration) =>
             {
                 options.AccessDeniedPath = DeniedPath;
+                options.CallbackPath = SignInPath + "-github";
                 options.ClientId = configuration["GitHub:ClientId"];
                 options.ClientSecret = configuration["GitHub:ClientSecret"];
                 options.EnterpriseDomain = configuration["GitHub:EnterpriseDomain"];

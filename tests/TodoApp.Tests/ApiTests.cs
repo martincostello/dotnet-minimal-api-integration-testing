@@ -261,7 +261,7 @@ public class ApiTests
 
         // Go through the sign-in flow, which will set
         // the authentication cookie on the HttpClient.
-        using var response = await client.PostAsync("/signin", content);
+        using var response = await client.PostAsync("/sign-in", content);
         response.IsSuccessStatusCode.ShouldBeTrue();
 
         return client;
