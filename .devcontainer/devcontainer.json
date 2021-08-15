@@ -15,8 +15,7 @@
     },
     "5001": {
       "label": "TodoApp",
-      "onAutoForward": "openBrowserOnce",
-      "protocol": "https"
+      "onAutoForward": "openBrowserOnce"
     }
   },
   "postCreateCommand": "./build.ps1 -SkipTests",
