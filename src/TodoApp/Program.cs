@@ -26,6 +26,12 @@ builder.Services.AddDbContext<TodoContext>((options) =>
         dataDirectory = Path.Combine(environment.ContentRootPath, "App_Data");
     }
 
+    // Ensure the configured data directory exists
+    if (!Directory.Exists(dataDirectory))
+    {
+        Directory.CreateDirectory(dataDirectory);
+    }
+
     var databaseFile = Path.Combine(dataDirectory, "TodoApp.db");
 
     options.UseSqlite("Data Source=" + databaseFile);
