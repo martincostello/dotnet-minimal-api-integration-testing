@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2021. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using TodoApp;
@@ -43,8 +44,24 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new() { Title = "Todo API", Version = "v1" });
 });
 
+// Configure the reverse proxy, if enabled, so OAuth works correctly
+bool forwardHeaders = string.Equals(
+    builder.Configuration["ASPNETCORE_FORWARDEDHEADERS_ENABLED"],
+    "true",
+    StringComparison.OrdinalIgnoreCase);
+
+if (forwardHeaders)
+{
+    builder.Services.Configure<ForwardedHeadersOptions>(options => options.ForwardedHeaders = ForwardedHeaders.All);
+}
+
 // Create the app
 var app = builder.Build();
+
+if (forwardHeaders)
+{
+    app.UseForwardedHeaders();
+}
 
 // Configure error handling
 if (!app.Environment.IsDevelopment())

@@ -16,6 +16,7 @@
       },
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_FORWARDEDHEADERS_ENABLED": "${env:CODESPACES}",
         "GitHub__ClientId": "${env:TODOAPP_GITHUB_CLIENTID}",
         "GitHub__ClientSecret": "${env:TODOAPP_GITHUB_CLIENTSECRET}"
       }
