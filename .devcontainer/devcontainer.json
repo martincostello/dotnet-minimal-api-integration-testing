@@ -8,15 +8,15 @@
     "ms-dotnettools.csharp",
     "ms-vscode.PowerShell"
   ],
-  "forwardPorts": [ 5000 ],
+  "forwardPorts": [ 5000, 5001 ],
   "portsAttributes":{
     "5000": {
-      "label": "TodoApp",
-      "onAutoForward": "openBrowserOnce",
-      "protocol": "http"
+      "onAutoForward": "silent"
     },
     "5001": {
-      "onAutoForward": "silent"
+      "label": "TodoApp",
+      "onAutoForward": "openBrowserOnce",
+      "protocol": "https"
     }
   },
   "postCreateCommand": "./build.ps1 -SkipTests",
