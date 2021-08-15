@@ -50,24 +50,15 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new() { Title = "Todo API", Version = "v1" });
 });
 
-// Configure the reverse proxy, if enabled, so OAuth works correctly
-bool forwardHeaders = string.Equals(
-    builder.Configuration["ASPNETCORE_FORWARDEDHEADERS_ENABLED"],
-    "true",
-    StringComparison.OrdinalIgnoreCase);
-
-if (forwardHeaders)
+if (string.Equals(builder.Configuration["CODESPACES"], "true", StringComparison.OrdinalIgnoreCase))
 {
-    builder.Services.Configure<ForwardedHeadersOptions>(options => options.ForwardedHeaders = ForwardedHeaders.All);
+    // When running in GitHub Codespaces, X-Forwarded-Host also needs to be set
+    builder.Services.Configure<ForwardedHeadersOptions>(
+        options => options.ForwardedHeaders |= ForwardedHeaders.XForwardedHost);
 }
 
 // Create the app
 var app = builder.Build();
-
-if (forwardHeaders)
-{
-    app.UseForwardedHeaders();
-}
 
 // Configure error handling
 if (!app.Environment.IsDevelopment())
