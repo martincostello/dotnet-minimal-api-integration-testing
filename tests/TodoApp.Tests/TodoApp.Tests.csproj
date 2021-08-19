@@ -9,7 +9,7 @@
     <PackageReference Include="coverlet.msbuild" Version="3.1.0" PrivateAssets="All" />
     <PackageReference Include="JustEat.HttpClientInterception" Version="3.1.1" />
     <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0-rc.1.21417.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0-rc.1.21418.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="Microsoft.Playwright" Version="1.14.0" />
     <PackageReference Include="ReportGenerator" Version="4.8.12" />
