@@ -12,12 +12,9 @@ export class TodoClient {
             text: text
         };
 
-        /* eslint-disable @typescript-eslint/naming-convention */
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        };
-        /* eslint-enable @typescript-eslint/naming-convention */
+        const headers = new Headers();
+        headers.set('Accept', 'application/json');
+        headers.set('Content-Type', 'application/json');
 
         const init = {
             method: 'POST',
