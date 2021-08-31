@@ -9,10 +9,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="6.0.0-preview.7.21413.32" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0-rc.1.21420.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0-rc.1.21430.10" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.3.5" PrivateAssets="all" />
     <PackageReference Include="NodaTime" Version="3.0.5" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.1" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="scripts\ts\**\*.ts" />
