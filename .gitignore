@@ -25,6 +25,8 @@ UpgradeLog*.htm
 UpgradeLog*.XML
 PublishProfiles
 *.db
+*.db-shm
+*.db-wal
 *.DotSettings
 *.GhostDoc.xml
 *.log
