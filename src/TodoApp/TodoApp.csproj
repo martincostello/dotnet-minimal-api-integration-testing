@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <IsPackable>false</IsPackable>
+    <!-- HACK Workaround for https://github.com/dotnet/sdk/issues/20444 -->
+    <LangVersion Condition="'$(BuildingInsideVisualStudio)' == 'true'">preview</LangVersion>
     <RootNamespace>TodoApp</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
