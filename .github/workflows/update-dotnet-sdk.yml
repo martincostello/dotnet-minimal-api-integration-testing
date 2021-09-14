@@ -1,9 +1,8 @@
 name: update-dotnet-sdk
 
 on:
-  # TODO Re-enable once using a stable version of the SDK
-  #schedule:
-  #  - cron:  '0 * * * *'
+  schedule:
+    - cron:  '0 * * * *'
   workflow_dispatch:
 
 jobs:
