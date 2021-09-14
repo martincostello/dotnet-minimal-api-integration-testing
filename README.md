@@ -6,9 +6,8 @@
 
 ## Introduction
 
-> ℹ️ This project currently depends on features in [daily builds] of the .NET
-`6.0.100-rc.1` SDK and requires preview builds of Visual Studio 2022 for IDE
-support.
+> ℹ️ This project currently depends on features in pre-releases of the .NET 6
+SDK and requires preview builds of Visual Studio 2022 for IDE support.
 >
 > To work with this sample directly from source with Visual Studio Code, run
 `build.ps1` and then `startvscode.cmd` or `startvscode.sh`.
