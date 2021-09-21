@@ -16,7 +16,7 @@ using Microsoft.Extensions.Options;
 
 namespace TodoApp;
 
-public class TodoAppFixture : WebApplicationFactory<Services.ITodoService>, ITestOutputHelperAccessor
+public class TodoAppFixture : WebApplicationFactory<Program>, ITestOutputHelperAccessor
 {
     public TodoAppFixture()
     {
