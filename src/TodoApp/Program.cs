@@ -78,9 +78,6 @@ if (!app.Environment.IsDevelopment())
 // Add static files for JavaScript, CSS and OpenAPI
 app.UseStaticFiles();
 
-// We explicitly call UseRouting here because of https://github.com/dotnet/aspnetcore/issues/34146
-app.UseRouting();
-
 // Add authN for GitHub
 app.UseAuthentication();
 app.UseAuthorization();
