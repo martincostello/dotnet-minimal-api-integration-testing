@@ -81,6 +81,7 @@ public class TodoAppFixture : WebApplicationFactory<Program>, ITestOutputHelperA
                 _ => new HttpRequestInterceptionFilter(Interceptor));
 
             services.AddSingleton<IPostConfigureOptions<GitHubAuthenticationOptions>, RemoteAuthorizationEventsFilter>();
+            services.AddScoped<LoopbackOAuthEvents>();
         });
 
         // Configure a bundle of HTTP requests to intercept for the OAuth flow.
