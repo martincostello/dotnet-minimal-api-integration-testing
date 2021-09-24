@@ -9,7 +9,7 @@
     <UserSecretsId>TodoApp</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="6.0.0-rc.1.21472.49" />
+    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="6.0.0-rc.1.21474.45" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0-rc.1.21452.10" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.4.2" PrivateAssets="all" />
     <PackageReference Include="NodaTime" Version="3.0.5" />
