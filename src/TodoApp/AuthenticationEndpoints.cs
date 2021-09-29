@@ -24,13 +24,13 @@ public static class AuthenticationEndpoints
     /// <summary>
     /// Adds GitHub authentication to the application.
     /// </summary>
-    /// <param name="builder">The <see cref="IServiceCollection"/>.</param>
+    /// <param name="services">The <see cref="IServiceCollection"/>.</param>
     /// <returns>
     /// A <see cref="IServiceCollection"/> that can be used to further configure the application.
     /// </returns>
-    public static IServiceCollection AddGitHubAuthentication(this IServiceCollection builder)
+    public static IServiceCollection AddGitHubAuthentication(this IServiceCollection services)
     {
-        return builder
+        return services
             .AddAuthentication(options => options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
