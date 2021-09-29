@@ -2,40 +2,13 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.EntityFrameworkCore;
-using NodaTime;
 using TodoApp;
-using TodoApp.Data;
-using TodoApp.Services;
 
 // Create the default web application builder
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure the Todo repository and associated services using EFCore and SQLite
-builder.Services.AddSingleton<IClock>(_ => SystemClock.Instance);
-builder.Services.AddScoped<ITodoRepository, TodoRepository>();
-builder.Services.AddScoped<ITodoService, TodoService>();
-builder.Services.AddDbContext<TodoContext>((options) =>
-{
-    var configuration = builder.Configuration;
-    var environment = builder.Environment;
-    var dataDirectory = configuration["DataDirectory"];
-
-    if (string.IsNullOrEmpty(dataDirectory) || !Path.IsPathRooted(dataDirectory))
-    {
-        dataDirectory = Path.Combine(environment.ContentRootPath, "App_Data");
-    }
-
-    // Ensure the configured data directory exists
-    if (!Directory.Exists(dataDirectory))
-    {
-        Directory.CreateDirectory(dataDirectory);
-    }
-
-    var databaseFile = Path.Combine(dataDirectory, "TodoApp.db");
-
-    options.UseSqlite("Data Source=" + databaseFile);
-});
+// Configure the Todo repository and associated services
+builder.Services.AddTodoApi();
 
 // Add user authentication with GitHub as an external OAuth provider
 builder.Services.AddGitHubAuthentication();
