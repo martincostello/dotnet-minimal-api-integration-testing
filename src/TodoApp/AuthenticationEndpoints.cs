@@ -11,7 +11,7 @@ namespace TodoApp;
 /// <summary>
 /// A class containing the HTTP endpoints and extension methods for authentication.
 /// </summary>
-public static class AuthenticationModule
+public static class AuthenticationEndpoints
 {
     private const string DeniedPath = "/denied";
     private const string RootPath = "/";

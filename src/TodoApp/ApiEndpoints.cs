@@ -10,7 +10,7 @@ namespace TodoApp;
 /// <summary>
 /// A class containing the HTTP endpoints for the Todo API.
 /// </summary>
-public static class ApiModule
+public static class ApiEndpoints
 {
     /// <summary>
     /// Maps the endpoints for the Todo API.
