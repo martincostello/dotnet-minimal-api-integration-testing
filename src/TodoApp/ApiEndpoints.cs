@@ -2,6 +2,9 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using NodaTime;
+using TodoApp.Data;
 using TodoApp.Models;
 using TodoApp.Services;
 
@@ -12,6 +15,44 @@ namespace TodoApp;
 /// </summary>
 public static class ApiEndpoints
 {
+    /// <summary>
+    /// Adds the services for the Todo API to the application.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/>.</param>
+    /// <returns>
+    /// A <see cref="IServiceCollection"/> that can be used to further configure the application.
+    /// </returns>
+    public static IServiceCollection AddTodoApi(this IServiceCollection services)
+    {
+        services.AddSingleton<IClock>(_ => SystemClock.Instance);
+        services.AddScoped<ITodoRepository, TodoRepository>();
+        services.AddScoped<ITodoService, TodoService>();
+
+        services.AddDbContext<TodoContext>((serviceProvider, options) =>
+        {
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            var dataDirectory = configuration["DataDirectory"];
+
+            if (string.IsNullOrEmpty(dataDirectory) || !Path.IsPathRooted(dataDirectory))
+            {
+                var environment = serviceProvider.GetRequiredService<IHostEnvironment>();
+                dataDirectory = Path.Combine(environment.ContentRootPath, "App_Data");
+            }
+
+            // Ensure the configured data directory exists
+            if (!Directory.Exists(dataDirectory))
+            {
+                Directory.CreateDirectory(dataDirectory);
+            }
+
+            var databaseFile = Path.Combine(dataDirectory, "TodoApp.db");
+
+            options.UseSqlite("Data Source=" + databaseFile);
+        });
+
+        return services;
+    }
+
     /// <summary>
     /// Maps the endpoints for the Todo API.
     /// </summary>
