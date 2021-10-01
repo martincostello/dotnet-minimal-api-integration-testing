@@ -11,7 +11,7 @@
     <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0-rc.1.21452.15" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageReference Include="Microsoft.Playwright" Version="1.15.0" />
+    <PackageReference Include="Microsoft.Playwright" Version="1.15.1" />
     <PackageReference Include="ReportGenerator" Version="4.8.13" />
     <PackageReference Include="Shouldly" Version="4.0.3" />
     <PackageReference Include="xunit" Version="2.4.1" />
