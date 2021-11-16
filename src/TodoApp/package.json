@@ -39,7 +39,7 @@
     "vinyl-buffer": "1.0.1",
     "vinyl-source-stream": "2.0.0",
     "yargs": "17.2.1",
-    "yargs-parser": "20.2.9"
+    "yargs-parser": "21.0.0"
   },
   "dependencies": {}
 }
