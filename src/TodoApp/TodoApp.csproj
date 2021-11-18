@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0" />
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.4.4" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.5.2" PrivateAssets="all" />
     <PackageReference Include="NodaTime" Version="3.0.9" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
