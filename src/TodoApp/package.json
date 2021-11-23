@@ -14,7 +14,7 @@
   "author": "martincostello",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/jquery": "^3.5.8",
+    "@types/jquery": "^3.5.9",
     "@types/moment": "2.13.0",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/eslint-plugin-tslint": "^5.4.0",
