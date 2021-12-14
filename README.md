@@ -6,8 +6,6 @@
 
 ## Introduction
 
-[daily builds]: https://github.com/dotnet/installer#installers-and-binaries
-
 This sample project demonstrates techniques you can use for integration testing
 an ASP.NET Core 6 web application that uses the new [minimal APIs] feature.
 
