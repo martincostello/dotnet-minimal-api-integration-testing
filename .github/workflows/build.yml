@@ -13,7 +13,6 @@ on:
 
 env:
   DOTNET_NOLOGO: true
-  DOTNET_ROLL_FORWARD: Major # HACK Remove once Playwright supports .NET 6
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   NUGET_XMLDOC_MODE: skip
 
