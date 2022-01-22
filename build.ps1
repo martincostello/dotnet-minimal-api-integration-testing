@@ -1,4 +1,4 @@
-#! /usr/bin/pwsh
+#! /usr/bin/env pwsh
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
     [Parameter(Mandatory = $false)][string] $OutputPath = "",
