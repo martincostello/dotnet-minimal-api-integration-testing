@@ -21,30 +21,36 @@ public class UITests
 
     private ITestOutputHelper OutputHelper { get; }
 
-    public static IEnumerable<object[]> Browsers()
+    public static IEnumerable<object?[]> Browsers()
     {
-        yield return new[] { BrowserType.Chromium };
-        yield return new[] { BrowserType.Chromium + ":chrome" };
+        yield return new[] { BrowserType.Chromium, null };
+        yield return new[] { BrowserType.Chromium, "chrome" };
 
         if (!OperatingSystem.IsLinux())
         {
-            yield return new[] { BrowserType.Chromium + ":msedge" };
+            yield return new[] { BrowserType.Chromium, "msedge" };
         }
 
-        yield return new[] { BrowserType.Firefox };
+        yield return new[] { BrowserType.Firefox, null };
 
         if (OperatingSystem.IsMacOS())
         {
-            yield return new[] { BrowserType.Webkit };
+            yield return new[] { BrowserType.Webkit, null };
         }
     }
 
     [Theory]
     [MemberData(nameof(Browsers))]
-    public async Task Can_Sign_In_And_Manage_Todo_Items(string browserType)
+    public async Task Can_Sign_In_And_Manage_Todo_Items(string browserType, string? browserChannel)
     {
         // Arrange
-        var browser = new BrowserFixture(OutputHelper);
+        var options = new BrowserFixtureOptions
+        {
+            BrowserType = browserType,
+            BrowserChannel = browserChannel
+        };
+
+        var browser = new BrowserFixture(options, OutputHelper);
         await browser.WithPageAsync(async page =>
         {
             // Load the application
@@ -106,7 +112,6 @@ public class UITests
 
             // Assert
             await app.WaitForSignedOutAsync();
-        },
-        browserType);
+        });
     }
 }

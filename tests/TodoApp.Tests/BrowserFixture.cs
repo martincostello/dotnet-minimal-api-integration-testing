@@ -8,8 +8,13 @@ namespace TodoApp;
 
 public class BrowserFixture
 {
-    public BrowserFixture(ITestOutputHelper outputHelper)
+    private const string VideosDirectory = "videos";
+
+    public BrowserFixture(
+        BrowserFixtureOptions options,
+        ITestOutputHelper outputHelper)
     {
+        Options = options;
         OutputHelper = outputHelper;
     }
 
@@ -20,16 +25,17 @@ public class BrowserFixture
 
     private static bool IsRunningInGitHubActions { get; } = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS"));
 
+    private BrowserFixtureOptions Options { get; }
+
     private ITestOutputHelper OutputHelper { get; }
 
     public async Task WithPageAsync(
         Func<IPage, Task> action,
-        string browserType = "chromium",
         [CallerMemberName] string? testName = null)
     {
         // Start Playright and load the browser of the specified type
         using var playwright = await Playwright.CreateAsync();
-        await using var browser = await CreateBrowserAsync(playwright, browserType);
+        await using var browser = await CreateBrowserAsync(playwright);
 
         // Create a new page for the test to use
         var options = CreatePageOptions();
@@ -46,12 +52,13 @@ public class BrowserFixture
         }
         catch (Exception)
         {
-            await TryCaptureScreenshotAsync(page, testName!, browserType);
+            // Try and capture a screenshot at the point the test failed
+            await TryCaptureScreenshotAsync(page, Options.TestName ?? testName!);
             throw;
         }
         finally
         {
-            await TryCaptureVideoAsync(page, testName!, browserType);
+            await TryCaptureVideoAsync(page, Options.TestName ?? testName!);
         }
     }
 
@@ -67,15 +74,18 @@ public class BrowserFixture
 
         if (RecordVideo)
         {
-            options.RecordVideoDir = "videos";
+            options.RecordVideoDir = VideosDirectory;
         }
 
         return options;
     }
 
-    private static async Task<IBrowser> CreateBrowserAsync(IPlaywright playwright, string browserType)
+    private async Task<IBrowser> CreateBrowserAsync(IPlaywright playwright)
     {
-        var options = new BrowserTypeLaunchOptions();
+        var options = new BrowserTypeLaunchOptions
+        {
+            Channel = Options.BrowserChannel
+        };
 
         // Slow down actions and make the DevTools visible by default
         // to make it easier to debug the app when debugging locally.
@@ -86,21 +96,18 @@ public class BrowserFixture
             options.SlowMo = 250;
         }
 
-        // Configure a channel if one was specified, e.g. "chromium:chrome"
-        var split = browserType.Split(':');
-
-        browserType = split[0];
-
-        if (split.Length > 1)
-        {
-            options.Channel = split[1];
-        }
-
-        return await playwright[browserType].LaunchAsync(options);
+        return await playwright[Options.BrowserType].LaunchAsync(options);
     }
 
-    private static string GenerateFileName(string testName, string browserType, string extension)
+    private string GenerateFileName(string testName, string extension)
     {
+        string browserType = Options.BrowserType;
+
+        if (!string.IsNullOrEmpty(Options.BrowserChannel))
+        {
+            browserType += "_" + Options.BrowserChannel;
+        }
+
         string os =
             OperatingSystem.IsLinux() ? "linux" :
             OperatingSystem.IsMacOS() ? "macos" :
@@ -116,12 +123,11 @@ public class BrowserFixture
 
     private async Task TryCaptureScreenshotAsync(
         IPage page,
-        string testName,
-        string browserType)
+        string testName)
     {
         try
         {
-            string fileName = GenerateFileName(testName, browserType, ".png");
+            string fileName = GenerateFileName(testName, ".png");
             string path = Path.Combine("screenshots", fileName);
 
             await page.ScreenshotAsync(new() { Path = path });
@@ -134,32 +140,22 @@ public class BrowserFixture
         }
     }
 
-    private async Task TryCaptureVideoAsync(
-        IPage page,
-        string testName,
-        string browserType)
+    private async Task TryCaptureVideoAsync(IPage page, string testName)
     {
-        if (!RecordVideo)
+        if (!RecordVideo || page.Video is null)
         {
             return;
         }
 
         try
         {
+            string fileName = GenerateFileName(testName, ".webm");
+            string path = Path.Combine(VideosDirectory, fileName);
+
             await page.CloseAsync();
+            await page.Video.SaveAsAsync(path);
 
-            string videoSource = await page.Video!.PathAsync();
-
-            string? directory = Path.GetDirectoryName(videoSource);
-            string? extension = Path.GetExtension(videoSource);
-
-            string fileName = GenerateFileName(testName, browserType, extension!);
-
-            string videoDestination = Path.Combine(directory!, fileName);
-
-            File.Move(videoSource, videoDestination);
-
-            OutputHelper.WriteLine($"Video saved to {videoDestination}.");
+            OutputHelper.WriteLine($"Video saved to {path}.");
         }
         catch (Exception ex)
         {
