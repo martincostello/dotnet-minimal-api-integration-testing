@@ -9,5 +9,12 @@ public class BrowserFixtureOptions
 
     public string? BrowserChannel { get; set; }
 
+    // Only record traces and videos in CI to prevent filling
+    // up the local disk with videos from test runs.
+
+    public bool CaptureTrace { get; set; } = BrowserFixture.IsRunningInGitHubActions;
+
+    public bool CaptureVideo { get; set; } = BrowserFixture.IsRunningInGitHubActions;
+
     public string? TestName { get; set; }
 }

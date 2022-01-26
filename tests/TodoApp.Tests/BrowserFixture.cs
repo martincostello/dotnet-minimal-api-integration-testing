@@ -18,12 +18,7 @@ public class BrowserFixture
         OutputHelper = outputHelper;
     }
 
-    // Only record videos in CI to prevent filling
-    // up the local disk with videos from test runs.
-
-    protected virtual bool RecordVideo { get; } = IsRunningInGitHubActions;
-
-    private static bool IsRunningInGitHubActions { get; } = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS"));
+    internal static bool IsRunningInGitHubActions { get; } = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS"));
 
     private BrowserFixtureOptions Options { get; }
 
@@ -33,13 +28,30 @@ public class BrowserFixture
         Func<IPage, Task> action,
         [CallerMemberName] string? testName = null)
     {
+        string activeTestName = Options.TestName ?? testName!;
+
         // Start Playright and load the browser of the specified type
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await CreateBrowserAsync(playwright);
 
+        // Create a new context for the test
+        var options = CreateContextOptions();
+        await using var context = await browser.NewContextAsync(options);
+
+        // Enable generating a trace, if enabled, to use with https://trace.playwright.dev
+        if (Options.CaptureTrace)
+        {
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true,
+                Title = activeTestName
+            });
+        }
+
         // Create a new page for the test to use
-        var options = CreatePageOptions();
-        var page = await browser.NewPageAsync(options);
+        var page = await context.NewPageAsync();
 
         // Redirect the browser logs to the xunit output
         page.Console += (_, e) => OutputHelper.WriteLine(e.Text);
@@ -53,18 +65,26 @@ public class BrowserFixture
         catch (Exception)
         {
             // Try and capture a screenshot at the point the test failed
-            await TryCaptureScreenshotAsync(page, Options.TestName ?? testName!);
+            await TryCaptureScreenshotAsync(page, activeTestName);
             throw;
         }
         finally
         {
-            await TryCaptureVideoAsync(page, Options.TestName ?? testName!);
+            if (Options.CaptureTrace)
+            {
+                string traceName = GenerateFileName(activeTestName, ".zip");
+                string path = Path.Combine("traces", traceName);
+
+                await context.Tracing.StopAsync(new() { Path = path });
+            }
+
+            await TryCaptureVideoAsync(page, activeTestName);
         }
     }
 
-    protected virtual BrowserNewPageOptions CreatePageOptions()
+    protected virtual BrowserNewContextOptions CreateContextOptions()
     {
-        var options = new BrowserNewPageOptions
+        var options = new BrowserNewContextOptions
         {
             IgnoreHTTPSErrors = true, // The test fixture uses a self-signed TLS certificate
             Locale = "en-GB",
@@ -72,7 +92,7 @@ public class BrowserFixture
         };
 
 
-        if (RecordVideo)
+        if (Options.CaptureVideo)
         {
             options.RecordVideoDir = VideosDirectory;
         }
@@ -142,7 +162,7 @@ public class BrowserFixture
 
     private async Task TryCaptureVideoAsync(IPage page, string testName)
     {
-        if (!RecordVideo || page.Video is null)
+        if (!Options.CaptureVideo || page.Video is null)
         {
             return;
         }
