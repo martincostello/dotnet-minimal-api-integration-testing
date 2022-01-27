@@ -6,7 +6,7 @@ using Microsoft.Playwright;
 namespace TodoApp;
 
 [Collection(HttpServerCollection.Name)]
-public class UITests
+public class UITests : IAsyncLifetime
 {
     public UITests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     {
@@ -113,5 +113,23 @@ public class UITests
             // Assert
             await app.WaitForSignedOutAsync();
         });
+    }
+
+    public Task InitializeAsync()
+    {
+        InstallPlaywright();
+        return Task.CompletedTask;
+    }
+
+    public Task DisposeAsync() => Task.CompletedTask;
+
+    private static void InstallPlaywright()
+    {
+        int exitCode = Microsoft.Playwright.Program.Main(new[] { "install" });
+
+        if (exitCode != 0)
+        {
+            throw new InvalidOperationException($"Playwright exited with code {exitCode}");
+        }
     }
 }

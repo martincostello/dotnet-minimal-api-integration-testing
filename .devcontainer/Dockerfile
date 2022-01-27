@@ -11,6 +11,3 @@ RUN sudo apt-get --yes install google-chrome-stable 2>&1
 
 # Install Firefox
 RUN sudo apt-get --yes install firefox 2>&1
-
-# Install Playwright CLI
-RUN dotnet tool install --global Microsoft.Playwright.CLI
