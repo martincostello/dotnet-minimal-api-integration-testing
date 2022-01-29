@@ -1,4 +1,8 @@
 #! /usr/bin/env pwsh
+
+#Requires -PSEdition Core
+#Requires -Version 7
+
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
     [Parameter(Mandatory = $false)][string] $OutputPath = "",
@@ -118,11 +122,11 @@ function DotNetPublish {
 }
 
 $testProjects = @(
-    (Join-Path $solutionPath "tests\TodoApp.Tests\TodoApp.Tests.csproj")
+    (Join-Path $solutionPath "tests" "TodoApp.Tests" "TodoApp.Tests.csproj")
 )
 
 $publishProjects = @(
-    (Join-Path $solutionPath "src\TodoApp\TodoApp.csproj")
+    (Join-Path $solutionPath "src" "TodoApp" "TodoApp.csproj")
 )
 
 Write-Host "Publishing solution..." -ForegroundColor Green
