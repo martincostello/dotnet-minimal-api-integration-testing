@@ -17,4 +17,24 @@ public class BrowserFixtureOptions
     public bool CaptureVideo { get; set; } = BrowserFixture.IsRunningInGitHubActions;
 
     public string? TestName { get; set; }
+
+    public string? Build { get; set; }
+
+    public string? OperatingSystem { get; set; }
+
+    public string? OperatingSystemVersion { get; set; }
+
+    public string? PlaywrightVersion { get; set; }
+
+    public string? ProjectName { get; set; }
+
+    public bool UseBrowserStack { get; set; }
+
+    public bool UseBrowserStackLocal { get; set; }
+
+    public (string UserName, string AccessKey) BrowserStackCredentials { get; set; }
+
+    public BrowserStackLocalOptions? BrowserStackLocalOptions { get; set; }
+
+    public Uri BrowserStackEndpoint { get; set; } = new("wss://cdp.browserstack.com/playwright", UriKind.Absolute);
 }
