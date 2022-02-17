@@ -44,8 +44,8 @@ public static class AuthenticationEndpoints
             {
                 options.AccessDeniedPath = DeniedPath;
                 options.CallbackPath = SignInPath + "-github";
-                options.ClientId = configuration["GitHub:ClientId"];
-                options.ClientSecret = configuration["GitHub:ClientSecret"];
+                options.ClientId = configuration["GitHub:ClientId"] ?? string.Empty;
+                options.ClientSecret = configuration["GitHub:ClientSecret"] ?? string.Empty;
                 options.EnterpriseDomain = configuration["GitHub:EnterpriseDomain"];
 
                 options.Scope.Add("user:email");

@@ -56,10 +56,10 @@ public class TodoAppFixture : WebApplicationFactory<Program>, ITestOutputHelperA
             // Also override the default options for the GitHub OAuth provider
             var config = new[]
             {
-                KeyValuePair.Create("DataDirectory", dataDirectory),
-                KeyValuePair.Create("GitHub:ClientId", "github-id"),
-                KeyValuePair.Create("GitHub:ClientSecret", "github-secret"),
-                KeyValuePair.Create("GitHub:EnterpriseDomain", string.Empty)
+                KeyValuePair.Create<string, string?>("DataDirectory", dataDirectory),
+                KeyValuePair.Create<string, string?>("GitHub:ClientId", "github-id"),
+                KeyValuePair.Create<string, string?>("GitHub:ClientSecret", "github-secret"),
+                KeyValuePair.Create<string, string?>("GitHub:EnterpriseDomain", string.Empty)
             };
 
             configBuilder.AddInMemoryCollection(config);
