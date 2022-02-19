@@ -30,6 +30,11 @@ if (string.Equals(builder.Configuration["CODESPACES"], "true", StringComparison.
         options => options.ForwardedHeaders |= ForwardedHeaders.XForwardedHost);
 }
 
+// HACK Workaround https://github.com/dotnet/aspnetcore/issues/40301
+builder.WebHost.ConfigureKestrel(
+    options => options.ConfigureEndpointDefaults(
+        defaults => defaults.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1));
+
 // Create the app
 var app = builder.Build();
 
