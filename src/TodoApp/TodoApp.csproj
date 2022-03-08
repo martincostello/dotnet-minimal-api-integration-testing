@@ -13,7 +13,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.2" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.6.2" PrivateAssets="all" />
     <PackageReference Include="NodaTime" Version="3.0.9" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="scripts\ts\**\*.ts" />
