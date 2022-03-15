@@ -15,7 +15,7 @@ public sealed class RemoteAuthorizationEventsFilter : IPostConfigureOptions<GitH
 
     private IHttpClientFactory HttpClientFactory { get; }
 
-    public void PostConfigure(string name, GitHubAuthenticationOptions options)
+    public void PostConfigure(string? name, GitHubAuthenticationOptions options)
     {
         // Use HttpClientFactory for HTTP requests so that the tests
         // can intercept the request and return canned responses.
