@@ -20,5 +20,5 @@ jobs:
       if: ${{ github.repository_owner == 'martincostello' }}
       with:
         repo-token: ${{ secrets.ACCESS_TOKEN }}
-        user-email: martin@martincostello.com
-        user-name: martincostello
+        user-email: 102549341+costellobot@users.noreply.github.com
+        user-name: costellobot
