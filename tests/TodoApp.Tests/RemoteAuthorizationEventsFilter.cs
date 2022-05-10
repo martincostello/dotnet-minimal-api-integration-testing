@@ -19,7 +19,7 @@ public sealed class RemoteAuthorizationEventsFilter : IPostConfigureOptions<GitH
     {
         // Use HttpClientFactory for HTTP requests so that the tests
         // can intercept the request and return canned responses.
-        options.Backchannel = HttpClientFactory.CreateClient(name);
+        options.Backchannel = HttpClientFactory.CreateClient(name ?? string.Empty);
 
         // Configure the GitHub provider to redirect back to the
         // test application, rather than GitHub's own login pages.
