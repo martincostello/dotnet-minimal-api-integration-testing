@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2021. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Security.Claims;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
@@ -69,20 +68,20 @@ public static class ApiEndpoints
             // Get all Todo items
             group.MapGet("/", async (
                 ITodoService service,
-                ClaimsPrincipal user,
+                TodoUser user,
                 CancellationToken cancellationToken) =>
                 {
-                    return await service.GetListAsync(user.GetUserId(), cancellationToken);
+                    return await service.GetListAsync(user, cancellationToken);
                 });
 
             // Get a specific Todo item
             group.MapGet("/{id}", async Task<Results<Ok<TodoItemModel>, ProblemHttpResult>> (
                 Guid id,
-                ClaimsPrincipal user,
+                TodoUser user,
                 ITodoService service,
                 CancellationToken cancellationToken) =>
                 {
-                    var model = await service.GetAsync(user.GetUserId(), id, cancellationToken);
+                    var model = await service.GetAsync(user, id, cancellationToken);
                     return model switch
                     {
                         null => TypedResults.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound),
@@ -94,7 +93,7 @@ public static class ApiEndpoints
             // Create a new Todo item
             group.MapPost("/", async Task<Results<Created<CreatedTodoItemModel>, ProblemHttpResult>> (
                 CreateTodoItemModel model,
-                ClaimsPrincipal user,
+                TodoUser user,
                 ITodoService service,
                 CancellationToken cancellationToken) =>
                 {
@@ -103,7 +102,7 @@ public static class ApiEndpoints
                         return TypedResults.Problem("No item text specified.", statusCode: StatusCodes.Status400BadRequest);
                     }
 
-                    var id = await service.AddItemAsync(user.GetUserId(), model.Text, cancellationToken);
+                    var id = await service.AddItemAsync(user, model.Text, cancellationToken);
 
                     return TypedResults.Created($"/api/items/{id}", new CreatedTodoItemModel() { Id = id });
                 })
@@ -112,11 +111,11 @@ public static class ApiEndpoints
             // Mark a Todo item as completed
             group.MapPost("/{id}/complete", async Task<Results<NoContent, ProblemHttpResult>> (
                 Guid id,
-                ClaimsPrincipal user,
+                TodoUser user,
                 ITodoService service,
                 CancellationToken cancellationToken) =>
                 {
-                    var wasCompleted = await service.CompleteItemAsync(user.GetUserId(), id, cancellationToken);
+                    var wasCompleted = await service.CompleteItemAsync(user, id, cancellationToken);
 
                     return wasCompleted switch
                     {
@@ -131,11 +130,11 @@ public static class ApiEndpoints
             // Delete a Todo item
             group.MapDelete("/{id}", async Task<Results<NoContent, ProblemHttpResult>> (
                 Guid id,
-                ClaimsPrincipal user,
+                TodoUser user,
                 ITodoService service,
                 CancellationToken cancellationToken) =>
                 {
-                    var wasDeleted = await service.DeleteItemAsync(user.GetUserId(), id, cancellationToken);
+                    var wasDeleted = await service.DeleteItemAsync(user, id, cancellationToken);
                     return wasDeleted switch
                     {
                         true => TypedResults.NoContent(),
@@ -151,5 +150,22 @@ public static class ApiEndpoints
                .RequireAuthorization();
 
         return builder;
+    }
+
+    private readonly struct TodoUser
+    {
+        private TodoUser(string id)
+        {
+            Id = id;
+        }
+
+        public string Id { get; }
+
+        public static implicit operator string(TodoUser value) => value.Id;
+
+        public static ValueTask<TodoUser> BindAsync(HttpContext context)
+        {
+            return ValueTask.FromResult(new TodoUser(context.User.GetUserId()));
+        }
     }
 }
