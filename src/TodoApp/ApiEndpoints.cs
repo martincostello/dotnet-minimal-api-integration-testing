@@ -65,16 +65,16 @@ public static class ApiEndpoints
         var group = builder.MapGroup("/api/items")
                            .RequireAuthorization();
         {
-            // Get all Todo items
             group.MapGet("/", async (
                 ITodoService service,
                 TodoUser user,
                 CancellationToken cancellationToken) =>
                 {
                     return await service.GetListAsync(user, cancellationToken);
-                });
+                })
+                .WithSummary("Get all Todo items")
+                .WithDescription("Gets all of the current user's todo items.");
 
-            // Get a specific Todo item
             group.MapGet("/{id}", async Task<Results<Ok<TodoItemModel>, ProblemHttpResult>> (
                 Guid id,
                 TodoUser user,
@@ -88,9 +88,10 @@ public static class ApiEndpoints
                         _ => TypedResults.Ok(model),
                     };
                 })
-                .ProducesProblem(StatusCodes.Status404NotFound);
+                .ProducesProblem(StatusCodes.Status404NotFound)
+                .WithSummary("Get a specific Todo item")
+                .WithDescription("Gets the todo item with the specified ID.");
 
-            // Create a new Todo item
             group.MapPost("/", async Task<Results<Created<CreatedTodoItemModel>, ProblemHttpResult>> (
                 CreateTodoItemModel model,
                 TodoUser user,
@@ -106,9 +107,10 @@ public static class ApiEndpoints
 
                     return TypedResults.Created($"/api/items/{id}", new CreatedTodoItemModel() { Id = id });
                 })
-                .ProducesProblem(StatusCodes.Status400BadRequest);
+                .ProducesProblem(StatusCodes.Status400BadRequest)
+                .WithSummary("Create a new Todo item")
+                .WithDescription("Creates a new todo item for the current user and returns its ID.");
 
-            // Mark a Todo item as completed
             group.MapPost("/{id}/complete", async Task<Results<NoContent, ProblemHttpResult>> (
                 Guid id,
                 TodoUser user,
@@ -125,9 +127,10 @@ public static class ApiEndpoints
                     };
                 })
                 .ProducesProblem(StatusCodes.Status400BadRequest)
-                .ProducesProblem(StatusCodes.Status404NotFound);
+                .ProducesProblem(StatusCodes.Status404NotFound)
+                .WithSummary("Mark a Todo item as completed")
+                .WithDescription("Marks the todo item with the specified ID as complete.");
 
-            // Delete a Todo item
             group.MapDelete("/{id}", async Task<Results<NoContent, ProblemHttpResult>> (
                 Guid id,
                 TodoUser user,
@@ -141,7 +144,9 @@ public static class ApiEndpoints
                         false => TypedResults.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound),
                     };
                 })
-                .ProducesProblem(StatusCodes.Status404NotFound);
+                .ProducesProblem(StatusCodes.Status404NotFound)
+                .WithSummary("Delete a Todo item")
+                .WithDescription("Deletes the todo item with the specified ID.");
         };
 
         // Redirect to Open API/Swagger documentation
