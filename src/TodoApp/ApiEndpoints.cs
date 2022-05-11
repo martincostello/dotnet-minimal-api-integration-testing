@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using TodoApp.Data;
@@ -73,21 +74,20 @@ public static class ApiEndpoints
             .RequireAuthorization();
 
         // Get a specific Todo item
-        builder.MapGet("/api/items/{id}", async (
+        builder.MapGet("/api/items/{id}", async Task<Results<Ok<TodoItemModel>, ProblemHttpResult>> (
             Guid id,
             ClaimsPrincipal user,
             ITodoService service,
             CancellationToken cancellationToken) =>
             {
                 var model = await service.GetAsync(user.GetUserId(), id, cancellationToken);
-                return model is null ? Results.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound) : Results.Json(model);
+                return model is null ? TypedResults.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound) : TypedResults.Ok(model);
             })
-            .Produces<TodoItemModel>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .RequireAuthorization();
 
         // Create a new Todo item
-        builder.MapPost("/api/items", async (
+        builder.MapPost("/api/items", async Task<Results<Created<CreatedTodoItemModel>, ProblemHttpResult>> (
             CreateTodoItemModel model,
             ClaimsPrincipal user,
             ITodoService service,
@@ -95,19 +95,18 @@ public static class ApiEndpoints
             {
                 if (string.IsNullOrWhiteSpace(model.Text))
                 {
-                    return Results.Problem("No item text specified.", statusCode: StatusCodes.Status400BadRequest);
+                    return TypedResults.Problem("No item text specified.", statusCode: StatusCodes.Status400BadRequest);
                 }
 
                 var id = await service.AddItemAsync(user.GetUserId(), model.Text, cancellationToken);
 
-                return Results.Created($"/api/items/{id}", new { id });
+                return TypedResults.Created($"/api/items/{id}", new CreatedTodoItemModel() { Id = id });
             })
-            .Produces(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .RequireAuthorization();
 
         // Mark a Todo item as completed
-        builder.MapPost("/api/items/{id}/complete", async (
+        builder.MapPost("/api/items/{id}/complete", async Task<Results<NoContent, ProblemHttpResult>> (
             Guid id,
             ClaimsPrincipal user,
             ITodoService service,
@@ -117,27 +116,25 @@ public static class ApiEndpoints
 
                 return wasCompleted switch
                 {
-                    true => Results.NoContent(),
-                    false => Results.Problem("Item already completed.", statusCode: StatusCodes.Status400BadRequest),
-                    _ => Results.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound),
+                    true => TypedResults.NoContent(),
+                    false => TypedResults.Problem("Item already completed.", statusCode: StatusCodes.Status400BadRequest),
+                    _ => TypedResults.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound),
                 };
             })
-            .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .RequireAuthorization();
 
         // Delete a Todo item
-        builder.MapDelete("/api/items/{id}", async (
+        builder.MapDelete("/api/items/{id}", async Task<Results<NoContent, ProblemHttpResult>> (
             Guid id,
             ClaimsPrincipal user,
             ITodoService service,
             CancellationToken cancellationToken) =>
             {
                 var wasDeleted = await service.DeleteItemAsync(user.GetUserId(), id, cancellationToken);
-                return wasDeleted ? Results.NoContent() : Results.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound);
+                return wasDeleted ? TypedResults.NoContent() : TypedResults.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound);
             })
-            .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .RequireAuthorization();
 
