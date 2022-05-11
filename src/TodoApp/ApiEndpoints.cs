@@ -83,7 +83,11 @@ public static class ApiEndpoints
                 CancellationToken cancellationToken) =>
                 {
                     var model = await service.GetAsync(user.GetUserId(), id, cancellationToken);
-                    return model is null ? TypedResults.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound) : TypedResults.Ok(model);
+                    return model switch
+                    {
+                        null => TypedResults.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound),
+                        _ => TypedResults.Ok(model),
+                    };
                 })
                 .ProducesProblem(StatusCodes.Status404NotFound);
 
@@ -132,7 +136,11 @@ public static class ApiEndpoints
                 CancellationToken cancellationToken) =>
                 {
                     var wasDeleted = await service.DeleteItemAsync(user.GetUserId(), id, cancellationToken);
-                    return wasDeleted ? TypedResults.NoContent() : TypedResults.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound);
+                    return wasDeleted switch
+                    {
+                        true => TypedResults.NoContent(),
+                        false => TypedResults.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound),
+                    };
                 })
                 .ProducesProblem(StatusCodes.Status404NotFound);
         };
