@@ -38,7 +38,7 @@
     "typescript": "^4.6.4",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
-    "yargs": "^17.5.0",
+    "yargs": "^17.5.1",
     "yargs-parser": "^21.0.1"
   },
   "dependencies": {}
