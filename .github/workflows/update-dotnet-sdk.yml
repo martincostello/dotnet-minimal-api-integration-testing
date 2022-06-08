@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Update .NET SDK
-      uses: martincostello/update-dotnet-sdk@v1
+      uses: martincostello/update-dotnet-sdk@v2
       if: ${{ github.repository_owner == 'martincostello' }}
       with:
         repo-token: ${{ secrets.ACCESS_TOKEN }}
