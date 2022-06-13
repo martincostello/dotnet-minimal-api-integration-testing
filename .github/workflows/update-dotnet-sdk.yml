@@ -19,6 +19,7 @@ jobs:
       uses: martincostello/update-dotnet-sdk@v2
       if: ${{ github.repository_owner == 'martincostello' }}
       with:
+        labels: dependencies
         repo-token: ${{ secrets.ACCESS_TOKEN }}
         user-email: 102549341+costellobot@users.noreply.github.com
         user-name: costellobot
