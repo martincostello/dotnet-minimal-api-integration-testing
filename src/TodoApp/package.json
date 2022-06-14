@@ -17,7 +17,7 @@
     "@types/jquery": "^3.5.14",
     "@types/moment": "^2.13.0",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/eslint-plugin-tslint": "^5.27.1",
+    "@typescript-eslint/eslint-plugin-tslint": "^5.28.0",
     "@typescript-eslint/parser": "^4.33.0",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-runtime": "^6.23.0",
