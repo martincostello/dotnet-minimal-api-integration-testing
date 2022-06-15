@@ -66,22 +66,20 @@ public static class ApiEndpoints
                            .RequireAuthorization();
         {
             group.MapGet("/", async (
-                ITodoService service,
-                TodoUser user,
+                [AsParameters] TodoRequestContext context,
                 CancellationToken cancellationToken) =>
                 {
-                    return await service.GetListAsync(user, cancellationToken);
+                    return await context.Service.GetListAsync(context.User, cancellationToken);
                 })
                 .WithSummary("Get all Todo items")
                 .WithDescription("Gets all of the current user's todo items.");
 
             group.MapGet("/{id}", async Task<Results<Ok<TodoItemModel>, ProblemHttpResult>> (
                 Guid id,
-                TodoUser user,
-                ITodoService service,
+                [AsParameters] TodoRequestContext context,
                 CancellationToken cancellationToken) =>
                 {
-                    var model = await service.GetAsync(user, id, cancellationToken);
+                    var model = await context.Service.GetAsync(context.User, id, cancellationToken);
                     return model switch
                     {
                         null => TypedResults.Problem("Item not found.", statusCode: StatusCodes.Status404NotFound),
@@ -94,8 +92,7 @@ public static class ApiEndpoints
 
             group.MapPost("/", async Task<Results<Created<CreatedTodoItemModel>, ProblemHttpResult>> (
                 CreateTodoItemModel model,
-                TodoUser user,
-                ITodoService service,
+                [AsParameters] TodoRequestContext context,
                 CancellationToken cancellationToken) =>
                 {
                     if (string.IsNullOrWhiteSpace(model.Text))
@@ -103,7 +100,7 @@ public static class ApiEndpoints
                         return TypedResults.Problem("No item text specified.", statusCode: StatusCodes.Status400BadRequest);
                     }
 
-                    var id = await service.AddItemAsync(user, model.Text, cancellationToken);
+                    var id = await context.Service.AddItemAsync(context.User, model.Text, cancellationToken);
 
                     return TypedResults.Created($"/api/items/{id}", new CreatedTodoItemModel() { Id = id });
                 })
@@ -113,11 +110,10 @@ public static class ApiEndpoints
 
             group.MapPost("/{id}/complete", async Task<Results<NoContent, ProblemHttpResult>> (
                 Guid id,
-                TodoUser user,
-                ITodoService service,
+                [AsParameters] TodoRequestContext context,
                 CancellationToken cancellationToken) =>
                 {
-                    var wasCompleted = await service.CompleteItemAsync(user, id, cancellationToken);
+                    var wasCompleted = await context.Service.CompleteItemAsync(context.User, id, cancellationToken);
 
                     return wasCompleted switch
                     {
@@ -133,11 +129,10 @@ public static class ApiEndpoints
 
             group.MapDelete("/{id}", async Task<Results<NoContent, ProblemHttpResult>> (
                 Guid id,
-                TodoUser user,
-                ITodoService service,
+                [AsParameters] TodoRequestContext context,
                 CancellationToken cancellationToken) =>
                 {
-                    var wasDeleted = await service.DeleteItemAsync(user, id, cancellationToken);
+                    var wasDeleted = await context.Service.DeleteItemAsync(context.User, id, cancellationToken);
                     return wasDeleted switch
                     {
                         true => TypedResults.NoContent(),
@@ -156,6 +151,8 @@ public static class ApiEndpoints
 
         return builder;
     }
+
+    private record struct TodoRequestContext(TodoUser User, ITodoService Service);
 
     private readonly struct TodoUser
     {
