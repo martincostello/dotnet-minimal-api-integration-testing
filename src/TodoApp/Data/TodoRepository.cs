@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 namespace TodoApp.Data;
+
 public sealed class TodoRepository : ITodoRepository
 {
     public TodoRepository(IClock clock, TodoContext context)
