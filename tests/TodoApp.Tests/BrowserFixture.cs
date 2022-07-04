@@ -392,6 +392,8 @@ public class BrowserFixture
             _localService = localService;
         }
 
+        public IBrowserType BrowserType => _browser.BrowserType;
+
         public IReadOnlyList<IBrowserContext> Contexts => _browser.Contexts;
 
         public bool IsConnected => _browser.IsConnected;
