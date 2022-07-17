@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
     "inlineSources": true,
     "inlineSourceMap": true,
     "noEmitOnError": true,

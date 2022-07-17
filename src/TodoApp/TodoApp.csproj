@@ -16,11 +16,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.2" />
   </ItemGroup>
   <ItemGroup>
+    <Content Update=".prettierrc.json;package.json;package-lock.json;tsconfig.json" CopyToPublishDirectory="Never" />
     <None Remove="scripts\ts\**\*.ts" />
     <TypeScriptCompile Include="scripts\ts\**\*.ts" />
   </ItemGroup>
   <Target Name="BundleAssets" BeforeTargets="BeforeBuild">
     <Exec Command="npm install" Condition=" !Exists('$(MSBuildThisFileDirectory)\node_modules') " />
-    <Exec Command="npm run build" Condition=" ('$(BuildingInsideVisualStudio)' != 'true' and '$(GITHUB_ACTIONS)' != 'true') or !Exists('$(MSBuildThisFileDirectory)\wwwroot\static\js\main.js') " />
+    <Exec Command="npm run build" Condition=" !Exists('$(MSBuildThisFileDirectory)\wwwroot\static\js\main.js') " />
   </Target>
 </Project>

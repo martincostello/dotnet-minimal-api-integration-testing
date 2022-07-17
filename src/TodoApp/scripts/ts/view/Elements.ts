@@ -7,7 +7,6 @@ import { Selectors } from './Selectors';
 import { TodoElement } from './TodoElement';
 
 export class Elements {
-
     readonly banner: HTMLElement;
     readonly createItemButton: HTMLElement;
     readonly createItemForm: HTMLElement;
@@ -21,7 +20,9 @@ export class Elements {
         this.banner = document.getElementById('banner');
         this.createItemButton = document.getElementById('add-new-item');
         this.createItemForm = document.getElementById('add-form');
-        this.createItemText = <HTMLInputElement>document.getElementById('new-item-text');
+        this.createItemText = <HTMLInputElement>(
+            document.getElementById('new-item-text')
+        );
         this.itemList = document.getElementById('item-list');
         this.itemTable = document.getElementById('item-table');
         this.itemTemplate = document.getElementById('item-template');
@@ -29,7 +30,6 @@ export class Elements {
     }
 
     createNewItem(item: TodoItem): TodoElement {
-
         // Clone the template and add to the table
         const node = this.itemTemplate.cloneNode(true);
         this.itemList.appendChild(node);

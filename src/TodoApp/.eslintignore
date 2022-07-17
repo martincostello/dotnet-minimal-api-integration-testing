@@ -1,0 +1,6 @@
+bin/
+node_modules/
+obj/
+wwwroot/
+gulpfile.js
+jest.config.js
