@@ -1,13 +1,12 @@
 // Copyright (c) Martin Costello, 2021. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import * as moment from '../../../node_modules/moment/moment';
+import moment from 'moment';
 import { TodoItem } from '../models/TodoItem';
 import { Classes } from './Classes';
 import { Selectors } from './Selectors';
 
 export class TodoElement {
-
     private readonly item: TodoItem;
 
     private readonly completeButton: Element;
@@ -21,12 +20,14 @@ export class TodoElement {
     private textElement: Element;
 
     constructor(element: Element, item: TodoItem) {
-
         this.item = item;
         this.itemElement = element;
 
         this.itemElement.setAttribute('id', item.id);
-        this.itemElement.setAttribute('data-completed', item.isCompleted.toString());
+        this.itemElement.setAttribute(
+            'data-completed',
+            item.isCompleted.toString()
+        );
         this.itemElement.setAttribute('data-id', item.id);
         this.itemElement.setAttribute('data-timestamp', item.lastUpdated);
 
@@ -80,9 +81,11 @@ export class TodoElement {
     }
 
     private completed(timestamp: moment.Moment) {
-
         this.itemElement.setAttribute('data-completed', 'true');
-        this.itemElement.setAttribute('data-timestamp', timestamp.toISOString());
+        this.itemElement.setAttribute(
+            'data-timestamp',
+            timestamp.toISOString()
+        );
 
         this.strikethrough();
 
@@ -90,7 +93,6 @@ export class TodoElement {
     }
 
     private async onCompleteItem(): Promise<void> {
-
         if (this.onCompletedHandler) {
             await this.onCompletedHandler(this.item.id);
         }
@@ -102,7 +104,6 @@ export class TodoElement {
     }
 
     private async onDeleteItem(): Promise<void> {
-
         if (this.onDeletingHandler) {
             await this.onDeletingHandler(this.item.id);
         }
@@ -115,7 +116,6 @@ export class TodoElement {
     }
 
     private strikethrough() {
-
         let element = this.textElement;
 
         const text = element.textContent;

@@ -5,11 +5,9 @@ import { TodoItem } from '../models/TodoItem';
 import { TodoList } from '../models/TodoList';
 
 export class TodoClient {
-
     async add(text: string): Promise<string> {
-
         const payload = {
-            text: text
+            text: text,
         };
 
         const headers = new Headers();
@@ -19,7 +17,7 @@ export class TodoClient {
         const init = {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
         };
 
         const response = await fetch('/api/items', init);
@@ -33,9 +31,8 @@ export class TodoClient {
     }
 
     async complete(id: string): Promise<void> {
-
         const init = {
-            method: 'POST'
+            method: 'POST',
         };
 
         const url = `/api/items/${encodeURIComponent(id)}/complete`;
@@ -48,9 +45,8 @@ export class TodoClient {
     }
 
     async delete(id: string): Promise<void> {
-
         const init = {
-            method: 'DELETE'
+            method: 'DELETE',
         };
 
         const url = `/api/items/${encodeURIComponent(id)}`;
@@ -63,7 +59,6 @@ export class TodoClient {
     }
 
     async get(id: string): Promise<TodoItem> {
-
         const response = await fetch(`/api/items/${encodeURIComponent(id)}`);
 
         if (!response.ok) {
@@ -74,7 +69,6 @@ export class TodoClient {
     }
 
     async getAll(): Promise<TodoItem[]> {
-
         const response = await fetch('/api/items');
 
         if (!response.ok) {

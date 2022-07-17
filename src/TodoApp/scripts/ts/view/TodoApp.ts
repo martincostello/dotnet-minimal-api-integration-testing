@@ -8,7 +8,6 @@ import { Elements } from './Elements';
 import { TodoElement } from './TodoElement';
 
 export class TodoApp {
-
     private readonly client: TodoClient;
     private readonly elements: Elements;
     private readonly items: TodoElement[];
@@ -20,7 +19,6 @@ export class TodoApp {
     }
 
     async initialize(): Promise<void> {
-
         // Return if the app is not signed in
         if (!this.elements.createItemForm) {
             return;
@@ -71,12 +69,10 @@ export class TodoApp {
     }
 
     async addNewItem(): Promise<void> {
-
         this.disable(this.elements.createItemButton);
         this.disable(this.elements.createItemText);
 
         try {
-
             const text = this.elements.createItemText.value;
 
             // Add the new Todo item and then fetch it
@@ -90,7 +86,6 @@ export class TodoApp {
             this.elements.createItemText.value = '';
             this.hide(this.elements.banner);
             this.show(this.elements.itemTable);
-
         } catch {
             // Re-enable adding this item if it failed
             this.enable(this.elements.createItemButton);
@@ -101,7 +96,6 @@ export class TodoApp {
     }
 
     createItem(item: TodoItem) {
-
         const element = this.elements.createNewItem(item);
 
         // Wire-up event handler to complete the Todo item if required
@@ -116,13 +110,14 @@ export class TodoApp {
             await this.client.delete(id);
         });
         element.onDeleted(() => {
-
             if (this.elements.itemCount() < 1) {
                 this.hide(this.elements.itemTable);
                 this.show(this.elements.banner);
             }
 
-            const index = this.items.findIndex((item) => item.id() === element.id());
+            const index = this.items.findIndex(
+                (item) => item.id() === element.id()
+            );
 
             if (index > -1) {
                 this.items.splice(index, 1);

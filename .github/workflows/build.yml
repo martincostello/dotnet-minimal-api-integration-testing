@@ -48,7 +48,7 @@ jobs:
     - uses: codecov/codecov-action@v3
       name: Upload coverage to Codecov
       with:
-        file: ./artifacts/coverage.cobertura.xml
+        files: ./artifacts/coverage.cobertura.xml,./src/TodoApp/coverage/lcov.info
         flags: ${{ matrix.codecov_os }}
 
     - name: Publish screenshots

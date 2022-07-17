@@ -1,13 +1,21 @@
-/// <binding ProjectOpened='default' />
-let browserify = require('browserify');
-let buffer = require('vinyl-buffer');
-let eslint = require('gulp-eslint');
-let gulp = require('gulp');
-let source = require('vinyl-source-stream');
-let sourcemaps = require('gulp-sourcemaps');
-let tsify = require('tsify');
-let uglify = require('gulp-uglify');
-var sourceFiles = ['scripts/ts/**/*.ts'];
+/// <binding ProjectOpened='default, watch' />
+const browserify = require('browserify');
+const buffer = require('vinyl-buffer');
+const eslint = require('gulp-eslint');
+const gulp = require('gulp');
+const jest = require('gulp-jest').default;
+const prettier = require('gulp-prettier');
+const source = require('vinyl-source-stream');
+const sourcemaps = require('gulp-sourcemaps');
+const tsify = require('tsify');
+const uglify = require('gulp-uglify');
+const sourceFiles = ['scripts/ts/**/*.ts'];
+
+gulp.task('prettier', function () {
+    return gulp.src(sourceFiles)
+        .pipe(prettier())
+        .pipe(gulp.dest(file => file.base));
+});
 
 gulp.task('lint', function () {
     return gulp.src(sourceFiles)
@@ -28,17 +36,8 @@ gulp.task('build', function () {
     })
         .plugin(tsify)
         .transform('babelify', {
-            presets: ['es2015'],
-            extensions: ['.ts'],
-            plugins: [
-                [
-                    'transform-runtime',
-                    {
-                        'polyfill': false,
-                        'regenerator': true
-                    }
-                ]
-            ]
+            presets: ['@babel/preset-env'],
+            extensions: ['.ts']
         })
         .bundle()
         .pipe(source('main.js'))
@@ -49,7 +48,14 @@ gulp.task('build', function () {
         .pipe(gulp.dest('wwwroot/static/js'));
 });
 
-gulp.task('default', gulp.series('lint', 'build'));
+gulp.task('test', function () {
+    return gulp.src('scripts')
+        .pipe(jest({
+            collectCoverage: true
+        }));
+});
+
+gulp.task('default', gulp.series('prettier', 'lint', 'build', 'test'));
 
 gulp.task('watch', function () {
     gulp.watch(sourceFiles, gulp.series('default'));
