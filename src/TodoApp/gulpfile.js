@@ -1,4 +1,4 @@
-/// <binding ProjectOpened='default, watch' />
+/// <binding ProjectOpened='watch' />
 const browserify = require('browserify');
 const buffer = require('vinyl-buffer');
 const eslint = require('gulp-eslint');
@@ -58,5 +58,5 @@ gulp.task('test', function () {
 gulp.task('default', gulp.series('prettier', 'lint', 'build', 'test'));
 
 gulp.task('watch', function () {
-    gulp.watch(sourceFiles, gulp.series('default'));
+    gulp.watch(sourceFiles, gulp.series('lint', 'build', 'test'));
 });
