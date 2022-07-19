@@ -17,7 +17,7 @@
     "@babel/core": "^7.18.9",
     "@babel/preset-env": "^7.18.9",
     "@types/jquery": "^3.5.14",
-    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
     "babel-core": "^6.26.3",
     "babel-runtime": "^6.26.0",
