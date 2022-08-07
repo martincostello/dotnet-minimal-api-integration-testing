@@ -2,7 +2,8 @@ name: update-dotnet-sdk
 
 on:
   schedule:
-    - cron:  '0 * * * *'
+    - cron:  '30 05 * * MON-FRI'
+    - cron:  '00 19 * * TUE'
   workflow_dispatch:
 
 jobs:
