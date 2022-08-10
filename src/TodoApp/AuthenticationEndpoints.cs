@@ -31,7 +31,7 @@ public static class AuthenticationEndpoints
     public static IServiceCollection AddGitHubAuthentication(this IServiceCollection services)
     {
         return services
-            .AddAuthentication(options => options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
                 options.LoginPath = SignInPath;
