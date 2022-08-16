@@ -25,7 +25,7 @@
     "browserify": "^17.0.0",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-jest": "^26.8.2",
+    "eslint-plugin-jest": "^26.8.3",
     "gulp": "^4.0.2",
     "gulp-eslint": "^6.0.0",
     "gulp-jest": "^4.0.4",
