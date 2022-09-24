@@ -14,7 +14,8 @@ const sourceFiles = ['scripts/ts/**/*.ts'];
 gulp.task('prettier', function () {
     return gulp.src(sourceFiles)
         .pipe(prettier())
-        .pipe(gulp.dest(file => file.base));
+        .pipe(gulp.dest(file => file.base))
+        .end();
 });
 
 gulp.task('lint', function () {
