@@ -17,6 +17,7 @@
     "@babel/core": "^7.20.2",
     "@babel/preset-env": "^7.20.2",
     "@types/jquery": "^3.5.14",
+    "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
     "babel-core": "^6.26.3",
@@ -38,7 +39,7 @@
     "prettier": "^2.8.0",
     "ts-jest": "^28.0.8",
     "tsify": "^5.0.4",
-    "typescript": "^4.8.4",
+    "typescript": "^4.9.3",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   }
