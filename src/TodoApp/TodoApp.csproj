@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="7.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.1" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.9.4" PrivateAssets="all" />
     <PackageReference Include="NodaTime" Version="3.1.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
