@@ -24,7 +24,7 @@
     "babel-runtime": "^6.26.0",
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",
-    "eslint": "^8.31.0",
+    "eslint": "^8.32.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-jest": "^27.2.1",
     "gulp": "^4.0.2",
