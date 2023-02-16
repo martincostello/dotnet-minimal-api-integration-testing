@@ -1,16 +1,16 @@
-# Integration Testing ASP.NET Core 6 Minimal APIs
+# Integration Testing ASP.NET Core Minimal APIs
 
 [![Build status](https://github.com/martincostello/dotnet-minimal-api-integration-testing/workflows/build/badge.svg?branch=main&event=push)](https://github.com/martincostello/dotnet-minimal-api-integration-testing/actions?query=workflow%3Abuild+branch%3Amain+event%3Apush)
 
 ## Introduction
 
 This sample project demonstrates techniques you can use for integration testing
-an ASP.NET Core 6 web application that uses the new [minimal APIs] feature.
+an ASP.NET Core web application that uses the [minimal APIs] feature.
 
 [minimal APIs]: https://devblogs.microsoft.com/aspnet/asp-net-core-updates-in-net-6-preview-4/#introducing-minimal-apis
 
 The system-under-test used by the sample implements a simple Todo list
-application with ASP.NET Core 6 using the following technologies:
+application with ASP.NET Core using the following technologies:
 
 * [Minimal APIs]
 * [EFCore] with [SQLite]
