@@ -428,6 +428,9 @@ public class BrowserFixture
             }
         }
 
+        public Task<ICDPSession> NewBrowserCDPSessionAsync()
+            => _browser.NewBrowserCDPSessionAsync();
+
         public Task<IBrowserContext> NewContextAsync(BrowserNewContextOptions? options = null)
             => _browser.NewContextAsync(options);
 
