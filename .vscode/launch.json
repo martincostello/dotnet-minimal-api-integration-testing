@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/src/TodoApp/bin/Debug/net7.0/TodoApp.dll",
+      "program": "${workspaceFolder}/src/TodoApp/bin/Debug/net8.0/TodoApp.dll",
       "args": [],
       "cwd": "${workspaceFolder}/src/TodoApp",
       "stopAtEntry": false,
