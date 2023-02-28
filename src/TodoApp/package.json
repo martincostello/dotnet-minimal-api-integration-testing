@@ -19,7 +19,7 @@
     "@types/jquery": "^3.5.16",
     "@types/node": "^18.14.2",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
-    "@typescript-eslint/parser": "^5.53.0",
+    "@typescript-eslint/parser": "^5.54.0",
     "babel-core": "^6.26.3",
     "babel-runtime": "^6.26.0",
     "babelify": "^10.0.0",
