@@ -17,8 +17,7 @@ node_modules
 obj
 packages
 project.lock.json
-src/TodoApp/wwwroot/static/**/*.js
-src/TodoApp/wwwroot/static/**/*.map
+src/TodoApp/wwwroot/static/
 TestResults
 typings
 UpgradeLog*.htm
