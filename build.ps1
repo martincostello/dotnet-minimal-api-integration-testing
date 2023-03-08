@@ -93,21 +93,6 @@ function DotNetTest {
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code $LASTEXITCODE"
     }
-
-    $nugetPath = $env:NUGET_PACKAGES ?? (Join-Path ($env:USERPROFILE ?? "~") ".nuget" "packages")
-    $propsFile = Join-Path $solutionPath "tests" "TodoApp.Tests" "TodoApp.Tests.csproj"
-    $reportGeneratorVersion = (Select-Xml -Path $propsFile -XPath "//PackageReference[@Include='ReportGenerator']/@Version").Node.'#text'
-    $reportGeneratorPath = Join-Path $nugetPath "reportgenerator" $reportGeneratorVersion "tools" "net6.0" "ReportGenerator.dll"
-
-    $coverageOutput = Join-Path $OutputPath "coverage.cobertura.xml"
-    $reportOutput = Join-Path $OutputPath "coverage"
-
-    & $dotnet `
-        $reportGeneratorPath `
-        `"-reports:$coverageOutput`" `
-        `"-targetdir:$reportOutput`" `
-        -reporttypes:HTML `
-        -verbosity:Warning
 }
 
 function DotNetPublish {
