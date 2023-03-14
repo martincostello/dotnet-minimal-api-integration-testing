@@ -20,7 +20,7 @@
     "@babel/core": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
     "@types/jquery": "^3.5.16",
-    "@types/node": "^18.15.1",
+    "@types/node": "^18.15.2",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "eslint": "^8.36.0",
