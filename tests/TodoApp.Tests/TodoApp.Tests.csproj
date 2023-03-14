@@ -10,7 +10,7 @@
     <PackageReference Include="GitHubActionsTestLogger" Version="2.0.1" />
     <PackageReference Include="JustEat.HttpClientInterception" Version="4.0.0" />
     <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageReference Include="Microsoft.Playwright" Version="1.31.1" />
     <PackageReference Include="ReportGenerator" Version="5.1.19" />
@@ -46,6 +46,6 @@
   </PropertyGroup>
   <Target Name="GenerateCoverageReports" AfterTargets="GenerateCoverageResultAfterTest" Condition=" '$(CollectCoverage)' == 'true' ">
     <ReportGenerator ReportFiles="@(CoverletReport)" ReportTypes="$(ReportGeneratorReportTypes)" Tag="$(Version)" TargetDirectory="$(ReportGeneratorTargetDirectory)" Title="$(AssemblyName)" VerbosityLevel="Warning" />
-    <Exec Condition=" '$(ReportGeneratorOutputMarkdown)' == 'true' " Command="pwsh -Command %22('$(_MarkdownSummaryPrefix)' + [System.Environment]::NewLine + [System.Environment]::NewLine + (Get-Content $([System.IO.Path]::Combine($(ReportGeneratorTargetDirectory), 'SummaryGithub.md')) | Out-String) + [System.Environment]::NewLine + [System.Environment]::NewLine + '$(_MarkdownSummarySuffix)') >> $(GITHUB_STEP_SUMMARY)%22" />
+    <Exec Condition=" '$(ReportGeneratorOutputMarkdown)' == 'true' " Command="pwsh -Command %22('$(_MarkdownSummaryPrefix)' + [System.Environment]::NewLine + [System.Environment]::NewLine + (Get-Content $([System.IO.Path]::Combine($(ReportGeneratorTargetDirectory), 'SummaryGithub.md')) | Out-String) + [System.Environment]::NewLine + [System.Environment]::NewLine + '$(_MarkdownSummarySuffix)') &gt;&gt; $(GITHUB_STEP_SUMMARY)%22" />
   </Target>
 </Project>
