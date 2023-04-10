@@ -1,8 +1,6 @@
 name: update-dotnet-sdk
 
 env:
-  GIT_COMMIT_USER_EMAIL: 102549341+costellobot@users.noreply.github.com
-  GIT_COMMIT_USER_NAME: costellobot
   TERM: xterm
 
 on:
@@ -30,8 +28,8 @@ jobs:
       with:
         labels: "dependencies,.NET"
         repo-token: ${{ secrets.ACCESS_TOKEN }}
-        user-email: ${{ env.GIT_COMMIT_USER_EMAIL }}
-        user-name: ${{ env.GIT_COMMIT_USER_NAME }}
+        user-email: ${{ vars.GIT_COMMIT_USER_EMAIL }}
+        user-name: ${{ vars.GIT_COMMIT_USER_NAME }}
 
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
@@ -109,8 +107,8 @@ jobs:
 
           $commitMessage = $commitMessageLines -join "`n"
 
-          git config user.email "${{ env.GIT_COMMIT_USER_EMAIL }}"
-          git config user.name "${{ env.GIT_COMMIT_USER_NAME }}"
+          git config user.email "${{ vars.GIT_COMMIT_USER_EMAIL }}"
+          git config user.name "${{ vars.GIT_COMMIT_USER_NAME }}"
           
           git add .
           git commit -m $commitMessage
