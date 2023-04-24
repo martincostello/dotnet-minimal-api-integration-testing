@@ -1,121 +1,19 @@
 name: update-dotnet-sdk
 
-env:
-  TERM: xterm
-
 on:
   schedule:
-    - cron:  '30 05 * * MON-FRI'
     - cron:  '00 19 * * TUE'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  update-dotnet-sdk:
-    name: Update .NET SDK
-    runs-on: ubuntu-latest
-    if: ${{ github.event.repository.fork == false }}
-
-    steps:
-
-    - name: Checkout code
-      uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.ACCESS_TOKEN }}
-
-    - name: Update .NET SDK
-      id: update-dotnet-sdk
-      uses: martincostello/update-dotnet-sdk@v2
-      with:
-        labels: "dependencies,.NET"
-        repo-token: ${{ secrets.ACCESS_TOKEN }}
-        user-email: ${{ vars.GIT_COMMIT_USER_EMAIL }}
-        user-name: ${{ vars.GIT_COMMIT_USER_NAME }}
-
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3
-      if : ${{ steps.update-dotnet-sdk.outputs.sdk-updated == 'true' }}
-
-    - name: Update NuGet packages
-      if : ${{ steps.update-dotnet-sdk.outputs.sdk-updated == 'true' }}
-      shell: pwsh
-      env:
-        DOTNET_CLI_TELEMETRY_OPTOUT: true
-        DOTNET_NOLOGO: true
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-        DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
-        NUGET_XMLDOC_MODE: skip
-      run: |
-        $ErrorActionPreference = "Stop"
-
-        dotnet tool install --global dotnet-outdated-tool
-
-        $tempPath = [System.IO.Path]::GetTempPath()
-        $updatesPath = (Join-Path $tempPath "dotnet-outdated.json")
-        
-        Write-Host "Checking for .NET NuGet package(s) to update..."
-
-        dotnet outdated `
-          --upgrade `
-          --version-lock Major `
-          --output $updatesPath `
-          --include "Microsoft.AspNetCore." `
-          --include "Microsoft.EntityFrameworkCore." `
-          --include "Microsoft.Extensions." `
-          --include "Microsoft.NET.Test.Sdk" `
-          --include "System."
-
-        $dependencies = @()
-
-        if (Test-Path $updatesPath) {
-          $dependencies = `
-            Get-Content -Path $updatesPath | `
-            ConvertFrom-Json | `
-            Select-Object -ExpandProperty projects | `
-            Select-Object -ExpandProperty TargetFrameworks | `
-            Select-Object -ExpandProperty Dependencies | `
-            Sort-Object -Property Name -Unique
-        }
-
-        if ($dependencies.Count -gt 0) {
-          Write-Host "Found $($dependencies.Count) .NET NuGet package(s) to update." -ForegroundColor Green
-
-          $commitMessageLines = @()
-
-          if ($dependencies.Count -eq 1) {
-            $commitMessageLines += "Bump $($dependencies[0].Name) from $($dependencies[0].ResolvedVersion) to $($dependencies[0].LatestVersion)"
-            $commitMessageLines += ""
-            $commitMessageLines += "Bumps $($dependencies[0].Name) from $($dependencies[0].ResolvedVersion) to $($dependencies[0].LatestVersion)."
-          } else {
-            $commitMessageLines += "Bump .NET NuGet packages"
-            $commitMessageLines += ""
-            $commitMessageLines += "Bumps .NET dependencies to their latest versions for the .NET ${{ steps.update-dotnet-sdk.outputs.sdk-version }} SDK."
-            $commitMessageLines += ""
-            foreach ($dependency in $dependencies) {
-              $commitMessageLines += "Bumps $($dependency.Name) from $($dependency.ResolvedVersion) to $($dependency.LatestVersion)."
-            }
-          }
-
-          foreach ($dependency in $dependencies) {
-            $commitMessageLines += "- dependency-name: $($dependency.Name)"
-            $commitMessageLines += "  dependency-type: direct:production"
-            $commitMessageLines += "  update-type: version-update:semver-$($dependency.UpgradeSeverity.ToLowerInvariant())"
-          }
-
-          $commitMessageLines += "..."
-          $commitMessageLines += ""
-          $commitMessageLines += ""
-
-          $commitMessage = $commitMessageLines -join "`n"
-
-          git config user.email "${{ vars.GIT_COMMIT_USER_EMAIL }}"
-          git config user.name "${{ vars.GIT_COMMIT_USER_NAME }}"
-          
-          git add .
-          git commit -m $commitMessage
-          git push
-          
-          Write-Host "Pushed update to $($dependencies.Count) NuGet package(s)." -ForegroundColor Green
-        }
-        else {
-          Write-Host "There are no .NET NuGet packages to update." -ForegroundColor Green
-        }
+  update-sdk:
+    uses: martincostello/update-dotnet-sdk/.github/workflows/update-dotnet-sdk.yml@a9c7965f8619036551db9aaa4d6ff5e186ccd700 # v2.1.2
+    with:
+      labels: "dependencies,.NET"
+      user-email: ${{ vars.GIT_COMMIT_USER_EMAIL }}
+      user-name: ${{ vars.GIT_COMMIT_USER_NAME }}
+    secrets:
+      repo-token: ${{ secrets.ACCESS_TOKEN }}
