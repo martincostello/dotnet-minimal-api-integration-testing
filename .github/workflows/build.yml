@@ -8,7 +8,7 @@ on:
     - '**/*.gitignore'
     - '**/*.gitattributes'
   pull_request:
-    branches: [ main ]
+    branches: [ main, dotnet-vnext ]
   workflow_dispatch:
 
 env:
