@@ -3,7 +3,6 @@
 
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using NodaTime;
 using TodoApp.Data;
 using TodoApp.Models;
 using TodoApp.Services;
@@ -24,7 +23,7 @@ public static class ApiEndpoints
     /// </returns>
     public static IServiceCollection AddTodoApi(this IServiceCollection services)
     {
-        services.AddSingleton<IClock>(_ => SystemClock.Instance);
+        services.AddSingleton(TimeProvider.System);
         services.AddScoped<ITodoRepository, TodoRepository>();
         services.AddScoped<ITodoService, TodoService>();
 

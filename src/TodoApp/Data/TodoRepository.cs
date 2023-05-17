@@ -2,19 +2,18 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using Microsoft.EntityFrameworkCore;
-using NodaTime;
 
 namespace TodoApp.Data;
 
 public sealed class TodoRepository : ITodoRepository
 {
-    public TodoRepository(IClock clock, TodoContext context)
+    public TodoRepository(TimeProvider timeProvider, TodoContext context)
     {
-        Clock = clock;
+        TimeProvider = timeProvider;
         Context = context;
     }
 
-    private IClock Clock { get; }
+    private TimeProvider TimeProvider { get; }
 
     private TodoContext Context { get; }
 
@@ -117,5 +116,5 @@ public sealed class TodoRepository : ITodoRepository
     private async Task EnsureDatabaseAsync(CancellationToken cancellationToken)
         => await Context.Database.EnsureCreatedAsync(cancellationToken);
 
-    private DateTime UtcNow() => Clock.GetCurrentInstant().ToDateTimeUtc();
+    private DateTime UtcNow() => TimeProvider.GetUtcNow().UtcDateTime;
 }
