@@ -19,6 +19,11 @@ updates:
   open-pull-requests-limit: 99
 - package-ecosystem: npm
   directory: "/src/TodoApp"
+  groups:
+    dependencies:
+      patterns:
+        - "@babel/*"
+        - "@typescript-eslint/*"
   schedule:
     interval: daily
     time: "05:30"
