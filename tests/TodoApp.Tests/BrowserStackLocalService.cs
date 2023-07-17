@@ -193,38 +193,25 @@ internal sealed class BrowserStackLocalService : IDisposable
                 currentETag = response.Headers.ETag?.Tag ?? string.Empty;
             }
 
-            // Is the local version of the ZIP file up-to-date?
+            // Is the local version of the tool up-to-date?
             bool needToDownload =
                 !File.Exists(cachedETagFileName) ||
                 !string.Equals(await File.ReadAllTextAsync(cachedETagFileName, Encoding.UTF8, cancellationToken), currentETag, StringComparison.Ordinal);
 
             if (needToDownload)
             {
-                // Download the latest ZIP file
-                byte[] zipBytes = await client.GetByteArrayAsync(downloadUri, cancellationToken);
+                // Get the latest ZIP file and extract it
+                using var source = await client.GetStreamAsync(downloadUri, cancellationToken);
 
-                if (!Directory.Exists(localCachePath))
+                if (Directory.Exists(localCachePath))
                 {
-                    Directory.CreateDirectory(localCachePath);
+                    Directory.Delete(localCachePath, recursive: true);
                 }
 
-                await File.WriteAllBytesAsync(zippedBinaryPath, zipBytes, cancellationToken);
+                Directory.CreateDirectory(localCachePath);
+
+                ZipFile.ExtractToDirectory(source, localCachePath);
                 await File.WriteAllTextAsync(cachedETagFileName, currentETag, Encoding.UTF8, cancellationToken);
-            }
-
-            // Update the binary with the one from the ZIP file
-            if (!File.Exists(binaryPath) || needToDownload)
-            {
-                if (!Directory.Exists(localCachePath))
-                {
-                    Directory.CreateDirectory(localCachePath);
-                }
-                else if (File.Exists(binaryPath))
-                {
-                    File.Delete(binaryPath);
-                }
-
-                ZipFile.ExtractToDirectory(zippedBinaryPath, localCachePath);
             }
 
             return binaryPath;
