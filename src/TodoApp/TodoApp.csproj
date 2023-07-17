@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
+    <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <IsPackable>false</IsPackable>
     <NoWarn>$(NoWarn);CA1050</NoWarn>
     <RootNamespace>TodoApp</RootNamespace>
