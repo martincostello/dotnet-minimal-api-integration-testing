@@ -1,0 +1,40 @@
+name: lint
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+    - '**/*.gitattributes'
+    - '**/*.gitignore'
+    - '**/*.md'
+  pull_request:
+    branches:
+      - main
+      - dotnet-vnext
+      - dotnet-nightly
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_COLOR: 3
+  TERM: xterm
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+    - name: Lint workflows
+      shell: bash
+      env:
+        ACTIONLINT_VERSION: '7b75d16d41920ec126e6f3269db0c6f3ab613c38' # v1.6.25
+      run: |
+        echo "::add-matcher::.github/actionlint-matcher.json"
+        bash <(curl --silent --show-error "https://raw.githubusercontent.com/rhysd/actionlint/${ACTIONLINT_VERSION}/scripts/download-actionlint.bash")
+        ./actionlint -color
