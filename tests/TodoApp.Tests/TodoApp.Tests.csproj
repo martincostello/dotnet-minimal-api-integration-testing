@@ -12,7 +12,7 @@
     <PackageReference Include="JustEat.HttpClientInterception" Version="4.0.0" />
     <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.9" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
     <PackageReference Include="Microsoft.Playwright" Version="1.36.0" />
     <PackageReference Include="ReportGenerator" Version="5.1.23" />
     <PackageReference Include="Shouldly" Version="4.2.1" />
