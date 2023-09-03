@@ -34,5 +34,98 @@
     "typescript": "^5.2.2",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true,
+      "jest/globals": true,
+      "node": true
+    },
+    "extends": [
+      "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "sourceType": "module"
+    },
+    "plugins": [
+      "@typescript-eslint",
+      "jest"
+    ],
+    "rules": {
+      "@typescript-eslint/indent": "error",
+      "@typescript-eslint/member-delimiter-style": "error",
+      "@typescript-eslint/naming-convention": "error",
+      "@typescript-eslint/prefer-namespace-keyword": "error",
+      "@typescript-eslint/quotes": [
+        "error",
+        "single"
+      ],
+      "@typescript-eslint/semi": [
+        "error",
+        "always"
+      ],
+      "@typescript-eslint/type-annotation-spacing": "error",
+      "brace-style": [
+        "error",
+        "1tbs"
+      ],
+      "eqeqeq": [
+        "error",
+        "smart"
+      ],
+      "id-blacklist": [
+        "error",
+        "any",
+        "Number",
+        "number",
+        "String",
+        "string",
+        "Boolean",
+        "boolean",
+        "Undefined",
+        "undefined"
+      ],
+      "id-match": "error",
+      "no-eval": "error",
+      "no-redeclare": "error",
+      "no-trailing-spaces": "error",
+      "no-underscore-dangle": "error",
+      "no-var": "error",
+      "spaced-comment": [
+        "error",
+        "always",
+        {
+          "markers": [
+            "/"
+          ]
+        }
+      ]
+    }
+  },
+  "jest": {
+    "clearMocks": true,
+    "reporters": [
+      "default",
+      "github-actions"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "verbose": true
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "endOfLine": "auto",
+    "printWidth": 80,
+    "quoteProps": "consistent",
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 4,
+    "trailingComma": "es5",
+    "useTabs": false
   }
 }
