@@ -1,5 +1,0 @@
-bin/
-node_modules/
-obj/
-wwwroot/
-jest.config.js

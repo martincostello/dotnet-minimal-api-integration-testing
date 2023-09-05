@@ -105,6 +105,12 @@
       ]
     }
   },
+  "eslintIgnore": [
+    "bin/",
+    "node_modules/",
+    "obj/",
+    "wwwroot/"
+  ],
   "jest": {
     "clearMocks": true,
     "reporters": [
