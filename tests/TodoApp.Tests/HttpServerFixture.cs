@@ -84,7 +84,6 @@ public sealed class HttpServerFixture : TodoAppFixture
         // Otherwise the internals will complain about the host's server
         // not being an instance of the concrete type TestServer.
         // See https://github.com/dotnet/aspnetcore/pull/34702.
-        testHost.Start();
         return testHost;
     }
 
