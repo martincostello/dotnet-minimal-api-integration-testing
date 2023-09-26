@@ -19,7 +19,7 @@ public class TodoPage
 
     public async Task AddItemAsync(string text)
     {
-        await Page.TypeAsync(Selectors.AddItemText, text);
+        await Page.FillAsync(Selectors.AddItemText, text);
         await Page.ClickAsync(Selectors.AddItemButton);
 
         var input = await Page.QuerySelectorAsync(Selectors.AddItemText);
