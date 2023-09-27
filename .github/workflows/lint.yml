@@ -30,11 +30,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4 # v3.5.3
 
+    - name: Add actionlint problem matcher
+      run: echo "::add-matcher::.github/actionlint-matcher.json"
+
     - name: Lint workflows
-      shell: bash
-      env:
-        ACTIONLINT_VERSION: '7b75d16d41920ec126e6f3269db0c6f3ab613c38' # v1.6.25
-      run: |
-        echo "::add-matcher::.github/actionlint-matcher.json"
-        bash <(curl --silent --show-error "https://raw.githubusercontent.com/rhysd/actionlint/${ACTIONLINT_VERSION}/scripts/download-actionlint.bash")
-        ./actionlint -color
+      uses: docker://rhysd/actionlint@sha256:2eb91a78b5a19140be099c7b4262d298c2567f2a9f27e10ed2a4323c5bcface8 # v1.6.26
+      with:
+        args: -color
