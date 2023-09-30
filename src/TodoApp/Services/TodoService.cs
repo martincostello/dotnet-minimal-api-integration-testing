@@ -6,21 +6,14 @@ using TodoApp.Models;
 
 namespace TodoApp.Services;
 
-public sealed class TodoService : ITodoService
+public sealed class TodoService(ITodoRepository repository) : ITodoService
 {
-    public TodoService(ITodoRepository repository)
-    {
-        Repository = repository;
-    }
-
-    private ITodoRepository Repository { get; }
-
     public async Task<string> AddItemAsync(
         string userId,
         string text,
         CancellationToken cancellationToken)
     {
-        var item = await Repository.AddItemAsync(userId, text, cancellationToken);
+        var item = await repository.AddItemAsync(userId, text, cancellationToken);
 
         return item.Id.ToString();
     }
@@ -30,7 +23,7 @@ public sealed class TodoService : ITodoService
         Guid itemId,
         CancellationToken cancellationToken)
     {
-        return await Repository.CompleteItemAsync(userId, itemId, cancellationToken);
+        return await repository.CompleteItemAsync(userId, itemId, cancellationToken);
     }
 
     public async Task<bool> DeleteItemAsync(
@@ -38,7 +31,7 @@ public sealed class TodoService : ITodoService
         Guid itemId,
         CancellationToken cancellationToken)
     {
-        return await Repository.DeleteItemAsync(userId, itemId, cancellationToken);
+        return await repository.DeleteItemAsync(userId, itemId, cancellationToken);
     }
 
     public async Task<TodoItemModel?> GetAsync(
@@ -46,7 +39,7 @@ public sealed class TodoService : ITodoService
         Guid itemId,
         CancellationToken cancellationToken)
     {
-        var item = await Repository.GetItemAsync(userId, itemId, cancellationToken);
+        var item = await repository.GetItemAsync(userId, itemId, cancellationToken);
 
         if (item is null)
         {
@@ -64,7 +57,7 @@ public sealed class TodoService : ITodoService
 
         if (!string.IsNullOrEmpty(userId))
         {
-            var items = await Repository.GetItemsAsync(userId, cancellationToken);
+            var items = await repository.GetItemsAsync(userId, cancellationToken);
 
             foreach (var todo in items)
             {

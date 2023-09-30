@@ -6,80 +6,66 @@ using Microsoft.Playwright;
 namespace TodoApp;
 
 /// <summary>
-/// A class represeting the Page Object Model for the Todo application.
+/// A class representing the Page Object Model for the Todo application.
 /// </summary>
-public class TodoPage
+public class TodoPage(IPage page)
 {
-    public TodoPage(IPage page)
-    {
-        Page = page;
-    }
-
-    private IPage Page { get; }
-
     public async Task AddItemAsync(string text)
     {
-        await Page.FillAsync(Selectors.AddItemText, text);
-        await Page.ClickAsync(Selectors.AddItemButton);
+        await page.FillAsync(Selectors.AddItemText, text);
+        await page.ClickAsync(Selectors.AddItemButton);
 
-        var input = await Page.QuerySelectorAsync(Selectors.AddItemText);
+        var input = await page.QuerySelectorAsync(Selectors.AddItemText);
         await input!.WaitForElementStateAsync(ElementState.Editable);
     }
 
     public async Task<IReadOnlyList<TodoPageItem>> GetItemsAsync()
     {
-        var elements = await Page.QuerySelectorAllAsync(Selectors.TodoItem);
+        var elements = await page.QuerySelectorAllAsync(Selectors.TodoItem);
         return elements.Select(x => new TodoPageItem(x)).ToArray();
     }
 
     public async Task SignInAsync()
-        => await Page.ClickAsync(Selectors.SignIn);
+        => await page.ClickAsync(Selectors.SignIn);
 
     public async Task SignOutAsync()
-        => await Page.ClickAsync(Selectors.SignOut);
+        => await page.ClickAsync(Selectors.SignOut);
 
     public async Task<string> UserNameAsync()
-        => await Page.InnerTextAsync(Selectors.UserName);
+        => await page.InnerTextAsync(Selectors.UserName);
 
     public async Task WaitForNoItemsAsync()
-        => await Page.WaitForSelectorAsync(Selectors.NoItems);
+        => await page.WaitForSelectorAsync(Selectors.NoItems);
 
     public async Task WaitForSignedInAsync()
-        => await Page.WaitForSelectorAsync(Selectors.UserName);
+        => await page.WaitForSelectorAsync(Selectors.UserName);
 
     public async Task WaitForSignedOutAsync()
-        => await Page.WaitForSelectorAsync(Selectors.SignIn);
+        => await page.WaitForSelectorAsync(Selectors.SignIn);
 
-    public sealed class TodoPageItem
+    public sealed class TodoPageItem(IElementHandle item)
     {
-        internal TodoPageItem(IElementHandle item)
-        {
-            Item = item;
-        }
-
-        private IElementHandle Item { get; }
-
         public async Task CompleteAsync()
         {
-            var element = await Item.QuerySelectorAsync(Selectors.CompleteItem);
+            var element = await item.QuerySelectorAsync(Selectors.CompleteItem);
             await element!.ClickAsync();
         }
 
         public async Task DeleteAsync()
         {
-            var element = await Item.QuerySelectorAsync(Selectors.DeleteItem);
+            var element = await item.QuerySelectorAsync(Selectors.DeleteItem);
             await element!.ClickAsync();
         }
 
         public async Task<string> TextAsync()
         {
-            var element = await Item.QuerySelectorAsync(Selectors.ItemText);
+            var element = await item.QuerySelectorAsync(Selectors.ItemText);
             return await element!.InnerTextAsync();
         }
 
         public async Task<string> LastUpdatedAsync()
         {
-            var element = await Item.QuerySelectorAsync(Selectors.ItemTimestamp);
+            var element = await item.QuerySelectorAsync(Selectors.ItemTimestamp);
             return await element!.InnerTextAsync();
         }
     }
