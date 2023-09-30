@@ -7,25 +7,15 @@ using System.Text;
 
 namespace TodoApp;
 
-internal sealed class BrowserStackLocalService : IDisposable
+internal sealed class BrowserStackLocalService(
+    string accessKey,
+    BrowserStackLocalOptions? options) : IDisposable
 {
     private static readonly SemaphoreSlim _downloadLock = new(1, 1);
     private static string? _binaryPath;
-
-    private readonly string _accessKey;
-    private readonly BrowserStackLocalOptions? _options;
-
     private bool _outputRedirected;
     private Process? _process;
     private bool _disposed;
-
-    public BrowserStackLocalService(
-        string accessKey,
-        BrowserStackLocalOptions? options)
-    {
-        _accessKey = accessKey;
-        _options = options;
-    }
 
     ~BrowserStackLocalService()
     {
@@ -34,7 +24,7 @@ internal sealed class BrowserStackLocalService : IDisposable
 
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
-        var arguments = BrowserStackLocalOptions.BuildCommandLine(_accessKey, _options);
+        var arguments = BrowserStackLocalOptions.BuildCommandLine(accessKey, options);
 
         // Ensure the binary for the BrowserStack Local proxy service is available
         if (_binaryPath is null)
@@ -45,11 +35,8 @@ internal sealed class BrowserStackLocalService : IDisposable
             try
             {
 #pragma warning disable CA1508
-                if (_binaryPath is null)
+                _binaryPath ??= await EnsureBinaryAsync(cancellationToken);
 #pragma warning restore CA1508
-                {
-                    _binaryPath = await EnsureBinaryAsync(cancellationToken);
-                }
             }
             finally
             {

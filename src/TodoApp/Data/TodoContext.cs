@@ -5,12 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TodoApp.Data;
 
-public class TodoContext : DbContext
+public class TodoContext(DbContextOptions<TodoContext> options) : DbContext(options)
 {
-    public TodoContext(DbContextOptions<TodoContext> options)
-        : base(options)
-    {
-    }
-
     public DbSet<TodoItem> Items { get; set; } = default!;
 }
