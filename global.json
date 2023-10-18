@@ -1,6 +1,6 @@
 {
   "sdk": {
-    "version": "8.0.100-rtm.23516.5",
+    "version": "8.0.100-rtm.23517.25",
     "allowPrerelease": false,
     "rollForward": "latestMajor"
   }
