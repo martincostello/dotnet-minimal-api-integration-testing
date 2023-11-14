@@ -7,25 +7,15 @@ using System.Text;
 
 namespace TodoApp;
 
-internal sealed class BrowserStackLocalService : IDisposable
+internal sealed class BrowserStackLocalService(
+    string accessKey,
+    BrowserStackLocalOptions? options) : IDisposable
 {
     private static readonly SemaphoreSlim _downloadLock = new(1, 1);
     private static string? _binaryPath;
-
-    private readonly string _accessKey;
-    private readonly BrowserStackLocalOptions? _options;
-
     private bool _outputRedirected;
     private Process? _process;
     private bool _disposed;
-
-    public BrowserStackLocalService(
-        string accessKey,
-        BrowserStackLocalOptions? options)
-    {
-        _accessKey = accessKey;
-        _options = options;
-    }
 
     ~BrowserStackLocalService()
     {
@@ -34,7 +24,7 @@ internal sealed class BrowserStackLocalService : IDisposable
 
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
-        var arguments = BrowserStackLocalOptions.BuildCommandLine(_accessKey, _options);
+        var arguments = BrowserStackLocalOptions.BuildCommandLine(accessKey, options);
 
         // Ensure the binary for the BrowserStack Local proxy service is available
         if (_binaryPath is null)
@@ -45,11 +35,8 @@ internal sealed class BrowserStackLocalService : IDisposable
             try
             {
 #pragma warning disable CA1508
-                if (_binaryPath is null)
+                _binaryPath ??= await EnsureBinaryAsync(cancellationToken);
 #pragma warning restore CA1508
-                {
-                    _binaryPath = await EnsureBinaryAsync(cancellationToken);
-                }
             }
             finally
             {
@@ -193,38 +180,25 @@ internal sealed class BrowserStackLocalService : IDisposable
                 currentETag = response.Headers.ETag?.Tag ?? string.Empty;
             }
 
-            // Is the local version of the ZIP file up-to-date?
+            // Is the local version of the tool up-to-date?
             bool needToDownload =
                 !File.Exists(cachedETagFileName) ||
                 !string.Equals(await File.ReadAllTextAsync(cachedETagFileName, Encoding.UTF8, cancellationToken), currentETag, StringComparison.Ordinal);
 
             if (needToDownload)
             {
-                // Download the latest ZIP file
-                byte[] zipBytes = await client.GetByteArrayAsync(downloadUri, cancellationToken);
+                // Get the latest ZIP file and extract it
+                using var source = await client.GetStreamAsync(downloadUri, cancellationToken);
 
-                if (!Directory.Exists(localCachePath))
+                if (Directory.Exists(localCachePath))
                 {
-                    Directory.CreateDirectory(localCachePath);
+                    Directory.Delete(localCachePath, recursive: true);
                 }
 
-                await File.WriteAllBytesAsync(zippedBinaryPath, zipBytes, cancellationToken);
+                Directory.CreateDirectory(localCachePath);
+
+                ZipFile.ExtractToDirectory(source, localCachePath);
                 await File.WriteAllTextAsync(cachedETagFileName, currentETag, Encoding.UTF8, cancellationToken);
-            }
-
-            // Update the binary with the one from the ZIP file
-            if (!File.Exists(binaryPath) || needToDownload)
-            {
-                if (!Directory.Exists(localCachePath))
-                {
-                    Directory.CreateDirectory(localCachePath);
-                }
-                else if (File.Exists(binaryPath))
-                {
-                    File.Delete(binaryPath);
-                }
-
-                ZipFile.ExtractToDirectory(zippedBinaryPath, localCachePath);
             }
 
             return binaryPath;

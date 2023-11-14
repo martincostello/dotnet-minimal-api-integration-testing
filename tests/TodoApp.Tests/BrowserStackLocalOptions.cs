@@ -18,12 +18,12 @@ public sealed class BrowserStackLocalOptions
     {
         ArgumentNullException.ThrowIfNull(apiKey);
 
-        var arguments = new List<string>()
-        {
+        List<string> arguments =
+        [
             "--key",
             apiKey,
             "--only-automate"
-        };
+        ];
 
         if (!string.IsNullOrWhiteSpace(options?.LocalIdentifier))
         {
