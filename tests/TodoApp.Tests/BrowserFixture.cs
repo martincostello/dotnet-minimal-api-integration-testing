@@ -398,7 +398,8 @@ public class BrowserFixture(
             remove => _browser.Disconnected -= value;
         }
 
-        public Task CloseAsync() => _browser.CloseAsync();
+        public Task CloseAsync(BrowserCloseOptions? options = null)
+            => _browser.CloseAsync();
 
         public async ValueTask DisposeAsync()
         {
