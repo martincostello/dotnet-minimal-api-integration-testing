@@ -4,9 +4,9 @@ on:
   push:
     branches: [ main ]
     paths-ignore:
-    - '**/*.md'
-    - '**/*.gitignore'
-    - '**/*.gitattributes'
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
   pull_request:
     branches:
       - main
@@ -32,11 +32,11 @@ jobs:
       matrix:
         include:
           - os: macos-latest
-            codecov_os: macos
+            os-name: macos
           - os: ubuntu-latest
-            codecov_os: linux
+            os-name: linux
           - os: windows-latest
-            codecov_os: windows
+            os-name: windows
 
     steps:
 
@@ -59,28 +59,28 @@ jobs:
       name: Upload coverage to Codecov
       with:
         files: ./artifacts/coverage.cobertura.xml,./src/TodoApp/coverage/lcov.info
-        flags: ${{ matrix.codecov_os }}
+        flags: ${{ matrix.os-name }}
 
     - name: Publish screenshots
       uses: actions/upload-artifact@v4
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
-        name: screenshots
+        name: screenshots-${{ matrix.os-name }}
         path: ./artifacts/screenshots/*.png
         if-no-files-found: ignore
 
     - name: Publish traces
       uses: actions/upload-artifact@v4
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
-        name: traces
+        name: traces-${{ matrix.os-name }}
         path: ./artifacts/traces/*
         if-no-files-found: ignore
 
     - name: Publish videos
       uses: actions/upload-artifact@v4
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
-        name: videos
+        name: videos-${{ matrix.os-name }}
         path: ./artifacts/videos/*
         if-no-files-found: ignore
