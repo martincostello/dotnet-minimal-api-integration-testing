@@ -28,7 +28,7 @@ jobs:
     steps:
 
     - name: Checkout code
-      uses: actions/checkout@v4 # v3.5.3
+      uses: actions/checkout@v4
 
     - name: Add actionlint problem matcher
       run: echo "::add-matcher::.github/actionlint-matcher.json"
