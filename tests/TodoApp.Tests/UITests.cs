@@ -21,22 +21,26 @@ public class UITests : IAsyncLifetime
 
     private ITestOutputHelper OutputHelper { get; }
 
-    public static IEnumerable<object?[]> Browsers()
+    public static TheoryData<string, string?> Browsers()
     {
-        yield return [BrowserType.Chromium, null];
-        yield return [BrowserType.Chromium, "chrome"];
+        var browsers = new TheoryData<string, string?>()
+        {
+            { BrowserType.Chromium, null },
+            { BrowserType.Chromium, "chrome" },
+            { BrowserType.Firefox, null },
+        };
 
         if (!OperatingSystem.IsLinux())
         {
-            yield return [BrowserType.Chromium, "msedge"];
+            browsers.Add(BrowserType.Chromium, "msedge");
         }
-
-        yield return [BrowserType.Firefox, null];
 
         if (OperatingSystem.IsMacOS())
         {
-            yield return [BrowserType.Webkit, null];
+            browsers.Add(BrowserType.Webkit, null);
         }
+
+        return browsers;
     }
 
     [Theory]
