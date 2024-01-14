@@ -18,9 +18,10 @@ builder.Services.AddRazorPages();
 
 // Configure OpenAPI documentation for the Todo API
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddOpenApiDocument(options =>
 {
-    options.SwaggerDoc("v1", new() { Title = "Todo API", Version = "v1" });
+    options.Title = "Todo API";
+    options.Version = "v1";
 });
 
 if (string.Equals(builder.Configuration["CODESPACES"], "true", StringComparison.OrdinalIgnoreCase))
@@ -55,8 +56,8 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Add Swagger endpoint for OpenAPI
-app.UseSwagger();
+// Add endpoint for OpenAPI
+app.UseOpenApi();
 
 // Add the HTTP endpoints
 app.MapAuthenticationRoutes();
