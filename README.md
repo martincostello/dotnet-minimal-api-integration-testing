@@ -1,6 +1,7 @@
 # Integration Testing ASP.NET Core Minimal APIs
 
 [![Build status](https://github.com/martincostello/dotnet-minimal-api-integration-testing/workflows/build/badge.svg?branch=main&event=push)](https://github.com/martincostello/dotnet-minimal-api-integration-testing/actions?query=workflow%3Abuild+branch%3Amain+event%3Apush)
+[![codecov](https://codecov.io/gh/martincostello/dotnet-minimal-api-integration-testing/branch/main/graph/badge.svg)](https://codecov.io/gh/martincostello/dotnet-minimal-api-integration-testing)
 
 ## Introduction
 
