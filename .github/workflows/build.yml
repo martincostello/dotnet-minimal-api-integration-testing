@@ -57,6 +57,8 @@ jobs:
 
     - uses: codecov/codecov-action@v4
       name: Upload coverage to Codecov
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
         files: ./artifacts/coverage.cobertura.xml,./src/TodoApp/coverage/lcov.info
         flags: ${{ matrix.os-name }}
