@@ -13,7 +13,7 @@
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.3.3" PrivateAssets="all" />
-    <PackageReference Include="NSwag.AspNetCore" Version="14.0.2" />
+    <PackageReference Include="NSwag.AspNetCore" Version="14.0.3" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="package.json;package-lock.json;tsconfig.json" CopyToPublishDirectory="Never" />
