@@ -2,16 +2,16 @@
   <PropertyGroup>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <IsPackable>false</IsPackable>
-    <NoWarn>$(NoWarn);CA1050</NoWarn>
+    <NoWarn>$(NoWarn);CA1050;CA1515</NoWarn>
     <RootNamespace>TodoApp</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
     <UserSecretsId>TodoApp</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="8.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0-preview.1.24081.2" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.4.4" PrivateAssets="all" />
     <PackageReference Include="NSwag.AspNetCore" Version="14.0.7" />
   </ItemGroup>
