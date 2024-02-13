@@ -3,7 +3,7 @@
   "components": [
     "Microsoft.VisualStudio.Component.CoreEditor",
     "Microsoft.VisualStudio.Workload.CoreEditor",
-    "Microsoft.NetCore.Component.Runtime.8.0",
+    "Microsoft.NetCore.Component.Runtime.9.0",
     "Microsoft.NetCore.Component.SDK",
     "Microsoft.VisualStudio.Component.Roslyn.Compiler",
     "Microsoft.VisualStudio.Component.Roslyn.LanguageServices",
