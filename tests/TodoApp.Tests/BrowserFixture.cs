@@ -121,7 +121,9 @@ public class BrowserFixture(
         // to make it easier to debug the app when debugging locally.
         if (System.Diagnostics.Debugger.IsAttached)
         {
+#pragma warning disable CS0612
             options.Devtools = true;
+#pragma warning restore CS0612
             options.Headless = false;
             options.SlowMo = 250;
         }
