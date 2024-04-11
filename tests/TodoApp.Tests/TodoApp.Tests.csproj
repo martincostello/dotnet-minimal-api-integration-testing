@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <IsPackable>false</IsPackable>
-    <NoWarn>$(NoWarn);CA1515;CA1861</NoWarn>
+    <NoWarn>$(NoWarn);CA1861</NoWarn>
     <RootNamespace>TodoApp</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
