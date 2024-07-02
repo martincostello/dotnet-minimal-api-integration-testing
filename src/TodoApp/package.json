@@ -57,11 +57,11 @@
       "jest"
     ],
     "rules": {
+      "@stylistic/js/indent": "error",
       "@stylistic/js/quotes": [
         "error",
         "single"
       ],
-      "@typescript-eslint/indent": "error",
       "@typescript-eslint/member-delimiter-style": "error",
       "@typescript-eslint/naming-convention": "error",
       "@typescript-eslint/prefer-namespace-keyword": "error",
