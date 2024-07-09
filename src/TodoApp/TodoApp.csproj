@@ -11,8 +11,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="8.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.5.24306.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0-preview.5.24306.3" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.6.24328.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0-preview.6.24327.4" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.6.2" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
