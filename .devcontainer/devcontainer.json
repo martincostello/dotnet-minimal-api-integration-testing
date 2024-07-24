@@ -3,17 +3,21 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "extensions": [
-    "editorconfig.editorconfig",
-    "ms-dotnettools.csharp",
-    "ms-vscode.PowerShell"
-  ],
-  "forwardPorts": [ 5000, 5001 ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "editorconfig.editorconfig",
+        "ms-dotnettools.csharp",
+        "ms-vscode.PowerShell"
+      ]
+    }
+  },
+  "forwardPorts": [ 50000, 50001 ],
   "portsAttributes":{
-    "5000": {
+    "50000": {
       "onAutoForward": "silent"
     },
-    "5001": {
+    "50001": {
       "label": "TodoApp",
       "onAutoForward": "openBrowserOnce"
     }

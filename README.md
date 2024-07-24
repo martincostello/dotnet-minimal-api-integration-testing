@@ -62,9 +62,9 @@ to [create a GitHub OAuth app] to obtain secrets for the `GitHub:ClientId` and
 `GitHub:ClientSecret` [options] so that the [OAuth user authentication] works and
 you can log into the Todo App UI.
 
-> 💡 When creating the GitHub OAuth app, use `https://localhost:5001/sign-in-github`
+> 💡 When creating the GitHub OAuth app, use `https://localhost:50001/sign-in-github`
 as the _Authorization callback URL_.
-
+>
 > ⚠️ Do not commit GitHub OAuth secrets to source control. Configure them
 with [User Secrets] instead.
 
@@ -103,7 +103,7 @@ found from testing this sample with the ASP.NET Core 6 pre-releases!
 
 The repository is hosted in
 [GitHub](https://github.com/martincostello/dotnet-minimal-api-integration-testing "This project on GitHub.com"):
-https://github.com/martincostello/dotnet-minimal-api-integration-testing.git
+<https://github.com/martincostello/dotnet-minimal-api-integration-testing.git>
 
 ## License
 
