@@ -18,7 +18,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/core": "^7.24.9",
-    "@babel/preset-env": "^7.24.8",
+    "@babel/preset-env": "^7.25.0",
     "@stylistic/eslint-plugin-js": "^2.4.0",
     "@types/jquery": "^3.5.30",
     "@typescript-eslint/eslint-plugin": "^7.17.0",
