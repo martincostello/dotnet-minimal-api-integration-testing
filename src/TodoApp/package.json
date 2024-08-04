@@ -19,10 +19,10 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
-    "@stylistic/eslint-plugin-js": "^2.6.1",
+    "@stylistic/eslint-plugin": "^2.6.1",
     "@types/jquery": "^3.5.30",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^28.7.0",
@@ -52,24 +52,24 @@
       "sourceType": "module"
     },
     "plugins": [
-      "@stylistic/js",
+      "@stylistic",
       "@typescript-eslint",
       "jest"
     ],
     "rules": {
-      "@stylistic/js/indent": "error",
-      "@stylistic/js/quotes": [
+      "@stylistic/indent": "error",
+      "@stylistic/member-delimiter-style": "error",
+      "@stylistic/quotes": [
         "error",
         "single"
       ],
-      "@typescript-eslint/member-delimiter-style": "error",
-      "@typescript-eslint/naming-convention": "error",
-      "@typescript-eslint/prefer-namespace-keyword": "error",
-      "@typescript-eslint/semi": [
+      "@stylistic/semi": [
         "error",
         "always"
       ],
-      "@typescript-eslint/type-annotation-spacing": "error",
+      "@stylistic/type-annotation-spacing": "error",
+      "@typescript-eslint/naming-convention": "error",
+      "@typescript-eslint/prefer-namespace-keyword": "error",
       "brace-style": [
         "error",
         "1tbs"
