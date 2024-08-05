@@ -23,7 +23,7 @@
     "@types/jquery": "^3.5.30",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
-    "eslint": "^8.57.0",
+    "eslint": "^9.8.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^28.7.0",
     "jest": "^29.7.0",
