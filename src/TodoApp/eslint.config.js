@@ -17,7 +17,7 @@ const compat = new FlatCompat({
 });
 
 export default [...compat.extends("prettier"), {
-    files: ["**/*.ts"],
+    files: ["**/*.cjs", "**/*.js", "**/*.ts"],
     ignores: [
         "bin/",
         "node_modules/",
