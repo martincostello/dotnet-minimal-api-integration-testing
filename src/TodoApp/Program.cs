@@ -19,7 +19,7 @@ builder.Services.AddRazorPages();
 // Configure OpenAPI documentation for the Todo API
 builder.Services.AddOpenApi(options =>
 {
-    options.UseDocumentTransformer((document, _, _) =>
+    options.AddDocumentTransformer((document, _, _) =>
     {
         document.Info.Title = "Todo API";
         document.Info.Version = "v1";
