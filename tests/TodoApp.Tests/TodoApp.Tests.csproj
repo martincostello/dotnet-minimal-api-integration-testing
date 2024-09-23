@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.Playwright" Version="1.47.0" />
     <PackageReference Include="ReportGenerator" Version="5.3.9" />
     <PackageReference Include="Shouldly" Version="4.2.1" />
-    <PackageReference Include="xunit" Version="2.9.0" />
+    <PackageReference Include="xunit" Version="2.9.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
     <PackageReference Include="Xunit.SkippableFact" Version="1.4.13" />
   </ItemGroup>
