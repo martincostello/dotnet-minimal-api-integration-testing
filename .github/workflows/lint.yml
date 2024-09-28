@@ -37,3 +37,10 @@ jobs:
       uses: docker://rhysd/actionlint@sha256:89d3f90f82781dee3c8724651129634b08cf2241bbd67fcd02a1c5198119fc5e # v1.7.2
       with:
         args: -color
+
+    - name: Lint markdown
+      uses: DavidAnson/markdownlint-cli2-action@v17
+      with:
+        config: '.markdownlint.json'
+        globs: |
+          **/*.md
