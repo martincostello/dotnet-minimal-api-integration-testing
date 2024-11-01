@@ -44,7 +44,7 @@ public sealed class HttpServerFixture : TodoAppFixture
         // Configure a self-signed TLS certificate for HTTPS
         builder.ConfigureKestrel(
             serverOptions => serverOptions.ConfigureHttpsDefaults(
-                httpsOptions => httpsOptions.ServerCertificate = new X509Certificate2("localhost-dev.pfx", "Pa55w0rd!")));
+                httpsOptions => httpsOptions.ServerCertificate = X509CertificateLoader.LoadPkcs12FromFile("localhost-dev.pfx", "Pa55w0rd!")));
 
         // Configure the server address for the server to
         // listen on for HTTPS requests on a dynamic port.

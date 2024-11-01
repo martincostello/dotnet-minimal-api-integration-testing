@@ -17,11 +17,14 @@ builder.Services.AddGitHubAuthentication();
 builder.Services.AddRazorPages();
 
 // Configure OpenAPI documentation for the Todo API
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApiDocument(options =>
+builder.Services.AddOpenApi(options =>
 {
-    options.Title = "Todo API";
-    options.Version = "v1";
+    options.AddDocumentTransformer((document, _, _) =>
+    {
+        document.Info.Title = "Todo API";
+        document.Info.Version = "v1";
+        return Task.CompletedTask;
+    });
 });
 
 if (string.Equals(builder.Configuration["CODESPACES"], "true", StringComparison.OrdinalIgnoreCase))
@@ -57,7 +60,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Add endpoint for OpenAPI
-app.UseOpenApi();
+app.MapOpenApi();
 
 // Add the HTTP endpoints
 app.MapAuthenticationRoutes();
