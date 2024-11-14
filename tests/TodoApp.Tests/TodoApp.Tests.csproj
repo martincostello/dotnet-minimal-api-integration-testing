@@ -14,7 +14,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="Microsoft.Playwright" Version="1.48.0" />
-    <PackageReference Include="ReportGenerator" Version="5.4.0" />
+    <PackageReference Include="ReportGenerator" Version="5.4.1" />
     <PackageReference Include="Shouldly" Version="4.2.1" />
     <PackageReference Include="System.Text.Encodings.Web" Version="9.0.0" />
     <PackageReference Include="xunit" Version="2.9.2" />
