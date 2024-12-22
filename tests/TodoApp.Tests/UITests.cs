@@ -5,7 +5,7 @@ using Microsoft.Playwright;
 
 namespace TodoApp;
 
-[Collection(HttpServerCollection.Name)]
+[Collection<HttpServerCollection>]
 public class UITests : IAsyncLifetime
 {
     public UITests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
@@ -98,7 +98,7 @@ public class UITests : IAsyncLifetime
             await items[0].DeleteAsync();
             await items[1].CompleteAsync();
 
-            await Task.Delay(TimeSpan.FromSeconds(0.5));
+            await Task.Delay(TimeSpan.FromSeconds(0.5), TestContext.Current.CancellationToken);
 
             // Assert
             items = await app.GetItemsAsync();
@@ -120,13 +120,17 @@ public class UITests : IAsyncLifetime
         });
     }
 
-    public Task InitializeAsync()
+    public ValueTask InitializeAsync()
     {
         InstallPlaywright();
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
-    public Task DisposeAsync() => Task.CompletedTask;
+    public ValueTask DisposeAsync()
+    {
+        GC.SuppressFinalize(this);
+        return ValueTask.CompletedTask;
+    }
 
     private static void InstallPlaywright()
     {
