@@ -2,6 +2,7 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <NoWarn>$(NoWarn);CA1861</NoWarn>
+    <OutputType>Exe</OutputType>
     <RootNamespace>TodoApp</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
@@ -10,16 +11,15 @@
     <PackageReference Include="coverlet.msbuild" Version="6.0.2" PrivateAssets="All" />
     <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageReference Include="JustEat.HttpClientInterception" Version="5.0.0" />
-    <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.4.0" />
+    <PackageReference Include="MartinCostello.Logging.XUnit.v3" Version="0.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="Microsoft.Playwright" Version="1.49.0" />
     <PackageReference Include="ReportGenerator" Version="5.4.1" />
     <PackageReference Include="Shouldly" Version="4.2.1" />
     <PackageReference Include="System.Text.Encodings.Web" Version="9.0.0" />
-    <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.0.0" />
-    <PackageReference Include="Xunit.SkippableFact" Version="1.5.23" />
+    <PackageReference Include="xunit.v3" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="oauth-http-bundle.json;xunit.runner.json;xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
@@ -31,7 +31,6 @@
   <ItemGroup>
     <Using Include="Shouldly" />
     <Using Include="Xunit" />
-    <Using Include="Xunit.Abstractions" />
   </ItemGroup>
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>

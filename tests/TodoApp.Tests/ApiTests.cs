@@ -11,7 +11,7 @@ using TodoApp.Models;
 
 namespace TodoApp;
 
-[Collection(TodoAppCollection.Name)]
+[Collection<TodoAppCollection>]
 public class ApiTests
 {
     public ApiTests(TodoAppFixture fixture, ITestOutputHelper outputHelper)
@@ -31,10 +31,11 @@ public class ApiTests
     public async Task Can_Manage_Todo_Items_With_Api()
     {
         // Arrange
+        var cancellationToken = TestContext.Current.CancellationToken;
         var client = await CreateAuthenticatedClientAsync();
 
         // Act - Get all the items
-        var items = await client.GetFromJsonAsync<TodoListViewModel>("/api/items");
+        var items = await client.GetFromJsonAsync<TodoListViewModel>("/api/items", cancellationToken);
 
         // Assert - There should be no items
         items.ShouldNotBeNull();
@@ -47,20 +48,20 @@ public class ApiTests
         var newItem = new CreateTodoItemModel { Text = text };
 
         // Act - Add a new item
-        using var createdResponse = await client.PostAsJsonAsync("/api/items", newItem);
+        using var createdResponse = await client.PostAsJsonAsync("/api/items", newItem, cancellationToken);
 
         // Assert - An item was created
         createdResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
         createdResponse.Headers.Location.ShouldNotBeNull();
 
-        using var createdJson = await createdResponse.Content.ReadFromJsonAsync<JsonDocument>();
+        using var createdJson = await createdResponse.Content.ReadFromJsonAsync<JsonDocument>(cancellationToken);
 
         // Arrange - Get the new item's URL and Id
         var itemUri = createdResponse.Headers.Location;
         var itemId = createdJson!.RootElement.GetProperty("id").GetString();
 
         // Act - Get the item
-        var item = await client.GetFromJsonAsync<TodoItemModel>(itemUri);
+        var item = await client.GetFromJsonAsync<TodoItemModel>(itemUri, cancellationToken);
 
         // Assert - Verify the item was created correctly
         item.ShouldNotBeNull();
@@ -70,12 +71,12 @@ public class ApiTests
         item.Text.ShouldBe(text);
 
         // Act - Mark the item as being completed
-        using var completedResponse = await client.PostAsJsonAsync(itemUri + "/complete", new { });
+        using var completedResponse = await client.PostAsJsonAsync(itemUri + "/complete", new { }, cancellationToken);
 
         // Assert - The item was completed
         completedResponse.StatusCode.ShouldBe(HttpStatusCode.NoContent);
 
-        item = await client.GetFromJsonAsync<TodoItemModel>(itemUri);
+        item = await client.GetFromJsonAsync<TodoItemModel>(itemUri, cancellationToken);
 
         item.ShouldNotBeNull();
         item.Id.ShouldBe(itemId);
@@ -83,7 +84,7 @@ public class ApiTests
         item.IsCompleted.ShouldBeTrue();
 
         // Act - Get all the items
-        items = await client.GetFromJsonAsync<TodoListViewModel>("/api/items");
+        items = await client.GetFromJsonAsync<TodoListViewModel>("/api/items",cancellationToken);
 
         // Assert - The item was completed
         items.ShouldNotBeNull();
@@ -98,12 +99,12 @@ public class ApiTests
         item.LastUpdated.ShouldNotBeNull();
 
         // Act - Delete the item
-        using var deletedResponse = await client.DeleteAsync(itemUri);
+        using var deletedResponse = await client.DeleteAsync(itemUri, cancellationToken);
 
         // Assert - The item no longer exists
         deletedResponse.StatusCode.ShouldBe(HttpStatusCode.NoContent);
 
-        items = await client.GetFromJsonAsync<TodoListViewModel>("/api/items");
+        items = await client.GetFromJsonAsync<TodoListViewModel>("/api/items", cancellationToken);
 
         items.ShouldNotBeNull();
         items.Items.ShouldNotBeNull();
@@ -111,12 +112,12 @@ public class ApiTests
         items.Items.ShouldNotContain(x => x.Id == itemId);
 
         // Act
-        using var getResponse = await client.GetAsync(itemUri);
+        using var getResponse = await client.GetAsync(itemUri, cancellationToken);
 
         // Assert
         getResponse.StatusCode.ShouldBe(HttpStatusCode.NotFound);
 
-        var problem = await getResponse.Content.ReadFromJsonAsync<ProblemDetails>();
+        var problem = await getResponse.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken);
 
         problem.ShouldNotBeNull();
         problem.Status.ShouldBe(StatusCodes.Status404NotFound);
@@ -130,16 +131,17 @@ public class ApiTests
     public async Task Cannot_Create_Todo_Item_With_No_Text()
     {
         // Arrange
+        var cancellationToken = TestContext.Current.CancellationToken;
         var client = await CreateAuthenticatedClientAsync();
         var item = new CreateTodoItemModel { Text = string.Empty };
 
         // Act
-        var response = await client.PostAsJsonAsync("/api/items", item);
+        var response = await client.PostAsJsonAsync("/api/items", item, cancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken);
 
         problem.ShouldNotBeNull();
         problem.Status.ShouldBe(StatusCodes.Status400BadRequest);
@@ -153,25 +155,26 @@ public class ApiTests
     public async Task Cannot_Complete_Todo_Item_Multiple_Times()
     {
         // Arrange
+        var cancellationToken = TestContext.Current.CancellationToken;
         var client = await CreateAuthenticatedClientAsync();
         var item = new CreateTodoItemModel { Text = "Something" };
 
-        using var createdResponse = await client.PostAsJsonAsync("/api/items", item);
+        using var createdResponse = await client.PostAsJsonAsync("/api/items", item, cancellationToken);
         createdResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
         createdResponse.Headers.Location.ShouldNotBeNull();
 
         var itemUri = createdResponse.Headers.Location;
 
-        using var completedResponse = await client.PostAsJsonAsync(itemUri + "/complete", new { });
+        using var completedResponse = await client.PostAsJsonAsync(itemUri + "/complete", new { }, cancellationToken);
         completedResponse.StatusCode.ShouldBe(HttpStatusCode.NoContent);
 
         // Act
-        using var response = await client.PostAsJsonAsync(itemUri + "/complete", new { });
+        using var response = await client.PostAsJsonAsync(itemUri + "/complete", new { }, cancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken);
 
         problem.ShouldNotBeNull();
         problem.Status.ShouldBe(StatusCodes.Status400BadRequest);
@@ -185,25 +188,26 @@ public class ApiTests
     public async Task Cannot_Complete_Deleted_Todo_Item()
     {
         // Arrange
+        var cancellationToken = TestContext.Current.CancellationToken;
         var client = await CreateAuthenticatedClientAsync();
         var item = new CreateTodoItemModel { Text = "Something" };
 
-        using var createdResponse = await client.PostAsJsonAsync("/api/items", item);
+        using var createdResponse = await client.PostAsJsonAsync("/api/items", item, cancellationToken);
         createdResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
         createdResponse.Headers.Location.ShouldNotBeNull();
 
         var itemUri = createdResponse.Headers.Location;
 
-        using var deletedResponse = await client.DeleteAsync(itemUri);
+        using var deletedResponse = await client.DeleteAsync(itemUri, cancellationToken);
         deletedResponse.StatusCode.ShouldBe(HttpStatusCode.NoContent);
 
         // Act
-        using var response = await client.PostAsJsonAsync(itemUri + "/complete", new { });
+        using var response = await client.PostAsJsonAsync(itemUri + "/complete", new { }, cancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
 
-        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken);
 
         problem.ShouldNotBeNull();
         problem.Status.ShouldBe(StatusCodes.Status404NotFound);
@@ -217,25 +221,26 @@ public class ApiTests
     public async Task Cannot_Delete_Todo_Item_Multiple_Times()
     {
         // Arrange
+        var cancellationToken = TestContext.Current.CancellationToken;
         var client = await CreateAuthenticatedClientAsync();
         var item = new CreateTodoItemModel { Text = "Something" };
 
-        using var createdResponse = await client.PostAsJsonAsync("/api/items", item);
+        using var createdResponse = await client.PostAsJsonAsync("/api/items", item, cancellationToken);
         createdResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
         createdResponse.Headers.Location.ShouldNotBeNull();
 
         var itemUri = createdResponse.Headers.Location;
 
-        using var deletedResponse = await client.DeleteAsync(itemUri);
+        using var deletedResponse = await client.DeleteAsync(itemUri, cancellationToken);
         deletedResponse.StatusCode.ShouldBe(HttpStatusCode.NoContent);
 
         // Act
-        using var response = await client.DeleteAsync(itemUri);
+        using var response = await client.DeleteAsync(itemUri, cancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
 
-        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+        var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken);
 
         problem.ShouldNotBeNull();
         problem.Status.ShouldBe(StatusCodes.Status404NotFound);
