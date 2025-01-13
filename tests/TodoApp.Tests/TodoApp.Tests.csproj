@@ -18,8 +18,8 @@
     <PackageReference Include="ReportGenerator" Version="5.4.3" />
     <PackageReference Include="Shouldly" Version="4.2.1" />
     <PackageReference Include="System.Text.Encodings.Web" Version="9.0.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.0" />
-    <PackageReference Include="xunit.v3" Version="1.0.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.1" />
+    <PackageReference Include="xunit.v3" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="oauth-http-bundle.json;xunit.runner.json;xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
