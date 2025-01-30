@@ -49,7 +49,7 @@ libraries and technologies:
 [HttpClient Interception]: https://github.com/justeat/httpclient-interception
 [Playwright]: https://playwright.dev/dotnet/
 [ReportGenerator]: https://github.com/danielpalme/ReportGenerator
-[Shouldly]: https://shouldly.io/
+[Shouldly]: https://docs.shouldly.org
 [User Interface]: https://github.com/martincostello/dotnet-minimal-api-integration-testing/blob/main/tests/TodoApp.Tests/UITests.cs
 [WebApplicationFactory&lt;T&gt;]: https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests
 [xunit]: https://xunit.net/
