@@ -22,10 +22,15 @@ env:
   NUGET_XMLDOC_MODE: skip
   TERM: xterm
 
+permissions: {}
+
 jobs:
   build:
     name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+
+    permissions:
+      content: read
 
     strategy:
       fail-fast: false
