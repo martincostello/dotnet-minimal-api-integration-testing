@@ -1,10 +1,10 @@
 ---
 name: Bug report
+title: Bug report
 about: Create a bug report to help us improve this project
 labels: bug
 ---
 
-<!-- markdownlint-disable MD041 -->
 ### Describe the bug
 
 <!--
