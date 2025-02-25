@@ -4,7 +4,7 @@
     <IsPackable>false</IsPackable>
     <NoWarn>$(NoWarn);CA1050</NoWarn>
     <RootNamespace>TodoApp</RootNamespace>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
     <UserSecretsId>TodoApp</UserSecretsId>
