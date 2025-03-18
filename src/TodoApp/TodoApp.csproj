@@ -11,7 +11,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="10.0.0-preview.1.25127.64" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.1.25120.3" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.2.25164.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0-preview.1.25081.1" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.9.3" PrivateAssets="all" />
   </ItemGroup>
