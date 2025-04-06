@@ -1,0 +1,39 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path=".vsconfig" />
+    <File Path="build.ps1" />
+    <File Path="CODE_OF_CONDUCT.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+    <File Path="LICENSE" />
+    <File Path="NuGet.config" />
+    <File Path="README.md" />
+    <File Path="TodoApp.ruleset" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/">
+    <File Path=".github/CONTRIBUTING.md" />
+    <File Path=".github/dependabot.yml" />
+    <File Path=".github/ISSUE_TEMPLATE.md" />
+    <File Path=".github/PULL_REQUEST_TEMPLATE.md" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/ISSUE_TEMPLATE/">
+    <File Path=".github/ISSUE_TEMPLATE/bug_report.md" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/workflows/">
+    <File Path=".github/workflows/build.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/.vscode/">
+    <File Path=".vscode/extensions.json" />
+    <File Path=".vscode/launch.json" />
+    <File Path=".vscode/tasks.json" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/TodoApp/TodoApp.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TodoApp.Tests/TodoApp.Tests.csproj" />
+  </Folder>
+</Solution>
