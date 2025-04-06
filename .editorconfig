@@ -9,7 +9,7 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{config,csproj,json,props,ruleset,targets,yml}]
+[*.{config,csproj,json,props,ruleset,slnx,targets,yml}]
 indent_size = 2
 
 # Code files

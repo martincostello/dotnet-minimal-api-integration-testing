@@ -10,7 +10,7 @@ SET DOTNET_ROOT(x86)=%~dp0.dotnetcli\x86
 :: Put our local dotnet.exe on PATH first so Visual Studio knows which one to use.
 SET PATH=%DOTNET_ROOT%;%PATH%
 
-SET sln=%~dp0TodoApp.sln
+SET sln=%~dp0TodoApp.slnx
 
 IF NOT EXIST "%DOTNET_ROOT%\dotnet.exe" (
     echo The .NET SDK has not yet been installed. Run `%~dp0build.ps1` to install it

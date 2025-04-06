@@ -69,7 +69,7 @@ public class TodoAppFixture : WebApplicationFactory<Program>, ITestOutputHelperA
         builder.ConfigureLogging(loggingBuilder => loggingBuilder.ClearProviders().AddXUnit(this));
 
         // Configure the correct content root for the static content and Razor pages
-        builder.UseSolutionRelativeContentRoot(Path.Combine("src", "TodoApp"));
+        builder.UseSolutionRelativeContentRoot(Path.Combine("src", "TodoApp"), "*.slnx");
 
         // Configure the application so HTTP requests related to the OAuth flow
         // can be intercepted and redirected to not use the real GitHub service.
