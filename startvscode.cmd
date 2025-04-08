@@ -4,8 +4,8 @@ SETLOCAL
 :: This command launches Visual Studio Code with environment variables required to use a local version of the .NET SDK.
 
 :: This tells .NET to use the same dotnet.exe that the build script uses.
-SET DOTNET_ROOT=%~dp0.dotnetcli
-SET DOTNET_ROOT(x86)=%~dp0.dotnetcli\x86
+SET DOTNET_ROOT=%~dp0.dotnet
+SET DOTNET_ROOT(x86)=%~dp0.dotnet\x86
 
 :: Put our local dotnet.exe on PATH first so Visual Studio Code knows which one to use.
 SET PATH=%DOTNET_ROOT%;%PATH%

@@ -11,7 +11,7 @@
     "enableEditorConfigSupport": true
   },
   "msbuild": {
-    "MSBuildSDKsPath": ".\\.dotnetcli",
+    "MSBuildSDKsPath": ".\\.dotnet",
     "EnablePackageAutoRestore": true,
     "loadProjectsOnDemand": true
   },
