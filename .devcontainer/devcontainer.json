@@ -25,6 +25,6 @@
   "postCreateCommand": "./build.ps1 -SkipTests",
   "remoteEnv": {
     "DOTNET_ROLL_FORWARD": "Major",
-    "PATH": "/root/.dotnet/tools:${containerWorkspaceFolder}/.dotnetcli:${containerEnv:PATH}"
+    "PATH": "/root/.dotnet/tools:${containerWorkspaceFolder}/.dotnet:${containerEnv:PATH}"
   }
 }
