@@ -1,6 +1,6 @@
 {
   "sdk": {
-    "version": "10.0.100-preview.4.25210.6",
+    "version": "10.0.100-preview.4.25210.23",
     "allowPrerelease": false,
     "rollForward": "latestMajor",
     "paths": [ ".dotnet", "$host$" ],
