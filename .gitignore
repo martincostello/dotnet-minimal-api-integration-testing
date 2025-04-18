@@ -13,6 +13,7 @@ bin
 Bin
 coverage
 coverage.*
+junit.xml
 node_modules
 obj
 packages
