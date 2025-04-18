@@ -65,10 +65,17 @@ jobs:
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
         NUGET_XMLDOC_MODE: skip
 
-    - uses: codecov/codecov-action@v5
-      name: Upload coverage to Codecov
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5
       with:
         files: ./artifacts/coverage.cobertura.xml,./src/TodoApp/coverage/lcov.info
+        flags: ${{ matrix.os-name }}
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+    - name: Upload test results to Codecov
+      uses: codecov/test-results-action@v1
+      if: ${{ !cancelled() }}
+      with:
         flags: ${{ matrix.os-name }}
         token: ${{ secrets.CODECOV_TOKEN }}
 
