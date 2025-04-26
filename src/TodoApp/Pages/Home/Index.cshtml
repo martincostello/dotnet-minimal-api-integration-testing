@@ -21,7 +21,7 @@ else
     <h2>
         My List
         <div class="h6 spinner-border" id="loader" role="status">
-            <span class="sr-only">Loading...</span>
+            <span class="visually-hidden">Loading...</span>
         </div>
     </h2>
 
@@ -31,7 +31,7 @@ else
 
     <div>
         <table class="table d-none" id="item-table">
-            <thead class="thead-light">
+            <thead>
                 <tr>
                     <th class="w-50" scope="col">Item</th>
                     <th class="w-25" scope="col">Last Updated</th>
@@ -59,19 +59,19 @@ else
 
     <h2>Add New Item</h2>
 
-    <form id="add-form" class="form-inline" role="form">
-
-        <label class="sr-only" for="new-item-text">Thing to do</label>
-
-        <input autocomplete="off"
-               autofocus
-               class="form-control form-control-lg mr-sm-2 w-75"
-               id="new-item-text"
-               name="text"
-               placeholder="Buy eggs 🥚"
-               type="text">
-
-        <button class="btn btn-lg btn-primary" disabled id="add-new-item" type="submit">Add</button>
-
+    <form id="add-form" class="row gx-3 gy-2 align-items-center" role="form">
+        <div class="col-auto col-md-11">
+            <label class="visually-hidden" for="new-item-text">Thing to do</label>
+            <input autocomplete="off"
+                   autofocus
+                   class="form-control form-control-lg"
+                   id="new-item-text"
+                   name="text"
+                   placeholder="Buy eggs 🥚"
+                   type="text">
+         </div>
+         <div class="col-auto">
+             <button class="btn btn-lg btn-primary" disabled id="add-new-item" type="submit">Add</button>
+         </div>
     </form>
 }
