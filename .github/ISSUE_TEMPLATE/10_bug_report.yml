@@ -7,15 +7,6 @@ body:
   attributes:
     value: |
       Please check for an existing issue and the [README](https://github.com/martincostello/dotnet-minimal-api-integration-testing/blob/main/README.md) before submitting a bug report.
-
-      If you're not using the latest release, please try upgrading to the latest version first to see if the issue resolves itself.
-- type: input
-  attributes:
-    label: Version
-    description: Which version of the application are you experiencing the issue with?
-    placeholder: 1.0.0
-  validations:
-    required: true
 - type: textarea
   attributes:
     label: Describe the bug
@@ -52,15 +43,6 @@ body:
     label: Exception(s) (if any)
     description: Include any exception(s) and/or stack trace(s) you get when facing this issue.
     render: text
-  validations:
-    required: false
-- type: input
-  attributes:
-    label: .NET Version
-    description: |
-      Run `dotnet --version` to get the .NET SDK version you're using.
-      Alternatively, which target framework(s) (e.g. `net8.0`) does the project you're using the package with target?
-    placeholder: 9.0.100
   validations:
     required: false
 - type: textarea
