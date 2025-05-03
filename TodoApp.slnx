@@ -20,7 +20,10 @@
     <File Path=".github/PULL_REQUEST_TEMPLATE.md" />
   </Folder>
   <Folder Name="/Solution Items/.github/ISSUE_TEMPLATE/">
-    <File Path=".github/ISSUE_TEMPLATE/bug_report.md" />
+    <File Path=".github/ISSUE_TEMPLATE/10_bug_report.yml" />
+    <File Path=".github/ISSUE_TEMPLATE/20_feature_request.yml" />
+    <File Path=".github/ISSUE_TEMPLATE/30_question.yml" />
+    <File Path=".github/ISSUE_TEMPLATE/config.yml" />
   </Folder>
   <Folder Name="/Solution Items/.github/workflows/">
     <File Path=".github/workflows/build.yml" />
