@@ -1,0 +1,31 @@
+name: 🤔 Question?
+description: You have something specific to achieve and the existing documentation hasn't covered how.
+title: '[Question]: '
+labels: ['question']
+body:
+- type: markdown
+  attributes:
+    value: |
+      Please check for an existing issue and the [README](https://github.com/martincostello/dotnet-minimal-api-integration-testing/blob/main/README.md) before asking a question.
+- type: textarea
+  attributes:
+    label: What do you want to achieve?
+    description: A clear and concise description of what you're trying to do.
+    placeholder: I am trying to [...] but [...]
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: What code or approach do you have so far?
+    description: |
+      Provide a [minimalistic project which shows what you have so far](https://stackoverflow.com/help/mcve) hosted in a **public** GitHub repository.
+      Code snippets wrapped in a [fenced code block](https://docs.github.com/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks) are also acceptable.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Additional context
+    description: |
+      Add any other context or screenshots related to your question here.
+  validations:
+    required: false
