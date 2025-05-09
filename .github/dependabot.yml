@@ -6,8 +6,6 @@ updates:
     interval: daily
     time: "05:30"
     timezone: Europe/London
-  reviewers:
-    - "martincostello"
 - package-ecosystem: nuget
   directory: "/"
   groups:
@@ -18,8 +16,6 @@ updates:
     interval: daily
     time: "05:30"
     timezone: Europe/London
-  reviewers:
-    - "martincostello"
   open-pull-requests-limit: 99
 - package-ecosystem: npm
   directory: "/src/TodoApp"
@@ -34,6 +30,4 @@ updates:
     interval: daily
     time: "05:30"
     timezone: Europe/London
-  reviewers:
-    - "martincostello"
   open-pull-requests-limit: 99
