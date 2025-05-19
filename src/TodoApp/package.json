@@ -23,7 +23,7 @@
     "@stylistic/eslint-plugin": "^4.2.0",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
-    "eslint": "^9.26.0",
+    "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-jest": "^28.11.0",
     "globals": "^16.1.0",
