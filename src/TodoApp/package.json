@@ -18,8 +18,8 @@
   "author": "martincostello",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@babel/core": "^7.27.7",
-    "@babel/preset-env": "^7.27.2",
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
     "@stylistic/eslint-plugin": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^8.35.1",
     "@typescript-eslint/parser": "^8.32.1",
