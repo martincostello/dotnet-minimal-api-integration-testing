@@ -30,21 +30,21 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       with:
         filter: 'tree:0'
         persist-credentials: false
         show-progress: false
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@181d5eefc20863364f96762470ba6f862bdef56b # v3
       with:
         build-mode: none
         languages: ${{ matrix.language }}
         queries: security-and-quality
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@181d5eefc20863364f96762470ba6f862bdef56b # v3
       with:
         category: '/language:${{ matrix.language }}'
 
