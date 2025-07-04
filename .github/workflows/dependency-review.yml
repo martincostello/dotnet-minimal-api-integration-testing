@@ -7,17 +7,25 @@ on:
       - dotnet-vnext
       - dotnet-nightly
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   dependency-review:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     steps:
 
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          filter: 'tree:0'
+          persist-credentials: false
+          show-progress: false
 
       - name: Review dependencies
         uses: actions/dependency-review-action@v4
+        with:
+          allow-licenses: 'Apache-2.0,BSD-2-Clause,BSD-3-Clause,MIT'

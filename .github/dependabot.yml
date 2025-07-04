@@ -1,39 +1,7 @@
 version: 2
 updates:
-- package-ecosystem: "docker"
-  directory: ".devcontainer"
-  schedule:
-    interval: daily
-    time: "05:30"
-    timezone: Europe/London
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
-    interval: daily
-    time: "05:30"
+    interval: yearly
     timezone: Europe/London
-- package-ecosystem: nuget
-  directory: "/"
-  groups:
-    xunit:
-      patterns:
-        - xunit*
-  schedule:
-    interval: daily
-    time: "05:30"
-    timezone: Europe/London
-  open-pull-requests-limit: 99
-- package-ecosystem: npm
-  directory: "/src/TodoApp"
-  groups:
-    babel:
-      patterns:
-        - "@babel/*"
-    typescript-eslint:
-      patterns:
-        - "@typescript-eslint/*"
-  schedule:
-    interval: daily
-    time: "05:30"
-    timezone: Europe/London
-  open-pull-requests-limit: 99
