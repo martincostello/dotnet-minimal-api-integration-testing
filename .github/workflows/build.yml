@@ -47,6 +47,10 @@ jobs:
 
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        filter: 'tree:0'
+        persist-credentials: false
+        show-progress: false
 
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
