@@ -261,8 +261,7 @@ public class ApiTests
 
         var client = Fixture.CreateClient(options);
 
-        var parameters = Array.Empty<KeyValuePair<string?, string?>>();
-        using var content = new FormUrlEncodedContent(parameters);
+        using var content = new FormUrlEncodedContent([]);
 
         // Go through the sign-in flow, which will set
         // the authentication cookie on the HttpClient.
