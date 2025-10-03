@@ -197,7 +197,7 @@ internal sealed class BrowserStackLocalService(
 
                 Directory.CreateDirectory(localCachePath);
 
-                ZipFile.ExtractToDirectory(source, localCachePath);
+                await ZipFile.ExtractToDirectoryAsync(source, localCachePath, cancellationToken);
                 await File.WriteAllTextAsync(cachedETagFileName, currentETag, Encoding.UTF8, cancellationToken);
             }
 
