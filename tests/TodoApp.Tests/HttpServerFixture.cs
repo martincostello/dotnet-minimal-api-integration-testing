@@ -16,7 +16,7 @@ public sealed class HttpServerFixture : TodoAppFixture
     public HttpServerFixture()
     {
         // Configure the address for the server to listen on for HTTPS
-        // requests on a dynamic port. with a self-signed TLS certificate.
+        // requests on a dynamic port with a self-signed TLS certificate.
         UseKestrel(
             (server) => server.Listen(
                 IPAddress.Loopback, 0, (listener) => listener.UseHttps(
