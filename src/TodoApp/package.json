@@ -23,7 +23,7 @@
     "@stylistic/eslint-plugin": "5.5.0",
     "@typescript-eslint/eslint-plugin": "8.46.4",
     "@typescript-eslint/parser": "8.46.4",
-    "@vitest/eslint-plugin": "1.4.2",
+    "@vitest/eslint-plugin": "1.4.3",
     "eslint": "9.39.1",
     "eslint-config-prettier": "10.1.8",
     "globals": "16.5.0",
