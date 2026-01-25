@@ -158,7 +158,7 @@ internal sealed class BrowserStackLocalService(
             string folderPath =
                 OperatingSystem.IsWindows() ?
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) :
-                Path.GetTempPath();
+                Directory.CreateTempSubdirectory("_BrowserStackLocal").FullName;
 
             string localCachePath = Path.Combine(folderPath, "_BrowserStackLocal");
             string binaryPath = Path.Combine(localCachePath, GetBinaryName());

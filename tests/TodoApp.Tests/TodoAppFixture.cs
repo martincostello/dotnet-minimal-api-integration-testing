@@ -46,12 +46,7 @@ public class TodoAppFixture : WebApplicationFactory<Program>, ITestOutputHelperA
         {
             // Configure the test fixture to write the SQLite database
             // to a temporary directory, rather than in App_Data.
-            var dataDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-
-            if (!Directory.Exists(dataDirectory))
-            {
-                Directory.CreateDirectory(dataDirectory);
-            }
+            var dataDirectory = Directory.CreateTempSubdirectory().FullName;
 
             // Also override the default options for the GitHub OAuth provider
             var config = new[]
