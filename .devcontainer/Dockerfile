@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/vscode/devcontainers/universal:latest@sha256:805fccf6bfda0c33d35308e4ddba70f62c9610995748c535143125eca87e3bf5
+FROM mcr.microsoft.com/vscode/devcontainers/universal:latest@sha256:feeaa66d9deb342b5a5a9fdcf8afef18689cd284359a67a62289a77772573337
 
 # Suppress an apt-key warning about standard out not being a terminal. Use in this script is safe.
 ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn
