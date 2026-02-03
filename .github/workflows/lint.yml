@@ -8,10 +8,6 @@ on:
     - '**/*.gitignore'
     - '**/*.md'
   pull_request:
-    branches:
-      - main
-      - dotnet-vnext
-      - dotnet-nightly
   workflow_dispatch:
 
 permissions: {}
