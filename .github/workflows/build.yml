@@ -8,10 +8,6 @@ on:
       - '**/*.gitignore'
       - '**/*.gitattributes'
   pull_request:
-    branches:
-      - main
-      - dotnet-vnext
-      - dotnet-nightly
   workflow_dispatch:
 
 env:
