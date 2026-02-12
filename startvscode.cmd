@@ -11,7 +11,7 @@ SET DOTNET_ROOT(x86)=%~dp0.dotnet\x86
 SET PATH=%DOTNET_ROOT%;%PATH%
 
 :: Sets the Target Framework for Visual Studio Code.
-SET TARGET=net10.0
+SET TARGET=net11.0
 
 SET FOLDER=%~1
 
