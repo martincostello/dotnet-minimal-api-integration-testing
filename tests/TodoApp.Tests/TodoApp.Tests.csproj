@@ -9,7 +9,7 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="coverlet.msbuild" Version="8.0.1" PrivateAssets="All" />
-    <PackageReference Include="GitHubActionsTestLogger" Version="3.0.1" />
+    <PackageReference Include="GitHubActionsTestLogger" Version="3.0.2" />
     <PackageReference Include="JunitXml.TestLogger" Version="8.0.0" />
     <PackageReference Include="JustEat.HttpClientInterception" Version="5.1.2" />
     <PackageReference Include="MartinCostello.Logging.XUnit.v3" Version="0.7.1" />
