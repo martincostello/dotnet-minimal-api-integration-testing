@@ -14,9 +14,9 @@ export class TodoElement {
     private readonly itemElement: Element;
     private readonly timestampElement: Element;
 
-    private onCompletedHandler: (id: string) => Promise<void>;
-    private onDeletedHandler: (id: string) => void;
-    private onDeletingHandler: (id: string) => Promise<void>;
+    private onCompletedHandler: ((id: string) => Promise<void>) | undefined;
+    private onDeletedHandler: ((id: string) => void) | undefined;
+    private onDeletingHandler: ((id: string) => Promise<void>) | undefined;
     private textElement: Element;
 
     constructor(element: Element, item: TodoItem) {
@@ -31,10 +31,10 @@ export class TodoElement {
         this.itemElement.setAttribute('data-id', item.id);
         this.itemElement.setAttribute('data-timestamp', item.lastUpdated);
 
-        this.completeButton = element.querySelector(Selectors.itemCompleted);
-        this.deleteButton = element.querySelector(Selectors.deleteItem);
-        this.textElement = element.querySelector(Selectors.itemText);
-        this.timestampElement = element.querySelector(Selectors.itemTimestamp);
+        this.completeButton = element.querySelector(Selectors.itemCompleted)!;
+        this.deleteButton = element.querySelector(Selectors.deleteItem)!;
+        this.textElement = element.querySelector(Selectors.itemText)!;
+        this.timestampElement = element.querySelector(Selectors.itemTimestamp)!;
 
         this.textElement.textContent = item.text;
 

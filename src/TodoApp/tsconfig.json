@@ -3,7 +3,7 @@
     "esModuleInterop": true,
     "inlineSources": true,
     "inlineSourceMap": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noImplicitAny": true,
     "noImplicitOverride": true,
