@@ -417,6 +417,9 @@ public class BrowserFixture(
             }
         }
 
+        public Task<BrowserBindResult> BindAsync(string wsEndpoint, BrowserBindOptions? options = null)
+            => _browser.BindAsync(wsEndpoint, options);
+
         public Task<ICDPSession> NewBrowserCDPSessionAsync()
             => _browser.NewBrowserCDPSessionAsync();
 
@@ -425,5 +428,8 @@ public class BrowserFixture(
 
         public Task<IPage> NewPageAsync(BrowserNewPageOptions? options = null)
             => _browser.NewPageAsync(options);
+
+        public Task UnbindAsync()
+            => _browser.UnbindAsync();
     }
 }
