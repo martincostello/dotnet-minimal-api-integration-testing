@@ -13,7 +13,6 @@ internal sealed class BrowserStackLocalService(
 {
     private static readonly SemaphoreSlim _downloadLock = new(1, 1);
     private static string? _binaryPath;
-    private bool _outputRedirected;
     private Process? _process;
     private bool _disposed;
 
@@ -60,73 +59,37 @@ internal sealed class BrowserStackLocalService(
             startInfo.ArgumentList.Add(argument);
         }
 
-        _process = Process.Start(startInfo);
+        _process = Process.Start(startInfo) ?? throw new InvalidOperationException("Failed to start BrowserStack Local service.");
 
-        if (_process is null)
-        {
-            throw new InvalidOperationException("Failed to start BrowserStack Local service.");
-        }
+        // Give the BrowserStackLocal process time to initialize
+        var timeout = TimeSpan.FromSeconds(15);
+
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cts.CancelAfter(timeout);
 
         try
         {
-            var stdout = new StringBuilder();
-            var tcs = new TaskCompletionSource();
-
-            void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
+            await foreach (var line in _process.ReadAllLinesAsync(cts.Token).WithCancellation(cts.Token))
             {
-                if (e.Data is not null)
+                if (line.Content.Contains("Press Ctrl-C to exit", StringComparison.OrdinalIgnoreCase))
                 {
-                    stdout.AppendLine(e.Data);
-
-                    if (e.Data.Contains("Press Ctrl-C to exit", StringComparison.OrdinalIgnoreCase))
-                    {
-                        tcs.SetResult();
-                    }
+                    break;
                 }
             }
-
-            _process.OutputDataReceived += OnOutputDataReceived;
-            _process.BeginOutputReadLine();
-
-            _outputRedirected = true;
 
             if (_process.HasExited)
             {
                 throw new InvalidOperationException(
                     $"Failed to start process. The process exited with code {_process.ExitCode}. This could be because {GetBinaryName()} requires updating; an updated version can be downloaded from {GetDownloadUri()}.");
             }
-
-            // Give the BrowserStackLocal process time to initialize
-            var timeout = TimeSpan.FromSeconds(15);
-
-            using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            cts.CancelAfter(timeout);
-
-            try
-            {
-                await tcs.Task.WaitAsync(cts.Token);
-            }
-            catch (TaskCanceledException)
-            {
-                var exception = new InvalidOperationException(
-                    $"Process failed to initialize within {timeout}. This could be because {GetBinaryName()} requires updating; an updated version can be downloaded from {GetDownloadUri()}. Alternatively, it could be caused by a firewall.");
-
-                exception.Data["stdout"] = stdout.ToString();
-
-                throw exception;
-            }
-
-            // Once started, we don't need to listen to stdout any more
-            _process.OutputDataReceived -= OnOutputDataReceived;
-            stdout.Clear();
+        }
+        catch (OperationCanceledException)
+        {
+            throw new InvalidOperationException(
+                $"Process failed to initialize within {timeout}. This could be because {GetBinaryName()} requires updating; an updated version can be downloaded from {GetDownloadUri()}. Alternatively, it could be caused by a firewall.");
         }
         catch (Exception)
         {
-            if (_outputRedirected)
-            {
-                _process.CancelOutputRead();
-            }
-
             if (!_process.HasExited)
             {
                 try
@@ -251,11 +214,6 @@ internal sealed class BrowserStackLocalService(
                 {
                     try
                     {
-                        if (_outputRedirected)
-                        {
-                            _process.CancelOutputRead();
-                        }
-
                         try
                         {
                             _process.Kill();
