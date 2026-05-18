@@ -26,7 +26,7 @@
     "@typescript-eslint/eslint-plugin": "8.59.3",
     "@typescript-eslint/parser": "8.59.3",
     "@vitest/eslint-plugin": "1.6.17",
-    "eslint": "10.3.0",
+    "eslint": "10.4.0",
     "eslint-config-prettier": "10.1.8",
     "globals": "17.6.0",
     "moment": "2.30.1",
