@@ -384,6 +384,12 @@ public class BrowserFixture(
             _localService = localService;
         }
 
+        public event EventHandler<IBrowserContext> Context
+        {
+            add => _browser.Context += value;
+            remove => _browser.Context -= value;
+        }
+
         public IBrowserType BrowserType => _browser.BrowserType;
 
         public IReadOnlyList<IBrowserContext> Contexts => _browser.Contexts;
