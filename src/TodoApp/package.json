@@ -35,7 +35,7 @@
     "tsify": "5.0.4",
     "typescript": "6.0.3",
     "vitest": "4.1.7",
-    "webpack": "5.107.1",
+    "webpack": "5.107.2",
     "webpack-cli": "7.0.2"
   },
   "prettier": {
