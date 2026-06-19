@@ -24,4 +24,8 @@
   <ItemGroup>
     <Using Include="System.Globalization" />
   </ItemGroup>
+  <!-- HACK Workaround until fix from https://github.com/dotnet/efcore/pull/38402 is available -->
+  <ItemGroup>
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-2m69-gcr7-jv3q" />
+  </ItemGroup>
 </Project>
