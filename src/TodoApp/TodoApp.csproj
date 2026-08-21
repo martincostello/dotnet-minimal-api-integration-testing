@@ -11,7 +11,7 @@
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.11" />
-    <PackageReference Include="Microsoft.OpenApi" Version="2.12.1" />
+    <PackageReference Include="Microsoft.OpenApi" Version="2.12.2" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="package.json;package-lock.json;tsconfig.json" CopyToPublishDirectory="Never" />
