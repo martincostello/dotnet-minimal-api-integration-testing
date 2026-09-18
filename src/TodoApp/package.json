@@ -32,7 +32,6 @@
     "moment": "2.31.0",
     "prettier": "3.9.6",
     "ts-loader": "9.6.2",
-    "tsify": "5.0.4",
     "typescript": "6.0.3",
     "vitest": "5.0.1",
     "webpack": "5.111.0",
