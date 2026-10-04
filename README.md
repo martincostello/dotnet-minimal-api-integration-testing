@@ -33,9 +33,9 @@ to an application are ready to ship to a production system.
 The tests include demonstrations of the use of the following open source
 libraries and technologies:
 
-* [coverlet]
 * [HttpClientFactory]
 * [HttpClient Interception]
+* [Microsoft Testing Platform]
 * [Playwright]
 * [ReportGenerator]
 * [Shouldly]
@@ -44,9 +44,9 @@ libraries and technologies:
 * [xunit Logging]
 
 [API]: https://github.com/martincostello/dotnet-minimal-api-integration-testing/blob/main/tests/TodoApp.Tests/ApiTests.cs
-[coverlet]: https://github.com/coverlet-coverage/coverlet
 [HttpClientFactory]: https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests
 [HttpClient Interception]: https://github.com/justeat/httpclient-interception
+[Microsoft Testing Platform]: https://learn.microsoft.com/dotnet/core/testing/microsoft-testing-platform-intro
 [Playwright]: https://playwright.dev/dotnet/
 [ReportGenerator]: https://github.com/danielpalme/ReportGenerator
 [Shouldly]: https://docs.shouldly.org
