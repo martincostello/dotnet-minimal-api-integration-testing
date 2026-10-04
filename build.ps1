@@ -79,7 +79,10 @@ function DotNetTest {
 
     $additionalArgs = @()
     $projectName = [System.IO.Path]::GetFileNameWithoutExtension($Project)
-    $coverageOutputPath = Join-Path $solutionPath "artifacts" "coverage" $projectName
+    $coverageOutputPath = Join-Path $OutputPath "coverage" $projectName
+    $coverageOutputFile = Join-Path $coverageOutputPath "coverage.xml"
+
+    $additionalArgs += "-p:CoverageOutput=$coverageOutputFile"
 
     if (-Not [string]::IsNullOrEmpty(${env:GITHUB_SHA})) {
         $additionalArgs += "--report-xunit-junit"
