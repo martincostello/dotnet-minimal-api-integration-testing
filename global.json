@@ -4,5 +4,8 @@
     "allowPrerelease": false,
     "paths": [ ".dotnet", "$host$" ],
     "errorMessage": "The required version of the .NET SDK could not be found. Please run ./build.ps1 to bootstrap the .NET SDK."
+  },
+  "test": {
+    "runner": "Microsoft.Testing.Platform"
   }
 }
