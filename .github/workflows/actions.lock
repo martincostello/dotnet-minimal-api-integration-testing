@@ -11,7 +11,7 @@ workflows:
         - 'codecov/codecov-action@v7.1.1'
     '.github/workflows/codeql.yml':
         - 'actions/checkout@v7.0.1'
-        - 'github/codeql-action@v4.39.4'
+        - 'github/codeql-action@v4.39.5'
     '.github/workflows/dependency-review.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/dependency-review-action@v5.0.1'
@@ -61,8 +61,8 @@ dependencies:
         commit: 'sha1-3ce8f712b5d8f31acd8e201be6d97e3d2bb23eb7'
         owner_id: 1828270
         repo_id: 329203602
-    'github/codeql-action@v4.39.4':
-        ref: 'v4.39.4'
-        commit: 'sha1-1bd86f2fdb4b86187fa4059f16f31a3202acc9ea'
+    'github/codeql-action@v4.39.5':
+        ref: 'v4.39.5'
+        commit: 'sha1-915412ff23e8b7659517e607487dbeae018f2934'
         owner_id: 9919
         repo_id: 259445878
